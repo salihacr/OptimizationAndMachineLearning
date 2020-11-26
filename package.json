@@ -1,0 +1,23 @@
+{
+  "name": "optimizationandmachinelearning",
+  "version": "1.0.0",
+  "description": "installation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/salihacr/OptimizationAndMachineLearning.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/salihacr/OptimizationAndMachineLearning/issues"
+  },
+  "homepage": "https://github.com/salihacr/OptimizationAndMachineLearning#readme",
+  "dependencies": {
+    "bootstrap": "^4.5.3",
+    "jquery": "^3.5.1"
+  }
+}
