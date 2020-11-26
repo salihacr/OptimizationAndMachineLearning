@@ -1,6 +1,12 @@
 installation
 
-cd your file
+open cmd or terminal
+
+git clone https://github.com/salihacr/OptimizationAndMachineLearning.git
+
+cd project
+
+npm install or npm i
 
 python -m venv venv
 
@@ -10,7 +16,7 @@ activate
 cd..
 cd..
 
-pip install
+pip install -r requirements.txt
 
 done !
 
