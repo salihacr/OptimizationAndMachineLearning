@@ -1,12 +1,16 @@
+requirements 
+
+python 3.7 or higher
+
 installation
 
 open cmd or terminal
 
-git clone https://github.com/salihacr/OptimizationAndMachineLearning.git
+git clone https://github.com/salihacr/OptimizationAndMachineLearning.git 
+
+(or download project and extract zip)
 
 cd project
-
-npm install or npm i
 
 python -m venv venv
 

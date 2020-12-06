@@ -1,19 +1,157 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-    <link rel = "stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
-</head>
+{% extends "base.html" %}
 
-<body>
-    <div class="container">
-        <div class="row">
-            <p class="text-danger">
+{% block title %}Home{% endblock %}
 
-            </p>
-        </div>
 
+{% block content %}
+
+<div class="wrapper">
+    <div class="card">
+        <h3 class="card-title">OPTİMİZASYON</h3>
+        <p class="card-content">Kelime anlamı “Mümkün olan en iyi duruma getirmek” demektir. Optimizasyon, en basit
+            tanımıyla en iyi çıktıyı üretecek girdileri seçmeye yardımcı olarak sonuçları iyileştirmeyi sağlar.</p>
+        <a href="{{url_for('optimization')}}"><button class="card-btn">İNCELE ></button></a>
     </div>
-</body>
-</html>
+    <div class="card">
+        <h3 class="card-title">GEZGİN SATICI</h3>
+        <p class="card-content">Bir satıcının verilen şehir listesine göre bulunduğu
+            şehirden itibaren tüm şehirlere yalnızca bir defa uğramak şartı ile en kısa yoldan (rotadan) ulaşması olarak
+            açıklanabilir.</p>
+        <a href="{{url_for('tsp')}}"><button class="card-btn">İNCELE ></button></a>
+    </div>
+    <div class="card">
+        <h3 class="card-title">MAKİNE ÖĞRENMESİ</h3>
+        <p class="card-content">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a
+            piece of classical Latin literature from 45 BC, making it over 2000 years old.</p>
+        <a href="{{url_for('machine_learning')}}"><button class="card-btn">İNCELE ></button></a>
+    </div>
+</div>
+
+
+<footer class="footer mt-auto py-3">
+    <div class="container">
+        <span class="text-muted">&copy;</span>
+    </div>
+</footer>
+
+<style>
+    /* Custom page CSS
+-------------------------------------------------- */
+    /* Not required for template or sticky footer method. */
+
+    main>.container {
+        padding: 60px 15px 0;
+    }
+
+    .footer {
+        background-color: #f5f5f5;
+    }
+
+    .footer>.container {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+
+    code {
+        font-size: 80%;
+    }
+
+    @import url('https://fonts.googleapis.com/css?family=Roboto');
+
+    body {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    h1 {
+        text-align: center;
+        color: #4181ee;
+    }
+
+    .wrapper {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        max-width: 300px;
+        min-height: 250px;
+        background: #02b875;
+        padding: 30px;
+        box-sizing: border-box;
+        color: #FFF;
+        margin: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 2px 18px -4px rgba(0, 0, 0, 0.75);
+    }
+
+    .card:nth-child(2) {
+        background: #4181ee;
+    }
+
+    .card:last-child {
+        background: #673ab7;
+    }
+
+    .card-title {
+        margin-top: 0;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 1.2px;
+    }
+
+    .card-content {
+        font-size: 14px;
+        letter-spacing: 0.5px;
+        line-height: 1.5;
+    }
+
+    .card-btn {
+        all: unset;
+        display: block;
+        margin-left: auto;
+        border: 2px solid #FFF;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 25px;
+        font-size: 10px;
+        font-weight: 600;
+        transition: all 0.5s;
+        cursor: pointer;
+        letter-spacing: 1.2px;
+        text-decoration: none;
+    }
+
+    .card-btn:hover {
+        color: #02b875;
+        background: #FFF;
+    }
+
+    .card:nth-child(2) .card-btn:hover {
+        color: #4181ee;
+        background: #FFF;
+    }
+
+    .card:last-child .card-btn:hover {
+        color: #673ab7;
+        background: #FFF;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        transition: all 0.5s ease;
+    }
+
+    .card:hover .card__image {
+        top: -20%;
+    }
+</style>
+
+
+
+{% endblock %}
