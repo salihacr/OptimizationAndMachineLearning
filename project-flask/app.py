@@ -4,6 +4,7 @@ import math
 import matplotlib.pyplot as plt
 from opt_algorithms.tsp.acotspself import ACO_TSP
 from opt_algorithms.tsp.genetictspself import *
+import timeit
 
 from flask import Flask,render_template,request
 
@@ -45,17 +46,24 @@ def runtsp():
         
     print("-----------------------------------")
     print("Ant Colony Optimization starting")
+    start = timeit.default_timer()
     
     acotsp = ACO_TSP( _longitude_x = boylam_x_ekseni,_latitude_y = enlem_y_ekseni, _city_list = cities, _iteration = 100)
     best_route, error_values, best_cost = acotsp.run()
     print("\nEn İyi Rota: ", best_route, "En İyi Rota Uzunluğu: ", best_cost)
+    stop = timeit.default_timer()
+    print('ACO İşlem Süresi: ', stop - start, " sn")
 
+
+    start = timeit.default_timer()
     cityxylist = format_for_genetic(enlem_y_ekseni,boylam_x_ekseni)
     tsp = TSP(cityxylist)
     bp = tsp.main(100) #iterasyon sayisi
 
     print("\nEn İyi Rota: ", bp[0], "En İyi Rota Uzunluğu: ", bp[2])
-    
+    stop = timeit.default_timer()
+    print('GA İşlem Süresi: ', stop - start," sn")
+
     plt.style.use('ggplot')
     fig, ax = plt.subplots(1,dpi = 120)
     fig.suptitle('Costs per Iterations')
