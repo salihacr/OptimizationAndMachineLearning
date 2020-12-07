@@ -1,8 +1,8 @@
-import numpy as np
-import math,random
-import matplotlib.pyplot as plt
+import random
+import math
 from math import radians, cos, sin, asin, sqrt
-
+import matplotlib.pyplot as plt
+import numpy as np
 #import warnings
 #warnings.filterwarnings("ignore")
 
@@ -18,7 +18,7 @@ class ACO_TSP(object):
         self.iteration = _iteration
         self.len_cities = len(_latitude_y)
         self.my_distance_matrice = self.distance_matrice_for_aco1()
-    global geodistance   
+    global geodistance       
     def geodistance(latitude1,longitude1,latitude2,longitude2):
         longitude1, latitude1, longitude2, latitude2 = map(radians, [longitude1, latitude1, longitude2, latitude2])
         dlon = longitude2 - longitude1
@@ -116,7 +116,7 @@ class ACO_TSP(object):
     
     global getXY
     def getXY(self,index):
-        xy = np.array([self.longitude_x[index],self.latitude_y[index]])
+        xy = np.array([self.latitude_y[index],self.longitude_x[index]])
         return xy
     
     def plot_best_route_on_graph(self,bestRoute, best_cost):        
@@ -130,14 +130,14 @@ class ACO_TSP(object):
         plt.ylabel("Latitude ENLEM Y EKSENİ")
         
 
+        #ax.scatter(self.longitude_x, self.latitude_y, c = "orange", s = 250)
         ax.scatter(self.longitude_x, self.latitude_y, c = "orange", s = 250)
-
         data = np.append(bestRoute, bestRoute)
 
         for i in range(len(self.city_list)):
             ax.annotate(self.city_list[i], xy = getXY(self, i), c = "purple", size = 12)
         
-        plt.plot(self.longitude_x[data], self.latitude_y[data], c = "gray")
+        plt.plot(self.latitude_y[data], self.longitude_x[data], c = "gray")
         plt.show();
         print("Best Route : {}, Best Cost : {} ".format(bestRouteOfCities,best_cost));
         

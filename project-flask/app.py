@@ -46,13 +46,13 @@ def runtsp():
     print("-----------------------------------")
     print("Ant Colony Optimization starting")
     
-    acotsp = ACO_TSP( _longitude_x = boylam_x_ekseni,_latitude_y = enlem_y_ekseni, _city_list = cities, _iteration = 10)
+    acotsp = ACO_TSP( _longitude_x = boylam_x_ekseni,_latitude_y = enlem_y_ekseni, _city_list = cities, _iteration = 100)
     best_route, error_values, best_cost = acotsp.run()
     print("\nEn İyi Rota: ", best_route, "En İyi Rota Uzunluğu: ", best_cost)
 
     cityxylist = format_for_genetic(enlem_y_ekseni,boylam_x_ekseni)
     tsp = TSP(cityxylist)
-    bp = tsp.main(10) #iterasyon sayisi
+    bp = tsp.main(100) #iterasyon sayisi
 
     print("\nEn İyi Rota: ", bp[0], "En İyi Rota Uzunluğu: ", bp[2])
     
@@ -67,6 +67,12 @@ def runtsp():
     plt.legend(['karınca', 'genetik'])
     plt.legend()
     plt.show()
+
+    # karınca dolaşma grafiği
+    #acotsp.plot_best_route_on_graph(best_route,best_cost)    
+    
+    # genetik dolaşma grafiği
+    #     opt_algorithms.tsp.genetictspself.genetikcizim(bp[0],boylam_x_ekseni,enlem_y_ekseni,cities)
 
 if __name__ =="__main__":  
     app.run(debug = True)  

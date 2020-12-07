@@ -205,3 +205,29 @@ def plot_cost_iteration_graph(error_values):
     plt.grid(b = True, which = 'major', ls = '-.', lw = 0.45)
     ax.plot(error_values)
     plt.show()
+
+def getXY2(longitude,latitude,index):
+    xy = np.array([longitude[index],latitude[index]])
+    return xy
+
+def genetikcizim(bestRoute, lonX,latY,city_list):        
+    bestRouteOfCities = []
+    for i in bestRoute:
+        bestRouteOfCities.append(city_list[i])
+
+    fig, ax = plt.subplots(1, dpi = 120, figsize = (12,8))
+    fig.suptitle('Ant Colony Optimization for TSP Problem')
+    plt.xlabel("Longitude BOYLAM X EKSENİ")
+    plt.ylabel("Latitude ENLEM Y EKSENİ")
+
+
+    ax.scatter(lonX, latY, c = "orange", s = 250)
+
+    data = np.append(bestRoute, bestRoute)
+
+    for i in range(len(city_list)):
+        ax.annotate(city_list[i], xy = getXY2(lonX,latY,i), c = "purple", size = 12)
+
+    plt.plot(lonX[data], latY[data], c = "gray")
+    plt.show();
+    print("Best Route : {}, Best Cost : {} ".format(bestRouteOfCities,best_cost))
