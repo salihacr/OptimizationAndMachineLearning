@@ -15,25 +15,25 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label>Karınca Sayısı</label>
-                            <input type="number" value="11" class="form-control" name="ant_size" placeholder="Karınca Sayısı"
-                                required>
+                            <input type="number" value="11" class="form-control" name="ant_size"
+                                placeholder="Karınca Sayısı" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label>Feromon Buharlaşma Orarnı</label>
-                            <input type="number" value="0.3"  step="any" class="form-control" name="pheromone_rho"
+                            <input type="number" value="0.3" step="any" class="form-control" name="pheromone_rho"
                                 placeholder="Feromon Miktarı" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label>Alfa</label>
-                            <input type="number" step="any" value="1"  class="form-control" name="alpha" placeholder="Alfa Değeri"
-                                required>
+                            <input type="number" step="any" value="1" class="form-control" name="alpha"
+                                placeholder="Alfa Değeri" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label>Beta</label>
-                            <input type="number" step="any" value="1"  class="form-control" name="beta" placeholder="Beta Değeri"
-                                required>
+                            <input type="number" step="any" value="1" class="form-control" name="beta"
+                                placeholder="Beta Değeri" required>
                         </div>
                     </div>
                 </div>
@@ -48,8 +48,8 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label>Birey Sayısı</label>
-                            <input type="number" value="100" class="form-control" name="life_count" placeholder="Birey Sayısı"
-                                required>
+                            <input type="number" value="100" class="form-control" name="life_count"
+                                placeholder="Birey Sayısı" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label>Mutasyon Olasılığı </label>
@@ -60,8 +60,8 @@
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label>Çaprazlama Olasılığı</label>
-                            <input type="number" value="0.4" class="form-control" name="cross_rate" placeholder="Çaprazlama Olasılığı"
-                                required>
+                            <input type="number" value="0.4" class="form-control" name="cross_rate"
+                                placeholder="Çaprazlama Olasılığı" required>
                         </div>
                     </div>
                 </div>
@@ -72,14 +72,42 @@
     <div class="col-md-12">
         <div class="form-group">
             <label>İterasyon Sayısı</label>
-            <input type="number" value="100" class="form-control" name="iteration" placeholder="İterasyon Sayısı" required>
+            <input type="number" value="10" class="form-control" name="iteration" placeholder="İterasyon Sayısı"
+                required>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary" style="width: 100%;">ÇALIŞTIR</button>
+            <button onclick="toggle_display()" type="submit" class="btn btn-primary"
+                style="width: 100%;">ÇALIŞTIR</button>
         </div>
         <label name="lbltest"></label>
+    </div>
+    <div class="col-md-12">
+
+        <div class="card content_section" style="width: 18rem;">
+            <img class="card-img-top" src="/templates/img/aco_vs_ga.png" alt="Card image cap">
+            <img src="{{ compare_image }}" alt="User Image">
+            <image src="{{url_for('static',filename = 'img/compare.png')}}" ></image>
+            <image src="{{url_for('static',filename = 'aco_vs_ga.png')}}" ></image>
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                    card's content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
     </div>
 
 </form>
 
+<script>
+    function toggle_display() {
+        el = document.querySelector('.content_section');
+
+        if (el.style.visibility == 'hidden') {
+            el.style.visibility = 'visible'
+        } else {
+            el.style.visibility = 'hidden'
+        }
+    }
+</script>
 {% endblock %}

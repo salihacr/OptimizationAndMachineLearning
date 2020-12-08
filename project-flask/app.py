@@ -1,25 +1,27 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
-import math, random
-#from opt_algorithms.tsp.acotspself import ACO_TSP
-#from opt_algorithms.tsp.genetictspself import *
-#from opt_algorithms.tsp.geneticNew import *
+import os 
+from io import BytesIO
+import math, random, timeit
 
 from opt_algorithms.tsp.aco_tsp_solve import ACO_TSP_SOLVE
 from opt_algorithms.tsp.ga_tsp_solve import GA_TSP_SOLVE
 
+from flask import Flask, render_template, request, make_response
 
-import timeit
-
-from flask import Flask,render_template,request
 
 #import warnings 
 #warnings.filterwarnings("ignore")
 
+PEOPLE_FOLDER = os.path.join('project-flask','templates','static', 'img')
 
 app = Flask(__name__)
+
+app.config['UPLOAD_FOLDER'] = PEOPLE_FOLDER
 
 @app.route('/')
 def index():
@@ -97,13 +99,13 @@ def run():
 
     bp = ga_tsp.run(int(iteration))
 
-    ga_tsp.plot_cities(cities_x_axis,cities_y_axis, bp[0], bp[2])
+    # cities bird's-eye graphics
+    #ga_tsp.plot_cities(cities_x_axis,cities_y_axis, bp[0], bp[2])
+    #aco_tsp.plot_cities(best_route, best_cost)
 
-    aco_tsp.plot_cities(best_route, best_cost)
-
-    aco_tsp.plot_cost_iteration(cost_values)
-
-    ga_tsp.plot_cost_iteration(bp[1])
+    # cost iteration graphics
+    #ga_tsp.plot_cost_iteration(bp[1])
+    #aco_tsp.plot_cost_iteration(cost_values)
 
     plt.style.use('ggplot')
     fig, ax = plt.subplots(1,dpi = 120)
@@ -117,7 +119,23 @@ def run():
     plt.legend()
     plt.show()
 
-    return render_template("tsp.html")
+    canvas = FigureCanvas(fig)
+    output = BytesIO()
+    canvas.print_png(output)
+    response = make_response(output.getvalue())
+    response.mimetype = 'image/png'
+
+    plt.savefig('uploads/aco_vs_ga.png')
+
+    #full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'compare.png')
+    
+    full_filename = "data/aco_vs_ga.png"
+
+    #project-flask\templates\static\img\
+    print("isim : ", full_filename)
+
+
+    return render_template("tsp.html", compare_image = full_filename)
 
 
 
