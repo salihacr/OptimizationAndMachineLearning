@@ -81,23 +81,24 @@
         </div>
         <label name="lbltest"></label>
     </div>
-    <div class="col-md-12">
+</form>
 
-        <div class="card content_section" style="width: 18rem;">
-            <img class="card-img-top" src="/templates/img/aco_vs_ga.png" alt="Card image cap">
-            <img src="{{ compare_image }}" alt="User Image">
-            <image src="{{url_for('static',filename = 'img/compare.png')}}" ></image>
-            <image src="{{url_for('static',filename = 'aco_vs_ga.png')}}" ></image>
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
+<div class="col-md-12">
+
+    <div class="card content_section" style="width: 18rem;">
+        <img class="card-img-top" src="/templates/img/aco_vs_ga.png" alt="Card image cap">
+        <img src="{{ compare_image }}" alt="User Image">
+        <image src="{{url_for('static',filename = 'img/compare.png')}}"></image>
+        <image src="{{url_for('static',filename = 'img/compare.png')}}"></image>
+        <image src="{{url_for('static',filename = 'img/aco_vs_ga.png')}}"></image>
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
         </div>
     </div>
-
-</form>
+</div>
 
 <script>
     function toggle_display() {
