@@ -1,13 +1,23 @@
-import pandas as pd
 import numpy as np
-import math
+import pandas as pd
 import matplotlib.pyplot as plt
-from opt_algorithms.tsp.acotspself import ACO_TSP
-from opt_algorithms.tsp.genetictspself import *
-from opt_algorithms.tsp.geneticNew import *
+
+import math, random
+#from opt_algorithms.tsp.acotspself import ACO_TSP
+#from opt_algorithms.tsp.genetictspself import *
+#from opt_algorithms.tsp.geneticNew import *
+
+from opt_algorithms.tsp.aco_tsp_solve import ACO_TSP_SOLVE
+from opt_algorithms.tsp.ga_tsp_solve import GA_TSP_SOLVE
+
+
 import timeit
 
 from flask import Flask,render_template,request
+
+#import warnings 
+#warnings.filterwarnings("ignore")
+
 
 app = Flask(__name__)
 
@@ -21,77 +31,122 @@ def optimization():
 
 @app.route('/travellingsalesmanproblem')
 def tsp():
-    runtsp()
     return render_template("tsp.html")
-
-###Using for Test
-@app.route('/machine_learning', methods = ["GET","POST"])
-def machine_learning():
-    if request.method == "POST":
-        sayi1 = request.form.get("sayi1")
-        sayi2 = request.form.get("sayi2")
-        sayi3 = request.form.get("sayi3")
-        sayi4 = request.form.get("sayi4")
-
-        toplama(sayi1,sayi2,sayi3,sayi4)
-    return render_template("machine-learning.html")
-
-def toplama(sayi1, sayi2, sayi3, sayi4):
-    total = int(sayi1) + int(sayi2)+ int(sayi3) + int(sayi4)
-    print("Toplam = ", total)
 
 def format_for_genetic(latitudes,longitudes):
     distance_list = zip(latitudes,longitudes)
     return list(distance_list)
 
-def runtsp():
+@app.route('/tsp', methods = ["GET","POST"])
+def run():
+
     file_type = "csv"
     if file_type == "text":
         df = pd.read_text("../input/marmara_mesafe/{}".format("mesafeler.txt")) 
     if file_type == "csv":
-        #df = pd.read_csv("project-flask\data\{}".format("marmara_mesafeler.csv"))
         df = pd.read_csv("data/marmara_mesafeler.csv")
-    
-    cities = df.iloc[:,0].values
-    boylam_x_ekseni = df.iloc[:,1].values
-    enlem_y_ekseni = df.iloc[:,2].values
+
+    cities = df.loc[:, 'city'].values
+
+    cities_x_axis = df.loc[:,'longitude'].values  # longitude is x axis
+
+    cities_y_axis = df.loc[:,'latitude'].values # latitude is y axis
+
+    print(cities)
+    print(cities_x_axis)
+    print(cities_y_axis)
+
+    if request.method == "POST":
+        print("çalıştım")
         
-    print("-----------------------------------")
-    print("Ant Colony Optimization starting")
-    start = timeit.default_timer()
+        # karınca parametreleri
+        ant_size = request.form.get("ant_size")
+        pheromone_rho = request.form.get("pheromone_rho")
+        alpha = request.form.get("alpha")
+        beta = request.form.get("beta")
+
+        # genetik parametreleri
+        life_count = request.form.get("life_count")
+        mutation_rate = request.form.get("mutation_rate")
+        cross_rate = request.form.get("cross_rate")
+
+        # iterasyon
+        iteration = request.form.get("iteration")
+
+    #(self, _x_axis, _y_axis, _iteration = 10, _ant_size = 10, _rho = 0.3, _alpha = 1, _beta = 1, _cities = [""]):
     
-    acotsp = ACO_TSP( _longitude_x = boylam_x_ekseni,_latitude_y = enlem_y_ekseni, _city_list = cities, _iteration = 10)
-    best_route, error_values, best_cost = acotsp.run()
-    print("\nEn İyi Rota: ", best_route, "En İyi Rota Uzunluğu: ", best_cost)
-    stop = timeit.default_timer()
-    print('ACO İşlem Süresi: ', stop - start, " sn")
+    cities_xy = format_for_genetic(cities_x_axis,cities_y_axis)
+    print(cities_xy)
+    
+    aco_tsp = ACO_TSP_SOLVE(_x_axis = cities_x_axis,
+                            _y_axis = cities_y_axis,
+                            _iteration = int(iteration),
+                            _ant_size = int(ant_size),
+                            _rho = float(pheromone_rho),
+                            _alpha = float(alpha),
+                            _beta = float(beta),
+                            _cities = cities)
 
-    start = timeit.default_timer()
-    cityxylist = format_for_genetic(enlem_y_ekseni,boylam_x_ekseni)
-    tsp = TSP(cityxylist)
-    bp = tsp.main(10) #iterasyon sayisi
+    best_route, cost_values, best_cost = aco_tsp.run_optimize()
 
-    print("\nEn İyi Rota: ", bp[0], "En İyi Rota Uzunluğu: ", bp[2])
-    stop = timeit.default_timer()
-    print('GA İşlem Süresi: ', stop - start," sn")
+    ga_tsp = GA_TSP_SOLVE(_cities_xy = cities_xy,
+                               _cities = cities,
+                               _life_count = int(life_count),
+                               _cross_rate = float(cross_rate),
+                               _mutation_rate = float(mutation_rate))
+
+    bp = ga_tsp.run(int(iteration))
+
+    ga_tsp.plot_cities(cities_x_axis,cities_y_axis, bp[0], bp[2])
+
+    aco_tsp.plot_cities(best_route, best_cost)
+
+    aco_tsp.plot_cost_iteration(cost_values)
+
+    ga_tsp.plot_cost_iteration(bp[1])
 
     plt.style.use('ggplot')
     fig, ax = plt.subplots(1,dpi = 120)
-    fig.suptitle('Costs per Iterations')
+    fig.suptitle('ACO vs GA Costs per Iterations')
     plt.xlabel("Iteration")
     plt.ylabel("Cost")
     plt.grid(b = True, which = 'major', ls = '-.', lw = 0.45)
-    plt.plot(error_values, c = "orange", label='Karınca')
+    plt.plot(cost_values, c = "orange", label='Karınca')
     plt.plot(bp[1],'-.',c = "#337ab7",label='Genetik')
-    plt.legend(['karınca', 'genetik'])
+    plt.legend(['Ant Colony', 'Genetic'])
     plt.legend()
     plt.show()
 
-    # karınca dolaşma grafiği
-    #acotsp.plot_best_route_on_graph(best_route,best_cost)    
-    
-    # genetik dolaşma grafiği
-    #     opt_algorithms.tsp.genetictspself.genetikcizim(bp[0],boylam_x_ekseni,enlem_y_ekseni,cities)
+    return render_template("tsp.html")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ###Refactored GA Tsp ~ Test with paramaters    
@@ -104,6 +159,7 @@ def genetikPage():
         iterasyon = request.form.get("sayi4")
 
         genetikRun(life_count, cross_rate, mutation_rate, iterasyon)
+
     return render_template("genetik.html")
 
 
@@ -158,6 +214,23 @@ def genetikRun(life_count, cross_rate, mutation_rate, iterasyon):
 
     stop = timeit.default_timer()
     print('GA ~ TSP Hesap Süresi: ', stop - start, " sn")
+
+###Using for Test
+@app.route('/machine_learning', methods = ["GET","POST"])
+def machine_learning():
+    if request.method == "POST":
+        sayi1 = request.form.get("sayi1")
+        sayi2 = request.form.get("sayi2")
+        sayi3 = request.form.get("sayi3")
+        sayi4 = request.form.get("sayi4")
+
+        toplama(sayi1,sayi2,sayi3,sayi4)
+    return render_template("machine-learning.html")
+
+def toplama(sayi1, sayi2, sayi3, sayi4):
+    total = int(sayi1) + int(sayi2)+ int(sayi3) + int(sayi4)
+    print("Toplam = ", total)
+
 
 if __name__ =="__main__":  
     app.run(debug = True)  

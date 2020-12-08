@@ -4,83 +4,82 @@
 
 
 {% block content %}
-
-<div class="col-md-6">
-    <div class="card">
-        <div class="card-header">
-            <h4>Karınca Kolonisi Parametreleri</h4>
+<form action="/tsp" method="post" class="d-inline">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Karınca Kolonisi Parametreleri</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label>Karınca Sayısı</label>
+                            <input type="number" value="11" class="form-control" name="ant_size" placeholder="Karınca Sayısı"
+                                required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Feromon Buharlaşma Orarnı</label>
+                            <input type="number" value="0.3"  step="any" class="form-control" name="pheromone_rho"
+                                placeholder="Feromon Miktarı" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label>Alfa</label>
+                            <input type="number" step="any" value="1"  class="form-control" name="alpha" placeholder="Alfa Değeri"
+                                required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Beta</label>
+                            <input type="number" step="any" value="1"  class="form-control" name="beta" placeholder="Beta Değeri"
+                                required>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <form>
-                <div class="form-row">
-                    <div class="col-md-6 mb-3">
-                        <label>Karınca Sayısı</label>
-                        <input type="text" class="form-control" name="ant_size" placeholder="Karınca Sayısı" required>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Genetik Algoritma Parametreleri</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label>Birey Sayısı</label>
+                            <input type="number" value="100" class="form-control" name="life_count" placeholder="Birey Sayısı"
+                                required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Mutasyon Olasılığı </label>
+                            <input type="number" value="0.2" class="form-control" name="mutation_rate"
+                                placeholder="Mutasyon Olasılığı" required>
+                        </div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label>Feromon</label>
-                        <input type="text" class="form-control" name="pheromone" placeholder="Feromon Miktarı" required>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label>Çaprazlama Olasılığı</label>
+                            <input type="number" value="0.4" class="form-control" name="cross_rate" placeholder="Çaprazlama Olasılığı"
+                                required>
+                        </div>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="col-md-6 mb-3">
-                        <label>Alfa</label>
-                        <input type="text" class="form-control" name="alfa" placeholder="Alfa Değeri" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label>Beta</label>
-                        <input type="text" class="form-control" name="beta" placeholder="Beta Değeri" required>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
-<div class="col-md-6">
-    <div class="card">
-        <div class="card-header">
-            <h4>Genetik Algoritma Parametreleri</h4>
-        </div>
-        <div class="card-body">
-            <form>
-                <div class="form-row">
-                    <div class="col-md-6 mb-3">
-                        <label>Birey Sayısı</label>
-                        <input type="text" class="form-control" name="gen_size" placeholder="Karınca Sayısı" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label>Seçim </label>
-                        <input type="text" class="form-control" name="selection" placeholder="Feromon Miktarı" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-md-6 mb-3">
-                        <label>Çaprazlama Ols.</label>
-                        <input type="text" class="form-control" name="crossover" placeholder="Çaprazlama Olasılığı"
-                            required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label>Mutasyon Ols.</label>
-                        <input type="text" class="form-control" name="mutation" placeholder="Mutasyon Olasılığı" required>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
-<div class="col-md-12">
-    <form>
+    <div class="col-md-12">
         <div class="form-group">
             <label>İterasyon Sayısı</label>
-            <input type="text" class="form-control" name="iteration" placeholder="İterasyon Sayısı" required>
+            <input type="number" value="100" class="form-control" name="iteration" placeholder="İterasyon Sayısı" required>
         </div>
         <div class="form-group">
-            <button class="btn btn-primary" onclick="tsp()" style="width: 100%;">ÇALIŞTIR</button>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">ÇALIŞTIR</button>
         </div>
         <label name="lbltest"></label>
-    </form>
-</div>
+    </div>
 
+</form>
 
 {% endblock %}
