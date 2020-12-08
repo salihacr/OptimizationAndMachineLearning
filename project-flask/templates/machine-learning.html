@@ -5,6 +5,49 @@
 
 {% block content %}
 
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ANASAYFA</title>
+</head>
+
+<body>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>Sayıları Topla </h4>
+            </div>
+            <div class="card-body">
+                <form action="/machine_learning" method = "post">
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label>Sayi1</label>
+                            <input type="number" class="form-control" name="sayi1" placeholder="Sayi1" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Sayi2 </label>
+                            <input type="number" class="form-control" name="sayi2" placeholder="Sayi2" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label>Sayi3</label>
+                            <input type="number" class="form-control" name="sayi3" placeholder="Sayi3" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Sayi4</label>
+                            <input type="number" class="form-control" name="sayi4" placeholder="Sayi4" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary"> Hesapla </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
 
 
 
