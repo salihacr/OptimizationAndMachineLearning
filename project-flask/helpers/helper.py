@@ -1,6 +1,7 @@
 import os 
 from io import BytesIO
 
+import random, string
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -60,22 +61,34 @@ def compare_route_graphic( x_axis, y_axis, cities, aco_best_route, ga_best_route
 
     return fig
 
+
 def save_figures_to_upload(plot_fig, img_name):
+    # random + img_name
+    #rand_str = get_random_string(10)
+    #temp_img_name = rand_str + img_name
 
-    canvas = FigureCanvas(plot_fig)
-    output = BytesIO()
-    canvas.print_png(output)
-    response = make_response(output.getvalue())
-    response.mimetype = 'image/png'
+    # pure img_name
+    temp_img_name = img_name
+    
+    base_path = 'static/uploads/'
+    img_path = base_path + temp_img_name
 
-    #img_name +=
-
-    plt.savefig('static/uploads/{}'.format(img_name))
-    print("resim yolu : ", 'static/uploads/{}'.format(img_name))
-    img_path = str('static/uploads/{}'.format(img_name))
-
-    # uploadsa çevir
-
+    plt.savefig(img_path)
+    print("Image Path => ", img_path)
+    
     return img_path
 
 # using >  plt_img1_path = save_figures_to_upload(figure,your_img_name)
+
+#Random str generator for image names
+def get_random_string(length):
+    letters = string.ascii_letters
+    value = random.randint(100, 999)
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    result_str += str(value)
+    print("Random string of length", length, "is:", result_str)
+    return result_str
+
+def format_for_genetic(longitudes_x,latitudes_y):
+    distance_list = zip(longitudes_x,latitudes_y)
+    return list(distance_list)
