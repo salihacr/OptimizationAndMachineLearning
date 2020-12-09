@@ -85,12 +85,15 @@
 
 <div class="col-md-12">
 
-    <div class="card content_section" style="width: 18rem;">
-        <img class="card-img-top" src="/templates/img/aco_vs_ga.png" alt="Card image cap">
+    <div class="card content_section" style="width: 18rem; visibility: hidden;">
+        <!-- <img class="card-img-top" src="/templates/img/aco_vs_ga.png" alt="Card image cap">
         <img src="{{ compare_image }}" alt="User Image">
         <image src="{{url_for('static',filename = 'img/compare.png')}}"></image>
         <image src="{{url_for('static',filename = 'img/compare.png')}}"></image>
-        <image src="{{url_for('static',filename = 'img/aco_vs_ga.png')}}"></image>
+        <image src="{{url_for('static',filename = 'img/aco_vs_ga.png')}}"></image> -->
+
+        <image src="{{url_for('static',filename = 'uploads/plt_compare_costs.png')}}"></image>
+        <img src="{{ compare_image }}" alt="User Image">
         <div class="card-body">
             <h5 class="card-title">Card title</h5>
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
@@ -106,8 +109,6 @@
 
         if (el.style.visibility == 'hidden') {
             el.style.visibility = 'visible'
-        } else {
-            el.style.visibility = 'hidden'
         }
     }
 </script>

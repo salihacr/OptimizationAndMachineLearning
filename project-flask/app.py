@@ -1,12 +1,15 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 import os 
 from io import BytesIO
 import math, random, timeit
+
+from helpers import helper
 
 from algorithms.tsp.aco_tsp_solve import ACO_TSP_SOLVE
 from algorithms.tsp.ga_tsp_solve import GA_TSP_SOLVE
@@ -54,13 +57,7 @@ def run():
 
     cities_y_axis = df.loc[:,'latitude'].values # latitude is y axis
 
-    print(cities)
-    print(cities_x_axis)
-    print(cities_y_axis)
-
-    if request.method == "POST":
-        print("çalıştım")
-        
+    if request.method == "POST":      
         # karınca parametreleri
         ant_size = request.form.get("ant_size")
         pheromone_rho = request.form.get("pheromone_rho")
@@ -75,10 +72,7 @@ def run():
         # iterasyon
         iteration = request.form.get("iteration")
 
-    #(self, _x_axis, _y_axis, _iteration = 10, _ant_size = 10, _rho = 0.3, _alpha = 1, _beta = 1, _cities = [""]):
-    
     cities_xy = format_for_genetic(cities_x_axis,cities_y_axis)
-    print(cities_xy)
     
     aco_tsp = ACO_TSP_SOLVE(_x_axis = cities_x_axis,
                             _y_axis = cities_y_axis,
@@ -89,7 +83,7 @@ def run():
                             _beta = float(beta),
                             _cities = cities)
 
-    best_route, cost_values, best_cost = aco_tsp.run_optimize()
+    aco_best_route, aco_cost_values, aco_best_cost = aco_tsp.run_optimize()
 
     ga_tsp = GA_TSP_SOLVE(_cities_xy = cities_xy,
                                _cities = cities,
@@ -97,7 +91,7 @@ def run():
                                _cross_rate = float(cross_rate),
                                _mutation_rate = float(mutation_rate))
 
-    bp = ga_tsp.run(int(iteration))
+    ga_best_route, ga_cost_values, ga_best_cost  = ga_tsp.run(int(iteration))
 
     # cities bird's-eye graphics
     #ga_tsp.plot_cities(cities_x_axis,cities_y_axis, bp[0], bp[2])
@@ -107,13 +101,34 @@ def run():
     #ga_tsp.plot_cost_iteration(bp[1])
     #aco_tsp.plot_cost_iteration(cost_values)
 
-    plt.style.use('ggplot')
+    # compare graphs via helper
+
+    plt_compare_routes_fig = helper.compare_route_graphic(cities_x_axis, cities_y_axis, cities, aco_best_route, ga_best_route)
+    
+    plt_compare_costs_fig = helper.compare_cost_values(aco_cost_values, ga_cost_values)
+
+    # save figures to upload via helper
+    compare_route_fig_path = helper.save_figures_to_upload(plot_fig = plt_compare_routes_fig, img_name = "plt_compare_routes")
+
+    compare_cost_fig_path = helper.save_figures_to_upload(plot_fig = plt_compare_costs_fig, img_name = "plt_compare_costs")
+
+    return render_template("tsp.html", compare_image = compare_route_fig_path)
+    #return render_template("tsp.html", route_compare_img = compare_route_fig_path, cost_compare_img = compare_cost_fig_path)
+
+
+
+
+
+
+
+
+"""plt.style.use('ggplot')
     fig, ax = plt.subplots(1,dpi = 120)
     fig.suptitle('ACO vs GA Costs per Iterations')
     plt.xlabel("Iteration")
     plt.ylabel("Cost")
     plt.grid(b = True, which = 'major', ls = '-.', lw = 0.45)
-    plt.plot(cost_values, c = "orange", label='Karınca')
+    plt.plot(aco_cost_values, c = "orange", label='Karınca')
     plt.plot(bp[1],'-.',c = "#337ab7",label='Genetik')
     plt.legend(['Ant Colony', 'Genetic'])
     plt.legend()
@@ -126,25 +141,7 @@ def run():
     response.mimetype = 'image/png'
 
     plt.savefig('uploads/aco_vs_ga.png')
-
-    #full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'compare.png')
-    
-    full_filename = "data/aco_vs_ga.png"
-
-    #project-flask\templates\static\img\
-    print("isim : ", full_filename)
-
-
-    return render_template("tsp.html", compare_image = full_filename)
-
-
-
-
-
-
-
-
-
+"""
 
 
 
