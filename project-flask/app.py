@@ -8,8 +8,8 @@ import os
 from io import BytesIO
 import math, random, timeit
 
-from opt_algorithms.tsp.aco_tsp_solve import ACO_TSP_SOLVE
-from opt_algorithms.tsp.ga_tsp_solve import GA_TSP_SOLVE
+from algorithms.tsp.aco_tsp_solve import ACO_TSP_SOLVE
+from algorithms.tsp.ga_tsp_solve import GA_TSP_SOLVE
 
 from flask import Flask, render_template, request, make_response
 
