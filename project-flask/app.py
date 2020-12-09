@@ -172,7 +172,7 @@ def run():
         return render_template("tsp.html", resim_yol = compare_route_fig_path, onayli = show_label)
         #return compare_route_fig_path, show_label
     else:
-        return render_template("tsp.html")
+        return render_template("tsp.html",onayli = False)
     #else:
         #return "",False
 

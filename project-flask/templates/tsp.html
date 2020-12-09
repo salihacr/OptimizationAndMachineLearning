@@ -86,27 +86,25 @@
 </form>
 
 <div class="col-md-12">
-    <div class="content_section" id="plot_area">
-        <label id="loaderlabel">
-            {% if onayli == True %}
-            <label>Sonuçları Görselleştirebilirsiniz</label>
-            <button class="btn btn-primary">Sonuçları Görselleştir</button>
-            {% else %}
-            Çalışıyor
-            {% endif %}
-        </label>
+    
+        {% if onayli == True %}
+        <button class="btn btn-primary" onclick="toggle()" type="button">
+            Sonuçları Görselleştir
+          </button>
+        <div>
+        <label>Sonuçları Görselleştirebilirsiniz</label>
+        {% else %}
+        <hr/>
+        <button class="btn btn-primary" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Görselleştirme Hazırlanıyor
+          </button>
+        <div>
+        {% endif %}
+    </label>
+    <div id="plot_area" style="display: none;">
 
-        <label id="loaderlabel">
-            {% if onayli == True %}
-            <label>Sonuçları Görselleştirebilirsiniz</label>
-            <button class="btn btn-primary">Sonuçları Görselleştir</button>
-            {% else %}
-            Çalışıyor
-            {% endif %}
-        </label>
-
-
-        <div class="card" style="width: 18rem;">
+        <div class="card">
             <image src="{{url_for('static',filename = 'uploads/karınca.png')}}"></image>
             <image src="{{url_for('static',filename = 'uploads/plt_compare_costs.png')}}"></image>
             <img src="{{ resim_yol }}" alt="User Image">
@@ -122,6 +120,13 @@
 
         if (el.style.visibility == 'hidden') {
             el.style.visibility = 'visible'
+        }
+    }
+    function toggle() {
+        toggle_form = document.getElementById('plot_area');
+
+        if(toggle_form.style.display == "none"){
+            toggle_form.style.display = "block";
         }
     }
 </script>

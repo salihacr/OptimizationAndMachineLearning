@@ -68,6 +68,8 @@ def save_figures_to_upload(plot_fig, img_name):
     response = make_response(output.getvalue())
     response.mimetype = 'image/png'
 
+    #img_name +=
+
     plt.savefig('static/uploads/{}'.format(img_name))
     print("resim yolu : ", 'static/uploads/{}'.format(img_name))
     img_path = str('static/uploads/{}'.format(img_name))
