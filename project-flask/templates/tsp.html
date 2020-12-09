@@ -1,10 +1,13 @@
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
 {% extends "base.html" %}
 
 {% block title %}Home{% endblock %}
 
 
 {% block content %}
-<form action="/tsp" method="post" class="d-inline">
+<form action="/travellingsalesmanproblem" method="post" class="d-inline">
     <div class="row">
         <div class="col-md-6">
             <div class="card">
@@ -79,26 +82,36 @@
             <button onclick="toggle_display()" type="submit" class="btn btn-primary"
                 style="width: 100%;">ÇALIŞTIR</button>
         </div>
-        <label name="lbltest"></label>
     </div>
 </form>
 
 <div class="col-md-12">
+    <div class="content_section" id="plot_area">
+        <label id="loaderlabel">
+            {% if onayli == True %}
+            <label>Sonuçları Görselleştirebilirsiniz</label>
+            <button class="btn btn-primary">Sonuçları Görselleştir</button>
+            {% else %}
+            Çalışıyor
+            {% endif %}
+        </label>
 
-    <div class="card content_section" style="width: 18rem; visibility: hidden;">
-        <!-- <img class="card-img-top" src="/templates/img/aco_vs_ga.png" alt="Card image cap">
-        <img src="{{ compare_image }}" alt="User Image">
-        <image src="{{url_for('static',filename = 'img/compare.png')}}"></image>
-        <image src="{{url_for('static',filename = 'img/compare.png')}}"></image>
-        <image src="{{url_for('static',filename = 'img/aco_vs_ga.png')}}"></image> -->
+        <label id="loaderlabel">
+            {% if onayli == True %}
+            <label>Sonuçları Görselleştirebilirsiniz</label>
+            <button class="btn btn-primary">Sonuçları Görselleştir</button>
+            {% else %}
+            Çalışıyor
+            {% endif %}
+        </label>
 
-        <image src="{{url_for('static',filename = 'uploads/plt_compare_costs.png')}}"></image>
-        <img src="{{ compare_image }}" alt="User Image">
-        <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+
+        <div class="card" style="width: 18rem;">
+            <image src="{{url_for('static',filename = 'uploads/karınca.png')}}"></image>
+            <image src="{{url_for('static',filename = 'uploads/plt_compare_costs.png')}}"></image>
+            <img src="{{ resim_yol }}" alt="User Image">
+            <div class="card-body">
+            </div>
         </div>
     </div>
 </div>

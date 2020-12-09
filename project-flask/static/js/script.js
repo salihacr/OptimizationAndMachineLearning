@@ -25,7 +25,11 @@ $(document).ready(function () {
     });
     // Predict
     $('#btn-test').click(function () {
-        var form_data = new FormData($('#upload-file')[0]); // form datas
+        var form_data = new FormData($('#upload-file')[0],
+        $('#sayi1')[0],
+        $('#sayi2')[0],
+        $('#sayi3')[0],
+        $('#sayi4')[0]); // form datas
 
         // Show loading animation
         $(this).hide();
@@ -34,7 +38,7 @@ $(document).ready(function () {
         // Make prediction by calling api /predict
         $.ajax({
             type: 'POST',
-            url: '/tsp', // response url > tsp
+            url: '/test', // response url > tsp
             data: form_data, // form datas 
             contentType: false,
             cache: false,

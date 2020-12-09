@@ -26,7 +26,7 @@ def compare_cost_values(aco_cost_values, ga_cost_values):
     plt.plot(ga_cost_values,'-.',c = "#337ab7",label='Genetik')
     plt.legend(['Ant Colony', 'Genetic'])
     plt.legend()
-    plt.show()
+    #plt.show()
 
     return fig
 
@@ -56,7 +56,7 @@ def compare_route_graphic( x_axis, y_axis, cities, aco_best_route, ga_best_route
     # ga path plot
     plt.plot(x_axis[ga_path], y_axis[ga_path], c = "green")
 
-    plt.show()
+    #plt.show()
 
     return fig
 

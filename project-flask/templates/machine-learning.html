@@ -4,48 +4,78 @@
 
 
 {% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-<!DOCTYPE html>
-<html>
+<div class="col-md-12">
+    <input type="number" id="sayi" placeholder="Sayı Giriniz">
+    <input type="number" id="sayi2" placeholder="Sayı2 Giriniz">
+    <input type="submit" id="gonder" value="Gönder"> <br><br>
 
-<head>
-    <title>ANASAYFA</title>
-</head>
+    Kareler Toplamı: <strong id="sonuc">-</strong>
+</div>
+<script>
+    var test = document.getElementById('sayi');
+    console.log(test);
+    $(function () {
+        $('#gonder').bind('click', function () {
 
-<body>
-    <div class="col-md-6">
+            $.ajax({
+                url: '/hesapla',
+                type: 'POST',
+                data: {
+                    sayilar: [
+                        { sayi: $('#sayi').val() },
+                        { sayi2: $('#sayi2').val() }
+                    ]
+                },
+                success: function (donen_veri) {
+                    console.log(donen_veri)
+                    $('#sonuc').html(donen_veri)
+                },
+                error: function (donen_veri) {
+                    $('#sonuc').html(donen_veri)
+                }
+            });
+
+        });
+    });
+</script>
+<!-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
                 <h4>Sayıları Topla </h4>
             </div>
             <div class="card-body">
-                <form action="/machine_learning" method = "post">
+                <form action="/machine_learning" method="post">
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label>Sayi1</label>
-                            <input type="number" class="form-control" name="sayi1" placeholder="Sayi1" required>
+                            <input type="number" class="form-control" id="sayi1" name="sayi1" placeholder="Sayi1"
+                                required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label>Sayi2 </label>
-                            <input type="number" class="form-control" name="sayi2" placeholder="Sayi2" required>
+                            <input type="number" class="form-control" id="sayi2" name="sayi2" placeholder="Sayi2"
+                                required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label>Sayi3</label>
-                            <input type="number" class="form-control" name="sayi3" placeholder="Sayi3" required>
+                            <input type="number" class="form-control" id="sayi3" name="sayi3" placeholder="Sayi3"
+                                required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label>Sayi4</label>
-                            <input type="number" class="form-control" name="sayi4" placeholder="Sayi4" required>
+                            <input type="number" class="form-control" id="sayi4" name="sayi4" placeholder="Sayi4"
+                                required>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary"> Hesapla </button>
                 </form>
             </div>
         </div>
-    </div>
-</body>
+    </div> -->
 
 </html>
 
