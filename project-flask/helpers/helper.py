@@ -26,7 +26,6 @@ def compare_cost_values(aco_cost_values, ga_cost_values):
     plt.plot(aco_cost_values, c = "orange", label='Karınca')
     plt.plot(ga_cost_values,'-.',c = "#337ab7",label='Genetik')
     plt.legend(['Ant Colony', 'Genetic'])
-    plt.legend()
     #plt.show()
 
     return fig
@@ -53,9 +52,11 @@ def compare_route_graphic( x_axis, y_axis, cities, aco_best_route, ga_best_route
     
     # adding paths to plot
     # aco path plot
-    plt.plot(x_axis[aco_path], y_axis[aco_path], c = "purple")
+    plt.plot(x_axis[aco_path], y_axis[aco_path], c = "purple", label='Karınca')
     # ga path plot
-    plt.plot(x_axis[ga_path], y_axis[ga_path], c = "green")
+    plt.plot(x_axis[ga_path], y_axis[ga_path],"-_", c = "green", label='Genetik')
+
+    plt.legend(['Ant Colony', 'Genetic'])
 
     #plt.show()
 
@@ -69,7 +70,7 @@ def save_figures_to_upload(plot_fig, img_name):
 
     # pure img_name
     temp_img_name = img_name
-    
+
     base_path = 'static/uploads/'
     img_path = base_path + temp_img_name
 

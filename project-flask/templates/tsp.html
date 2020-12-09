@@ -87,55 +87,60 @@
 
 <div class="col-md-12">
 
+    <div class="col-sm-6 offset-md-3">
+        <div class="alert alert-success in text-center"> <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <strong>Sonuçları Görüntüleyebilirsiniz ! </strong>
+        </div>
+        <br>
+    </div>
+
     {% if onayli == True %}
-    <button class="btn btn-primary" onclick="toggle()" type="button">
-        Sonuçları Görselleştir
+    <div class="col-sm-6 offset-md-3">
+        <div class="col text-center">
+            <button class="btn btn-danger" onclick="toggle()" type="button">
+                Sonuçları Görselleştir
+            </button>
+        </div>
+    </div>
+
+    {% else %}
+    <hr />
+    <button class="btn btn-primary" type="button" disabled>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Görselleştirme Hazırlanıyor
     </button>
     <div>
-        <div class="col-sm-6 offset-md-3">
-            <div class="alert alert-success in text-center"> <a href="#" class="close" data-dismiss="alert">&times;</a>
-                <strong>Sonuçları Görüntüleyebilirsiniz ! </strong>
-            </div>
-            <br>
-        </div>
+        {% endif %}
+        </label>
+        <div id="plot_area" style="display: none;">
 
-        {% else %}
-        <hr />
-        <button class="btn btn-primary" type="button" disabled>
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Görselleştirme Hazırlanıyor
-        </button>
-        <div>
-            {% endif %}
-            </label>
-            <div id="plot_area" style="display: none;">
+            <div class="card">
+                <img src="{{ route_compare_img }}" alt="User Image">
 
-                <div class="card">
-                    <img src="{{ route_compare_img }}" alt="User Image">
-
-                    <img src="{{ cost_compare_img }}" alt="User Image">
+                <img src="{{ cost_compare_img }}" alt="User Image">
 
 
-                    <div class="card-body">
-                    </div>
+                <div class="card-body">
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <script>
-            function toggle_display() {
-                el = document.querySelector('.content_section');
+<script>
+    function toggle_display() {
+        el = document.querySelector('.content_section');
 
-                if (el.style.visibility == 'hidden') {
-                    el.style.visibility = 'visible'
-                }
-            }
-            function toggle() {
-                toggle_form = document.getElementById('plot_area');
+        if (el.style.visibility == 'hidden') {
+            el.style.visibility = 'visible'
+        }
+    }
+    function toggle() {
+        toggle_form = document.getElementById('plot_area');
 
-                if (toggle_form.style.display == "none") {
-                    toggle_form.style.display = "block";
-                }
-            }
-        </script>
-        {% endblock %}
+        if (toggle_form.style.display == "none") {
+            toggle_form.style.display = "block";
+        }
+    }
+</script>
+{% endblock %}
