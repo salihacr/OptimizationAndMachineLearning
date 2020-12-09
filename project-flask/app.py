@@ -10,21 +10,15 @@ from io import BytesIO
 import math, random, timeit
 
 from helpers import helper
-
 from algorithms.tsp.aco_tsp_solve import ACO_TSP_SOLVE
 from algorithms.tsp.ga_tsp_solve import GA_TSP_SOLVE
 
 from flask import Flask, render_template, request, make_response
 
-
 #import warnings 
 #warnings.filterwarnings("ignore")
 
-PEOPLE_FOLDER = os.path.join('project-flask','templates','static', 'img')
-
 app = Flask(__name__)
-
-app.config['UPLOAD_FOLDER'] = PEOPLE_FOLDER
 
 @app.route('/')
 def index():
@@ -32,10 +26,9 @@ def index():
 
 @app.route('/optimization')
 def optimization():
-    return render_template("genetik.html")
+    return render_template("optimization.html")
 
-
-@app.route('/machine_learning', methods = ["GET","POST"])
+@app.route('/machine_learning')
 def machine_learning():
     return render_template("machine-learning.html")
 
@@ -132,13 +125,6 @@ def run():
         
     else:
         return render_template("tsp.html", onayli = False)
-    #else:
-        #return "",False
-
-    #return render_template("tsp.html", show = show_label  ,route_compare_img = compare_route_fig_path)
-    #return render_template("tsp.html", route_compare_img = compare_route_fig_path, cost_compare_img = compare_cost_fig_path)
-
-    
-
+ 
 if __name__ =="__main__":  
     app.run(debug = True)  
