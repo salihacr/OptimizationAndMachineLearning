@@ -6,7 +6,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
+from apscheduler.schedulers.background import BackgroundScheduler
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+
 
 from flask import make_response
 
@@ -93,3 +95,37 @@ def get_random_string(length):
 def format_for_genetic(longitudes_x,latitudes_y):
     distance_list = zip(longitudes_x,latitudes_y)
     return list(distance_list)
+
+
+#Delete Folder Şedule
+import schedule, time, os, glob
+def deleteFileInFolder():
+    dir = 'static/uploads'
+    filelist = glob.glob(os.path.join(dir, "*"))
+    if len(filelist) != 0:
+        for f in filelist:
+            os.remove(f)
+ 
+def runSchedule():
+    schedule.every(.5).minutes.do(deleteFileInFolder)
+    #schedule.every(2).hour.do(deleteFileInFolder)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+
+
+
+def testSalih():
+    def deleteFileInFolder():
+        dir = 'static/uploads'
+        filelist = glob.glob(os.path.join(dir, "*"))
+        if len(filelist) != 0:
+            for f in filelist:
+                os.remove(f)
+
+    sched = BackgroundScheduler(daemon=True)
+    sched.add_job(deleteFileInFolder, 'interval', minutes=1)
+    sched.start()
+

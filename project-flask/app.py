@@ -20,6 +20,8 @@ from flask import Flask, render_template, request, make_response
 
 app = Flask(__name__)
 
+helper.testSalih()
+
 @app.route('/')
 def index():
     return render_template("index.html")
@@ -35,6 +37,15 @@ def machine_learning():
 @app.route('/travellingsalesmanproblem')
 def tsp():
     return render_template("tsp.html")
+    
+
+@app.route('/salih')
+def salih():
+    return render_template("salih.html")
+
+@app.route('/berkay')
+def berkay():
+    return render_template("berkay.html")
 
 #Cache Blocker
 @app.after_request
@@ -125,6 +136,9 @@ def run():
         
     else:
         return render_template("tsp.html", onayli = False)
- 
+
+
+
+
 if __name__ =="__main__":  
     app.run(debug = True)  
