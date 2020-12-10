@@ -98,25 +98,7 @@ def format_for_genetic(longitudes_x,latitudes_y):
 
 
 #Delete Folder Şedule
-import schedule, time, os, glob
-def deleteFileInFolder():
-    dir = 'static/uploads'
-    filelist = glob.glob(os.path.join(dir, "*"))
-    if len(filelist) != 0:
-        for f in filelist:
-            os.remove(f)
- 
-def runSchedule():
-    schedule.every(.5).minutes.do(deleteFileInFolder)
-    #schedule.every(2).hour.do(deleteFileInFolder)
-
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
-
-
-
-
+import os, glob
 def testSalih():
     def deleteFileInFolder():
         dir = 'static/uploads'
@@ -126,6 +108,8 @@ def testSalih():
                 os.remove(f)
 
     sched = BackgroundScheduler(daemon=True)
-    sched.add_job(deleteFileInFolder, 'interval', minutes=1)
+    sched.add_job(deleteFileInFolder, 'interval', hours=1)
     sched.start()
+
+
 

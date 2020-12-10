@@ -13,12 +13,24 @@ from helpers import helper
 from algorithms.tsp.aco_tsp_solve import ACO_TSP_SOLVE
 from algorithms.tsp.ga_tsp_solve import GA_TSP_SOLVE
 
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, redirect, abort, flash, url_for
+from werkzeug.utils import secure_filename
 
 #import warnings 
 #warnings.filterwarnings("ignore")
 
+YUKLEME_KLASORU = 'static/dataUpload'
+#Test amaçlı duruyorlar, son hali => .csv ve .txt olcak
+UZANTILAR = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','csv'])
+
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = YUKLEME_KLASORU
+app.secret_key = "denemeKey"
+
+
+def uzanti_kontrol(dosyaadi):
+    return '.' in dosyaadi and \
+    dosyaadi.rsplit('.', 1)[1].lower() in UZANTILAR
 
 helper.testSalih()
 
@@ -45,7 +57,41 @@ def salih():
 
 @app.route('/berkay')
 def berkay():
+
     return render_template("berkay.html")
+
+#Formdan gelen resmi kullanıcıya geri göster. Veya belgesyi
+@app.route('/berkay/<string:dosya>')
+def dosyayuklemesonuc(dosya):
+   return render_template("berkay.html", dosya=dosya)
+
+# Form ile dosya yüklemek
+@app.route('/dataUpload', methods=['POST'])
+def dosyayukle():
+    if request.method == 'POST':
+        #Formdan bize bir dosya geldi mi ?
+        if 'dosya' not in request.files:
+            flash('Dosya seçilmedi')
+            return redirect('berkay')         
+							
+		#Kullanıcı dosya seçmemiş olabilir veya tarayıcı boş göndermiş mi kontrol et.
+        dosya = request.files['dosya']					
+        if dosya.filename == '':
+            flash('Dosya seçilmedi')
+            return redirect('berkay')
+					
+		#Gelen dosya tipi bizim istediğim tipte bir dosya mı ? 
+        #secure_filename => adı "../../../../home/images/logo.png" ise "home_images_logo.png" şeklinde çevirir. 
+        if dosya and uzanti_kontrol(dosya.filename):
+            dosyaadi = secure_filename(dosya.filename)
+            dosya.save(os.path.join(app.config['UPLOAD_FOLDER'], dosyaadi))
+            #return redirect(url_for('berkay',dosya=dosyaadi))
+            return redirect('berkay/' + dosyaadi)
+        else:
+            flash('İzin verilmeyen dosya uzantısı. Lütfen .txt veya .csv uzantılı bir dosya yükleyiniz !')
+            return redirect('berkay')							
+    else:
+        abort(401)      
 
 #Cache Blocker
 @app.after_request
@@ -136,8 +182,6 @@ def run():
         
     else:
         return render_template("tsp.html", onayli = False)
-
-
 
 
 if __name__ =="__main__":  
