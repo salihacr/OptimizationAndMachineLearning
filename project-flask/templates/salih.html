@@ -1,11 +1,255 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salih</title>
-</head>
-<body>
-    <p> salih </p>
-</body>
-</html>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+{% extends "base.html" %}
+
+{% block title %}Test Ajax{% endblock %}
+
+{% block content %}
+<form action="/tsptest" method="post" class="d-inline">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Karınca Kolonisi Parametreleri</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label>Karınca Sayısı</label>
+                            <input type="number" value="11" class="form-control" name="antsize" id="antsize"
+                                placeholder="Karınca Sayısı" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Feromon Buharlaşma Orarnı</label>
+                            <input type="number" value="0.3" step="any" class="form-control" id="pheromonerho"
+                                name="pheromonerho" placeholder="Feromon Miktarı" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label>Alfa</label>
+                            <input type="number" step="any" value="1" class="form-control" id="alfa" name="alpha"
+                                placeholder="Alfa Değeri" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Beta</label>
+                            <input type="number" step="any" value="1" class="form-control" id="beta" name="beta"
+                                placeholder="Beta Değeri" required>
+                        </div>
+                        <div class="form-group">
+                            <label>İterasyon Sayısı</label>
+                            <input type="number" value="10" class="form-control" name="iterasyon1" id="iterasyon1"
+                                placeholder="İterasyon Sayısı" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" style="width: 100%;">ÇALIŞTIR</button>
+        </div>
+    </div>
+</form>
+<center class="mt-2 mb-2">
+    <div class="spinner-border" id="wait" style="width: 3rem; height: 3rem; display: none;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</center>
+<div class="col-md-12">
+    <div>
+        </label>
+        <div id="plot_area" style="display: block;">
+
+            <div class="card">
+                <img id="resim1" src="">
+
+                <img id="resim2" src="">
+
+
+                <div class="card-body">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $(document).ajaxStart(function () {
+            $("#wait").css("display", "block");
+        });
+        $(document).ajaxComplete(function () {
+            $("#wait").css("display", "none");
+        });
+        $('form').on('submit', function (event) {
+            $.ajax({
+                data: {
+                    antsize: $('#antsize').val(),
+                    pheromonerho: $('#pheromonerho').val(),
+                    alfa: $('#alfa').val(),
+                    beta: $('#beta').val(),
+                    iteration: $('#iterasyon1').val()
+                },
+                type: 'POST',
+                url: '/tsptest'
+            })
+                .done(function (data) {
+
+                    if (data.error) {
+                        $('#errorAlert').text(data.error).show();
+                        $('#successAlert').hide();
+                    }
+                    else {
+                        console.log(data);
+                        $('#resim1').attr("src", data.img1);
+                        $('#resim2').attr("src", data.img2);
+                        $('#successAlert').text(data.name).show();
+                        $('#errorAlert').hide();
+                    }
+                });
+
+            event.preventDefault();
+
+        });
+
+    });
+
+
+    function toggle_display() {
+        el = document.querySelector('.content_section');
+
+        if (el.style.visibility == 'hidden') {
+            el.style.visibility = 'visible'
+        }
+    }
+    function toggle() {
+        toggle_form = document.getElementById('plot_area');
+
+        if (toggle_form.style.display == "none") {
+            toggle_form.style.display = "block";
+        }
+    }
+</script>
+
+
+test2 calisiyor
+<!-- 
+<form class="form-inline">
+    <div class="form-group">
+        <label class="sr-only" for="emailInput">Email address</label>
+        <input type="email" class="form-control" id="emailInput" placeholder="Email">
+    </div>
+    <div class="form-group">
+        <label class="sr-only" for="nameInput">Name</label>
+        <input type="text" class="form-control" id="nameInput" placeholder="First Name">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>
+<br>
+<div id="wait"
+    style="display:none;width:69px;height:89px;border:1px solid black;position:absolute;top:50%;left:50%;padding:2px;">
+    <p>o</p><br>Loading..
+</div>
+
+
+<div id="successAlert" class="alert alert-success" role="alert" style="display:none;"></div>
+<div id="errorAlert" class="alert alert-danger" role="alert" style="display:none;"></div>
+
+<script>
+    $(document).ready(function () {
+        $(document).ajaxStart(function () {
+            $("#wait").css("display", "block");
+        });
+        $(document).ajaxComplete(function () {
+            $("#wait").css("display", "none");
+        });
+        $('form').on('submit', function (event) {
+            $.ajax({
+                data: {
+                    name: $('#nameInput').val(),
+                    email: $('#emailInput').val()
+                },
+                type: 'POST',
+                url: '/process'
+            })
+                .done(function (data) {
+
+                    if (data.error) {
+                        $('#errorAlert').text(data.error).show();
+                        $('#successAlert').hide();
+                    }
+                    else {
+                        $('#successAlert').text(data.name).show();
+                        $('#errorAlert').hide();
+                    }
+                });
+
+            event.preventDefault();
+
+        });
+
+    });
+
+</script>
+
+ -->
+
+
+
+
+
+
+
+test 1
+<!-- 
+<form action="/salih" method="POST">
+    <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+            placeholder="Enter email">
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
+    <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+</form>
+<script>
+    $("#btnSubmit").click(function (e) {
+        console.log("test");
+        var EmailVal = $("#exampleInputEmail1").val();
+        var PasswordVal = $("#exampleInputPassword1").val();
+
+        alert(`Email : ${EmailVal}, Password :  ${PasswordVal}`);
+
+        $.ajax({
+            url: '/salih',
+            type: 'POST',
+            data: {
+                'Email': EmailVal,
+                'Password': PasswordVal
+            },
+            success: function (response) {
+                console.log("response : " + response);
+            },
+            error: function (error) {
+                console.log("error : " + error);
+            }
+        });
+
+
+        e.preventDefault();
+        //alert("clicked");
+    });
+</script> -->
+{% endblock %}

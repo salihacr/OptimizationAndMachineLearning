@@ -1,4 +1,4 @@
-import os 
+import os, glob
 from io import BytesIO
 
 import random, string
@@ -64,14 +64,28 @@ def compare_route_graphic( x_axis, y_axis, cities, aco_best_route, ga_best_route
 
     return fig
 
+#Random str generator for image names
+def get_random_string(length):
+    letters = string.ascii_letters
+    value = random.randint(100, 999)
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    result_str += str(value)
+    print("Random string of length", length, "is:", result_str)
+    return result_str
+
+from datetime import datetime
+
+def get_current_time():
+    return str(datetime.utcnow().strftime('%Y_%m_%d%H_%M_%S_%f')[:-3])
 
 def save_figures_to_upload(plot_fig, img_name):
     # random + img_name
-    #rand_str = get_random_string(10)
-    #temp_img_name = rand_str + img_name
+    rand_str = get_random_string(10)
+    current_time = get_current_time()
+    temp_img_name = rand_str + current_time + img_name
 
     # pure img_name
-    temp_img_name = img_name
+    #temp_img_name = img_name
 
     base_path = 'static/uploads/'
     img_path = base_path + temp_img_name
@@ -83,33 +97,38 @@ def save_figures_to_upload(plot_fig, img_name):
 
 # using >  plt_img1_path = save_figures_to_upload(figure,your_img_name)
 
-#Random str generator for image names
-def get_random_string(length):
-    letters = string.ascii_letters
-    value = random.randint(100, 999)
-    result_str = ''.join(random.choice(letters) for i in range(length))
-    result_str += str(value)
-    print("Random string of length", length, "is:", result_str)
-    return result_str
-
 def format_for_genetic(longitudes_x,latitudes_y):
     distance_list = zip(longitudes_x,latitudes_y)
     return list(distance_list)
 
+def delete_files_in_folder():
+    dir = 'static/uploads'
+    filelist = glob.glob(os.path.join(dir, "*"))
+    if len(filelist) != 0:
+        for f in filelist:
+            os.remove(f)
 
-#Delete Folder Şedule
-import os, glob
-def testSalih():
-    def deleteFileInFolder():
-        dir = 'static/uploads'
-        filelist = glob.glob(os.path.join(dir, "*"))
-        if len(filelist) != 0:
-            for f in filelist:
-                os.remove(f)
+def delete_files_in_folder_by_dir(dir = ''):
+    temp_dir = dir
+    filelist = glob.glob(os.path.join(temp_dir, "*"))
+    if len(filelist) != 0:
+        for f in filelist:
+            os.remove(f)
 
+def delete_files_in_folder_by_file_length():
+    dir = 'static/uploads'
+    filelist = glob.glob(os.path.join(dir, "*"))
+    if len(filelist) >= 10:
+        for f in filelist:
+            os.remove(f)
+
+def run_schedule2():
     sched = BackgroundScheduler(daemon=True)
-    sched.add_job(deleteFileInFolder, 'interval', hours=1)
+    sched.add_job(delete_files_in_folder, 'interval', minutes=1)
     sched.start()
 
 
-
+def run_schedule():
+    sched = BackgroundScheduler(daemon=True)
+    sched.add_job(delete_files_in_folder_by_file_length, 'interval', minutes = 1)
+    sched.start()
