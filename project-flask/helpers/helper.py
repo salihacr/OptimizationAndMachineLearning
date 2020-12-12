@@ -17,19 +17,22 @@ from flask import make_response
 plt.style.use('ggplot')
 
 global get_XY_location
+
+
 def get_XY_location(x_axis, y_axis, index):
     loc_xy = np.array([x_axis[index], y_axis[index]])
     return loc_xy
 
+
 def compare_cost_values(aco_cost_values, ga_cost_values):
-    fig, ax = plt.subplots(1)
+    fig, ax = plt.subplots(1, dpi=200)
     fig.suptitle('ACO vs GA Costs per Iterations')
     plt.xlabel("Iteration")
     plt.ylabel("Cost")
     plt.grid(b=True, which='major', ls='-.', lw=0.45)
-    plt.plot(aco_cost_values, c="orange", label='Karınca')
-    plt.plot(ga_cost_values, '-.', c="#337ab7", label='Genetik')
-    plt.legend(['Ant Colony', 'Genetic'])
+    ax.plot(aco_cost_values, c="green", lw=1.5, label='Karınca')
+    ax.plot(ga_cost_values, 'r--', c="red", label='Genetik')
+    ax.legend(['Ant Colony', 'Genetic'])
     # plt.show()
 
     return fig
@@ -37,7 +40,7 @@ def compare_cost_values(aco_cost_values, ga_cost_values):
 
 def compare_route_graphic(x_axis, y_axis, cities, aco_best_route, ga_best_route):
 
-    fig, ax = plt.subplots(1, figsize=(12, 8))
+    fig, ax = plt.subplots(1, figsize=(12, 8), dpi=200)
 
     fig.suptitle('ACO vs GA Optimization for TSP Problem')
     plt.xlabel('X AXIS')
@@ -58,10 +61,11 @@ def compare_route_graphic(x_axis, y_axis, cities, aco_best_route, ga_best_route)
 
     # adding paths to plot
     # aco path plot
-    plt.plot(x_axis[aco_path], y_axis[aco_path], c="purple", label='Karınca')
+    plt.plot(x_axis[aco_path], y_axis[aco_path], lw=2.5,
+             c="purple", label='Karınca')
     # ga path plot
     plt.plot(x_axis[ga_path], y_axis[ga_path],
-             "-_", c="green", label='Genetik')
+             "r--", c="green", label='Genetik')
 
     plt.legend(['Ant Colony', 'Genetic'])
 
@@ -78,15 +82,17 @@ def get_random_string(length):
     result_str = ''.join(random.choice(letters) for i in range(length))
     result_str += str(value)
     result_str += "_"
-    print("Random string of length", length, "is:", result_str)
+    #print("Random string of length", length, "is:", result_str)
     return result_str
 
 
 def get_current_time():
     return str(datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S_%f_')[:-3])
 
+
 def combine_names():
     return str(get_current_time() + get_random_string(10))
+
 
 def save_figures_to_upload(plot_fig, img_name):
     # random + img_name
@@ -101,7 +107,7 @@ def save_figures_to_upload(plot_fig, img_name):
     img_path = base_path + temp_img_name
 
     plt.savefig(img_path)
-    print("Image Path => ", img_path)
+    #print("Image Path => ", img_path)
 
     return img_path
 

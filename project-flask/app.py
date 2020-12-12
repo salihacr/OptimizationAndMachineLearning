@@ -232,6 +232,10 @@ def add_header(r):
 
 @app.route('/tsptest2', methods=['POST'])
 def tsptest2():
+    """
+    file operation done
+    """
+    """
     file = request.files['cityfile']
     filename = helper.combine_names()
     filename += secure_filename(file.filename)
@@ -250,6 +254,14 @@ def tsptest2():
         df = pd.read_text("uploads/{}".format(filename))
     if file_extension == "csv":
         df = pd.read_csv("uploads/{}".format(filename))
+
+    """
+
+    """
+    end file operation
+    """
+
+    df = pd.read_csv("data/marmara_mesafeler.csv")
 
     cities = df.loc[:, 'city'].values
 
@@ -277,7 +289,9 @@ def tsptest2():
     # iterasyon
     iteration = request.form.get('iteration', False)
 
-    if ant_size and iteration:
+    # file da eklenecek
+    if ant_size and iteration and pheromone_rho and alpha and beta and life_count and mutation_rate and cross_rate and iteration:
+
         cities_xy = helper.format_for_genetic(cities_x_axis, cities_y_axis)
 
         aco_tsp = ACO_TSP_SOLVE(_x_axis=cities_x_axis,
@@ -306,25 +320,52 @@ def tsptest2():
 
         show_label = True
 
-        # save routes figure
+        # save compare routes figure
         plt_compare_routes_fig = helper.compare_route_graphic(
             cities_x_axis, cities_y_axis, cities, aco_best_route, ga_best_route)
         compare_route_fig_path = helper.save_figures_to_upload(
             plot_fig=plt_compare_routes_fig, img_name="plt_compare_routes.png")
 
-        # save cost figure
+        # save compare cost figure
         plt_compare_costs_fig = helper.compare_cost_values(
             aco_cost_values, ga_cost_values)
         compare_cost_fig_path = helper.save_figures_to_upload(
             plot_fig=plt_compare_costs_fig, img_name="plt_compare_costs.png")
 
-        # compare_route_fig_path = "static/uploads/karınca.png"
-        print("onay {} resim yolu : {}".format(
-            show_label, compare_route_fig_path))
+        # save ant colony route figure
+        plt_antcolony_route_fig = aco_tsp.plot_cities(
+            aco_best_route, aco_cost_values)
 
-        return jsonify({'img1': compare_route_fig_path, 'img2': compare_cost_fig_path})
+        antcolony_route_fig_path = helper.save_figures_to_upload(
+            plot_fig=plt_antcolony_route_fig, img_name="plt_antcolony_route.png")
 
-    return jsonify({'error': 'Missing data!'})
+        # save ant colony cost figure
+        plt_antcolony_costs_fig = aco_tsp.plot_cost_iteration(aco_cost_values)
+
+        antcolony_cost_fig_path = helper.save_figures_to_upload(
+            plot_fig=plt_antcolony_costs_fig, img_name="plt_antcolony_costs.png")
+
+        # save genetic algorithm route figure
+        plt_ga_route_fig = ga_tsp.plot_cities(
+            cities_x_axis, cities_y_axis, ga_best_route, ga_cost_values)
+
+        ga_route_fig_path = helper.save_figures_to_upload(
+            plot_fig=plt_ga_route_fig, img_name="plt_ga_route.png")
+
+        # save ant colony cost figure
+        plt_ga_costs_fig = ga_tsp.plot_cost_iteration(ga_cost_values)
+
+        ga_cost_fig_path = helper.save_figures_to_upload(
+            plot_fig=plt_ga_costs_fig, img_name="plt_ga_costs.png")
+
+        return jsonify({'compare_routes': compare_route_fig_path,
+                        'compare_costs': compare_cost_fig_path,
+                        'antcolony_route': antcolony_route_fig_path,
+                        'antcolony_cost': antcolony_cost_fig_path,
+                        'ga_route': ga_route_fig_path,
+                        'ga_cost': ga_cost_fig_path})
+
+    return jsonify({'error': 'Lütfen tüm verileri eksiksiz doldurun !'})
 
 
 """
