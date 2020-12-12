@@ -109,11 +109,13 @@
 
         $(document).ajaxStart(function () {
             $("#wait").css("display", "block");
+            $("#plot_area").css("display", "none");
         });
 
 
         $(document).ajaxComplete(function () {
             $("#wait").css("display", "none");
+            $("#plot_area").css("display", "block");
         });
 
 
