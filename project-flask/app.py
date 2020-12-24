@@ -170,21 +170,92 @@ def salih():
     return render_template("salih.html")
 """
 
+#Test ARI
+from algorithms.optimization.abc import Bee
+def testBerkay():
+
+    def greiwank(x):
+        return np.sum(np.power(x, 2))/4000 + 1 - np.product(np.cos(np.multiply(x, np.power(np.arange(1,len(x)+1), -0.5))))
+
+    def rastrigin(x):
+        return np.sum(np.power(x, 2) - 10*np.cos(2*np.pi*x) + 10)
+
+    def rosenbrock(x):
+        x2 = np.power(x, 2)
+        v = np.sum(np.power(x2[:-1] - x[1:], 2)) + (x2[-1]*x[0])**2
+        return 100*v + np.sum(np.power(1-x, 2))
+
+    def ackley(x):
+        return 20+np.e-20*np.exp(-0.2*np.sqrt(np.sum(np.power(x, 2))/len(x)))-np.exp(np.sum(np.cos(2*np.pi*x))/len(x))
+
+    def schwefel(x):
+        return len(x)*4128.9829-np.sum(x*np.sin(np.sqrt(np.abs(x))))
+
+    def sphere(x):
+        return np.array([sum(np.power(x,2))])
+
+
+    if __name__=="__main__":
+        names = ["Greiwank", "Rastrigin", "Rosenbrock", "Ackley", "Schwefel", "Sphere"]
+        problems = [greiwank, rastrigin, rosenbrock, ackley, schwefel, sphere]
+
+        d = 2
+        for name, problem in zip(names, problems):
+            bound = (-4.5, 4.5)
+            #SN, MCN = 50, 45
+            MCN = 45 #Arı Sayısı == Besin Sayısı ?
+            SN = 30 #İterasyon 
+            limit = SN*d
+
+            best = Bee.ABC(problem, d, bound, SN, limit, MCN)
+
+            print("problem", problem)
+            print("best: ", best[0].f)
+
+            print("objit:", best[1])
+
+            objit = best[1]
+            
+            # tiri di - 3d
+            #plot(problem, bound, best, name, n=100) 
+
+            plt.plot(objit)
+            plt.xlabel("iterasyon")
+            plt.ylabel("obj")
+            plt.show()
+
+
+#Test PSO
+from algorithms.optimization.pso import Particle, PSO
+def testPSO():
+    def sphere(x):
+        return sum(np.power(x,2))
+
+    if __name__ == "__main__":
+        initial=[5,5]               # initial starting location [x1,x2...]
+        bounds=[(-10,10),(-10,10)]  # input bounds [(x1_min,x1_max),(x2_min,x2_max)...]
+        PSO(sphere,initial,bounds,num_particles=10,maxiter=50)
+
+
+#Dea class yapılacak.
+#GA Class yapılacak.
+
+@app.route('/berkayTest')
+def berkay_test():
+    #testBerkay()
+    testPSO()
+    return render_template("berkaytest.html")
+
 
 @app.route('/berkay')
 def berkay():
-
     return render_template("berkay.html")
-
 # Formdan gelen resmi kullanıcıya geri göster. Veya belgesyi
-
 
 @app.route('/berkay/<string:dosya>')
 def dosyayuklemesonuc(dosya):
     return render_template("berkay.html", dosya=dosya)
-
 # Form ile dosya yüklemek
-
 
 @app.route('/dataUpload', methods=['POST'])
 def dosyayukle():
