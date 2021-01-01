@@ -155,13 +155,78 @@ def tsptest():
     return jsonify({'error': 'Missing data!'})
 
 @app.route('/optimization')
-def optimization():
+def optimization2():
     return render_template("optimization.html")
 
+
+from algorithms.optimization.dea import DifferentialEvolution
+from algorithms.optimization.pso import PSO
+from algorithms.optimization.sa import SimulatedAnnealing
+from algorithms.optimization.abc import Bee, ABC
+from algorithms.optimization.obj_functions import*
 @app.route('/optimize', methods=['POST'])
 def optimize():
-    pass
+    #Ortaklar = Bounds,İterasyon, objFnc
+    bound = request.form.get("bound", False)
+    bounds = [-bound, bound]
 
+    iter = request.form.get("iteration", False)
+    iteration = int(iter)
+
+    obj_function = request.form.get("obj_function", False)
+
+    prob_size = request.form.get("problem_size", False)
+    problem_size = int(prob_size)
+
+    #---------------Difer Alg---------------
+    mr = request.form.get("mutation_rate", False)
+    mutation_rate = float(mr)
+
+    cr = request.form.get("cr", False)
+    cross_rate = float(cr)
+
+    ps = request.form.get("population_size", False)
+    population_size = int(ps)
+
+    de = DifferentialEvolution(obj_function, bounds = bounds, iteration = iteration, population_size = population_size, problem_size = problem_size, mutation_rate = mutation_rate, cr = cr)
+    de_cost_values, de_best_cost, de_best_solution = de.run_optimize()
+    de.plot_results(de_cost_values)
+
+    #---------------Pso Alg---------------
+    part_size = ("particle_size", False)
+    partical_size = int(part_size)
+    
+    w = ("weights", False)
+    weights = float(w)
+
+    pso = PSO(obj_function, bounds = bounds, iteration = iteration, problem_size= prob_size, particle_size = partical_size, w = weights)
+
+    pso_cost_values, pso_best_value = pso.run_optimize()
+    pso.plot_results(pso_cost_values)
+
+
+    #---------------Abc Alg---------------
+    bee_num = ("bee_size", False)
+    bee_size = int(bee_num)
+    
+    lmt = ("limit", False)
+    limit = float(lmt)
+
+    abc_best, abc_cost_values = ABC(obj_function, bounds = bounds, iteration = iteration, problem_size = problem_size, bee_size = bee_size, limit = limit)
+    print("Best Value: ", abc_best.f)
+    print("cost_values:", abc_cost_values)
+    #plot_results(abc_cost_values)
+    
+    #---------------SA Alg---------------+
+    co_coe = ("cooling_coefficient", False)
+    cooling_coefficient = float(co_coe)
+
+    dlt = ("delta", False)
+    delta = float(dlt)
+
+    sa = SimulatedAnnealing(obj_function, problem_size = problem_size, bounds = bounds, iteration = iteration, temperature = 10000, cooling_coefficient = cooling_coefficient, delta = delta)
+    sa_cost_values, sa_best_cost, sa_best_solve = sa.run_optimize()
+    sa.plot_results(sa_cost_values)
 
 
 @app.route('/salih')
