@@ -5,7 +5,164 @@
 
 {% block content %}
 
+<form action="/optimize" method="post" class="d-inline">
+    <div class=container>
+        <div class="py-1 text-center">
+            <img class="d-block mx-auto mb-1"
+                src="https://muhendislik.gop.edu.tr/Depo/Icons/birim_logo/fakulteler//muhendislik_tr.png?dt=20201213223623"
+                alt="" width="440" height="120">
+            <h2>Optimizasyon Algoritmalarını Test Et !</h2>
+            <p class="lead">Applied Optimization Algorithms and Machine Learning on Flask - Applied Optimization
+                Algorithms and Machine Learning on Flask</p>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Yapay Arı Algoritması (ABC)</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label>Arı Sayısı - Besin Sayısı</label>
+                                <input type="number" value="45" step="any" class="form-control"
+                                    name="abc_populationSize" id="abc_populationSize"
+                                    placeholder="Arı Sayısı - Besin Sayısı" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Limit</label>
+                                <input type="number" inputmode="decimal" value="10" step="any" class="form-control"
+                                    name="abc_limit" id="abc_limit" placeholder="Arı Sayısı - Besin Sayısı" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Tavlama Benzetimi</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label>Sıcaklık</label>
+                                <input type="number" value="100" class="form-control" name="sa_temperature"
+                                    id="sa_temperature" placeholder="Maksimum Sıcaklık" disabled required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>Soğuma Katsayısı</label>
+                                <input type="number" value="0.99" inputmode="decimal" class="form-control"
+                                    name="sa_cooling_coefficient" id="sa_cooling_coefficient"
+                                    placeholder="Mutasyon Olasılığı" disabled required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>Delta</label>
+                                <input type="number" value="0.10" inputmode="decimal" class="form-control"
+                                    name="sa_delta" id="sa_delta" placeholder="Çaprazlama Olasılığı" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Parçacık Sürü Optimizasyonu (PSO)</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label>Sürüdeki Birey Sayısı</label>
+                                <input type="number" value="5" class="form-control" name="pso_particle_size"
+                                    id="pso_particle_size" placeholder="Süredeki Birey Sayısı" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Ağırlık</label>
+                                <input type="number" inputmode="decimal" value="5" class="form-control"
+                                    name="pso_weight" id="pso_weight" placeholder="Ağırlık(w)" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Diferansiyel Evrim Algoritması (DEA)</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label>Popülasyon Sayısı</label>
+                                <input type="number" value="100" class="form-control" name="dea_population_size"
+                                    id="dea_population_size" placeholder="Popülasyon Sayısı" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>Mutasyon Olasılığı</label>
+                                <input type="number" value="0.5" class="form-control" name="dea_mutation_rate"
+                                    id="dea_mutation_rate" placeholder="Mutasyon Olasılığı" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>Çaprazlama Olasılığı</label>
+                                <input type="number" value="0.9" class="form-control" name="dea_crossRate"
+                                    id="dea_crossRate" placeholder="Çaprazlama Olasılığı" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
+            <div class="col-md-12 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Test Etmek İstediğiniz Fonksiyonları, İterasyon Sayısını ve Problem Boyutunu Belirleyiniz
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <label for="formControlRange">İterasyon Sayısını Belirleyiniz</label>
+                            <input type="range" class="form-control-range" min="10" max="100" step=10
+                                oninput="iteration.value = this.value">
+                            <output id="iteration" name = "iteration">60</output>
+                        </div>
+                        <label>Test Fonksiyonları</label>
 
-{% endblock %}
+                        <div class="form-row">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="obj_function"
+                                    id="obj_function" value="option1" checked>
+                                <label class="form-check-label" for="exampleRadios1">
+                                    Sphere Fonksiyonu
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Problem Boyutu</label>
+                            <input type="number" value="2" class="form-control" name="problem_size" id="problem_size"
+                                placeholder="Çaprazlama Olasılığı" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Üst Sınır</label>
+                            <input type="number" value="5.12" inputmode="decimal" class="form-control" name="bound"
+                                id="bound" placeholder="Üst Sınır" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <button type="button" class="btn btn-primary btn-lg btn-block">Testi Başlat !</button>
+
+
+        <br> <br>
+
+    </div>
+
+
+    {% endblock %}

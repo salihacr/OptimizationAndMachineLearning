@@ -166,50 +166,50 @@ from algorithms.optimization.abc import Bee, ABC
 from algorithms.optimization.obj_functions import*
 @app.route('/optimize', methods=['POST'])
 def optimize():
-    #Ortaklar = Bounds,İterasyon, objFnc
+    #Ortaklar: Bounds, iteration, objFunc, problem size
     bound = request.form.get("bound", False)
     bounds = [-bound, bound]
 
     iter = request.form.get("iteration", False)
     iteration = int(iter)
 
-    obj_function = request.form.get("obj_function", False)
+    #obj_function = request.form.get("obj_function", False)
+    obj_function = sphere
 
     prob_size = request.form.get("problem_size", False)
     problem_size = int(prob_size)
 
     #---------------Difer Alg---------------
-    mr = request.form.get("mutation_rate", False)
+    mr = request.form.get("dea_mutation_rate", False)
     mutation_rate = float(mr)
 
-    cr = request.form.get("cr", False)
+    cr = request.form.get("dea_crossRate", False)
     cross_rate = float(cr)
 
-    ps = request.form.get("population_size", False)
+    ps = request.form.get("dea_population_size", False)
     population_size = int(ps)
 
     de = DifferentialEvolution(obj_function, bounds = bounds, iteration = iteration, population_size = population_size, problem_size = problem_size, mutation_rate = mutation_rate, cr = cr)
     de_cost_values, de_best_cost, de_best_solution = de.run_optimize()
-    de.plot_results(de_cost_values)
+
 
     #---------------Pso Alg---------------
-    part_size = ("particle_size", False)
+    part_size = ("pso_particle_size", False)
     partical_size = int(part_size)
     
-    w = ("weights", False)
+    w = ("pso_weight", False)
     weights = float(w)
 
     pso = PSO(obj_function, bounds = bounds, iteration = iteration, problem_size= prob_size, particle_size = partical_size, w = weights)
 
     pso_cost_values, pso_best_value = pso.run_optimize()
-    pso.plot_results(pso_cost_values)
 
 
     #---------------Abc Alg---------------
-    bee_num = ("bee_size", False)
+    bee_num = ("abc_populationSize", False)
     bee_size = int(bee_num)
     
-    lmt = ("limit", False)
+    lmt = ("abc_limit", False)
     limit = float(lmt)
 
     abc_best, abc_cost_values = ABC(obj_function, bounds = bounds, iteration = iteration, problem_size = problem_size, bee_size = bee_size, limit = limit)
@@ -218,15 +218,14 @@ def optimize():
     #plot_results(abc_cost_values)
     
     #---------------SA Alg---------------+
-    co_coe = ("cooling_coefficient", False)
+    co_coe = ("sa_cooling_coefficient", False)
     cooling_coefficient = float(co_coe)
 
-    dlt = ("delta", False)
+    dlt = ("sa_delta", False)
     delta = float(dlt)
 
     sa = SimulatedAnnealing(obj_function, problem_size = problem_size, bounds = bounds, iteration = iteration, temperature = 10000, cooling_coefficient = cooling_coefficient, delta = delta)
     sa_cost_values, sa_best_cost, sa_best_solve = sa.run_optimize()
-    sa.plot_results(sa_cost_values)
 
 
 @app.route('/salih')
