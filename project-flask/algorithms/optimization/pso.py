@@ -1,103 +1,90 @@
-from __future__ import division
-import random
-import math
 import numpy as np
 import matplotlib.pyplot as plt
 
+class PSO(object):
+    def __init__(self, objective_function, bounds = [-5.12, 5.12], iteration = 10,
+    problem_size = 4, particle_size = 10, w = 0.8):
 
-class Particle:
-    def __init__(self,x0):
-        self.position_i=[]          # particle position
-        self.velocity_i=[]          # particle velocity
-        self.pos_best_i=[]          # best position individual
-        self.err_best_i=-1          # best error individual
-        self.err_i=-1               # error individual
+        self.objective_function = objective_function
+        self.bounds = bounds
+        self.iteration = iteration
+        self.problem_size = problem_size
+        self.particle_size = particle_size
 
-        for i in range(0,num_dimensions):
-            self.velocity_i.append(random.uniform(-1,1))
-            self.position_i.append(x0[i])
+        self.w = w
 
-    # evaluate current fitness
-    def evaluate(self,costFunc):
-        self.err_i=costFunc(self.position_i)
+    def run_optimize(self):
+        c1 = 2
+        c2 = 2
 
-        # check to see if the current position is an individual best
-        if self.err_i < self.err_best_i or self.err_best_i==-1:
-            self.pos_best_i=self.position_i
-            self.err_best_i=self.err_i
+        population = np.random.ranf([self.particle_size, self.problem_size]) * (self.bounds[1] - self.bounds[0]) + self.bounds[0]
 
-    # update new particle velocity
-    def update_velocity(self,pos_best_g):
-        w=0.5       # constant inertia weight (how much to weigh the previous velocity)
-        c1=1        # cognative constant
-        c2=2        # social constant
+        solution = np.zeros(self.particle_size)
 
-        for i in range(0,num_dimensions):
-            r1=random.random()
-            r2=random.random()
-
-            vel_cognitive=c1*r1*(self.pos_best_i[i]-self.position_i[i])
-            vel_social=c2*r2*(pos_best_g[i]-self.position_i[i])
-            self.velocity_i[i]=w*self.velocity_i[i]+vel_cognitive+vel_social
-
-    # update the particle position based off new velocity updates
-    def update_position(self,bounds):
-        for i in range(0,num_dimensions):
-            self.position_i[i]=self.position_i[i]+self.velocity_i[i]
-
-            # adjust maximum position if necessary
-            if self.position_i[i]>bounds[i][1]:
-                self.position_i[i]=bounds[i][1]
-
-            # adjust minimum position if neseccary
-            if self.position_i[i] < bounds[i][0]:
-                self.position_i[i]=bounds[i][0]
-                
-class PSO():
-
-    def __init__(self,costFunc,x0,bounds,num_particles,maxiter):
-        global num_dimensions
-        costValues = []
-        print("Test Fonksiyonu: ", str(costFunc))
-        print("Bounds: ", bounds)
-        print("Sürü Boyutu: ", num_particles)
-        print("İterasyon Sayısı: ", maxiter)
-        print("Hesaplama Başlıyor...")
-
-        num_dimensions=len(x0)
-        err_best_g=-1                   # best error for group
-        pos_best_g=[]                   # best position for group
-
-        # establish the swarm
-        swarm=[]
-        for i in range(0,num_particles):
-            swarm.append(Particle(x0))
-
-        # begin optimization loop
-        i=0
-        while i < maxiter:
-            #print i,err_best_g
-            #print("İterasyon Sayisi: {}, Maliyet: {}".format(i,err_best_g))
-            # cycle through particles in swarm and evaluate fitness
-            for j in range(0,num_particles):
-                swarm[j].evaluate(costFunc)
-
-                # determine if current particle is the best (globally)
-                if swarm[j].err_i < err_best_g or err_best_g == -1:
-                    pos_best_g=list(swarm[j].position_i)
-                    err_best_g=float(swarm[j].err_i)
-
-            # cycle through swarm and update velocities and position
-            for j in range(0,num_particles):
-                swarm[j].update_velocity(pos_best_g)
-                swarm[j].update_position(bounds)
-            i+=1
-
-            costValues.append(err_best_g)
+        for i in range(self.particle_size):
+            solution[i] = self.objective_function(population[i,:])
         
-        # print final results
-        print("BİTTİ : En İyinin Konumu: {} , En İyinin Maliyeti: {}".format(pos_best_g, err_best_g))
-        print("-------------------------------------------------------------------------------------\n")
-        #İterasyonları görmek için yukarıdaki yorum satırında olan printi açınız.
+        velocity = np.zeros([self.particle_size, self.problem_size])
+        
+        p_best_value = solution
+        p_best_position = population
+        
 
-        #return costValues, err_best_g
+        g_best_value = min(solution)
+        index = np.where(solution == g_best_value)
+        g_best_position = population[index, :]
+
+        cost_values = list()
+
+        cost_values.append(g_best_value)
+
+        for k in range(self.iteration):
+
+            for i in range(self.particle_size):
+                velocity[i, :] = self.w * velocity[i, :] + \
+                    c1 * np.random.ranf() * (p_best_position[i, :] - population[i, :]) + \
+                        c2 * np.random.ranf() * (g_best_position - population[i, :])
+            vmax = (self.bounds[1] - self.bounds[0]) / 2
+            
+            for i in range(self.particle_size):
+                for j in range(self.problem_size):
+                    if velocity[i, j] > vmax :
+                        velocity[i, j] = vmax
+                    elif velocity[i, j] < -vmax:
+                        velocity[i, j] = -vmax
+
+            population = population + velocity
+
+            for i in range(self.particle_size):
+                for j in range(self.problem_size):
+                    if population[i, j] > self.bounds[1]:
+                        population[i, j] = self.bounds[1]
+                    elif population[i, j] < self.bounds[0]:
+                        population[i, j] = self.bounds[0]
+
+            for i in range(self.particle_size):
+                solution[i]=self.objective_function(population[i,:])
+
+            for i in range(self.particle_size):
+                if solution[i] < p_best_value[i]:
+                    p_best_value[i, :] = population[i, :]
+                    p_best_value[i] = solution[i]
+
+            if min(solution) < g_best_value:
+                g_best_value = min(solution)
+                idx = np.where(solution == g_best_value)
+                g_best_position = population[idx, :]
+            
+            cost_values.append(g_best_value)
+            
+            print("Iteration :{}, Best Cost :{}".format(k + 1, g_best_value))
+        
+        return cost_values, g_best_value
+    def plot_results(self,cost_values):
+        
+        plt.plot(cost_values, 'r--', c="green", label='PSO')
+        plt.xlabel("Iteration")
+        plt.ylabel("Cost")
+        plt.legend()
+        plt.show()
+
