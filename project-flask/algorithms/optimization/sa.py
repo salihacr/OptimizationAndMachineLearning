@@ -81,5 +81,6 @@ class SimulatedAnnealing(object):
         plt.xlabel('Iteration')
         plt.ylabel('Cost')
         ax.plot(cost_values, "r--", c="blue", label = 'Simulated Annealing')
+        plt.legend()
         # plt.show()
         return fig

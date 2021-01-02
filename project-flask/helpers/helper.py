@@ -153,3 +153,16 @@ def run_schedule():
     sched = BackgroundScheduler(daemon=True)
     sched.add_job(delete_files_in_folder_by_file_length, 'interval', minutes=30)
     sched.start()
+
+
+def plt_compare_costs(cost_values, colors, labels):
+    fig, ax = plt.subplots(1, dpi = 200)
+    plt.xlabel('Iteration')
+    plt.ylabel('Cost')
+    
+    for i in range(0, len(cost_values)):
+        ax.plot(cost_values[i], "r--", c = colors[i], label = labels[i])
+
+    plt.legend()
+    return fig
+      

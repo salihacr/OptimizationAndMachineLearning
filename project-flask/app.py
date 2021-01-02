@@ -166,6 +166,10 @@ from algorithms.optimization.abc import Bee, ABC, plot_results
 from algorithms.optimization.obj_functions import*
 @app.route('/optimize', methods=['POST'])
 def optimize():
+    opt_cost_list  = []
+    opt_color_list = []
+    opt_label_list = []
+
     #Ortaklar: Bounds, iteration, objFunc, problem size
     bound = request.form.get("bound", False)
     boundConvert = float(bound) 
@@ -176,13 +180,36 @@ def optimize():
     iteration = int(iter)
     print("İt Sayısı : ", iteration)
     #obj_function = request.form.get("obj_function", False)
-    obj_function = sphere
+    
+    #obj_function = sphere
+    
+    obj_func = request.form.get("obj_function")
+
+    obj_function = rastrigin if obj_func == 'rastrigin' else sphere
+    obj_function = sphere if obj_func == 'sphere' else sphere
+
+    
+
 
     prob_size = request.form.get("problem_size", False)
     problem_size = int(prob_size)
     print("Problem Boyutu", problem_size)
 
     if bound and iter and prob_size and obj_function:
+        #---------------SA Alg---------------+
+        #co_coe = request.form.get("sa_cooling_coefficient", False)
+        #cooling_coefficient = float(co_coe)
+        
+        dlt = request.form.get("sa_delta", False)
+        delta = float(dlt)
+        print("SA - Delta: ", delta)
+
+        sa = SimulatedAnnealing(obj_function, problem_size = problem_size, bounds = bounds, iteration = iteration, temperature = 10000, cooling_coefficient = 0.99, delta = delta)
+        sa_cost_values, sa_best_cost, sa_best_solve = sa.run_optimize()
+
+        opt_cost_list.append(sa_cost_values)
+        opt_color_list.append('blue')
+        opt_label_list.append('SA-SimulatedAnnealing')
 
         #---------------Difer Alg---------------
         mr = request.form.get("dea_mutation_rate", False)
@@ -200,6 +227,14 @@ def optimize():
 
         de = DifferentialEvolution(obj_function, bounds = bounds, iteration = iteration, population_size = population_size, problem_size = problem_size, mutation_rate = mutation_rate, cr = cross_rate)
         de_cost_values, de_best_cost, de_best_solution = de.run_optimize()
+       
+        #'red','green','blue','orange','black','purple'
+        opt_cost_list.append(de_cost_values)
+        opt_color_list.append('red')
+        opt_label_list.append('DE-Differential Evolution')
+
+        plt_compare_fig = helper.plt_compare_costs(cost_values = opt_cost_list, colors = opt_color_list ,labels = opt_label_list)
+        plt_compare_fig_path = helper.save_figures_to_upload(plot_fig = plt_compare_fig, img_name="plt_compare_cost.png")
 
 
         #---------------Pso Alg---------------
@@ -212,9 +247,11 @@ def optimize():
         print("PSO - Pso Ağırlık:", weights)
 
         pso = PSO(obj_function, bounds = bounds, iteration = iteration, problem_size= problem_size, particle_size = partical_size, w = weights)
-
         pso_cost_values, pso_best_value = pso.run_optimize()
-
+        
+        opt_cost_list.append(pso_cost_values)
+        opt_color_list.append('green')
+        opt_label_list.append('PSO-Particle Swarm')
 
         #---------------Abc Alg---------------
         bee_num = request.form.get("abc_populationSize", False)
@@ -228,22 +265,14 @@ def optimize():
         abc_best, abc_cost_values = ABC(obj_function, bounds = bounds, iteration = iteration, problem_size = problem_size, bee_size = bee_size, limit = limit)
         print("Best Value: ", abc_best.f)
         print("cost_values:", abc_cost_values)
-        #plot_results(abc_cost_values)
         
-        #---------------SA Alg---------------+
-        #co_coe = request.form.get("sa_cooling_coefficient", False)
-        #cooling_coefficient = float(co_coe)
-        
-
-        dlt = request.form.get("sa_delta", False)
-        delta = float(dlt)
-        print("SA - Delta: ", delta)
-
-        sa = SimulatedAnnealing(obj_function, problem_size = problem_size, bounds = bounds, iteration = iteration, temperature = 10000, cooling_coefficient = 0.99, delta = delta)
-        sa_cost_values, sa_best_cost, sa_best_solve = sa.run_optimize()
+        opt_cost_list.append(abc_cost_values)
+        opt_color_list.append('orange')
+        opt_label_list.append('ABC-Artifical Bee Colony')
 
         #--------------------------BİTTİ--------------------------
-        # Save De
+        
+        # Save Dife Alg
         plt_de_costs_fig = de.plot_results(de_cost_values)
         de_cost_fig_path = helper.save_figures_to_upload(
             plot_fig=plt_de_costs_fig, img_name="plt_de_cost.png")
@@ -263,8 +292,21 @@ def optimize():
         sa_cost_fig_path = helper.save_figures_to_upload(
             plot_fig=plt_sa_costs_fig, img_name="plt_sa_cost.png")
 
+
+        opt_cost_list.remove(sa_cost_values)
+        opt_label_list.remove("SA-SimulatedAnnealing")
+        opt_color_list.remove("blue")
+
+        opt_cost_list.remove(de_cost_values)
+        opt_label_list.remove("DE-Differential Evolution")
+        opt_color_list.remove("red")
+
+        plt_compare_fig2 = helper.plt_compare_costs(cost_values = opt_cost_list, colors = opt_color_list ,labels = opt_label_list)
+        plt_compare_fig_path2 = helper.save_figures_to_upload(plot_fig = plt_compare_fig, img_name="plt_compare_cost.png")
+
         return jsonify({
-                        'compare_costs': '',
+                        'compare_costs_path': plt_compare_fig_path,
+                        'compare_costs_path2': plt_compare_fig_path2,
                         'de_cost_path': de_cost_fig_path,
                         'abc_cost_path': abc_cost_fig_path,
                         'pso_cost_path': pso_cost_fig_path,

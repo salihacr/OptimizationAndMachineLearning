@@ -74,6 +74,7 @@ class DifferentialEvolution(object):
         plt.xlabel('Iteration')
         plt.ylabel('Cost')
         ax.plot(cost_values, "r--", c="red", label = 'Differential Evolution')
+        plt.legend()
         # plt.show()
         return fig
 

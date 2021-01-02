@@ -85,9 +85,7 @@ class PSO(object):
         fig, ax = plt.subplots(1, dpi=200)
         plt.xlabel('Iteration')
         plt.ylabel('Cost')
-        ax.plot(cost_values, "r--", c="green", label = 'PSO')
+        ax.plot(cost_values, "r--", c="green", label = 'Particle Swarm')
+        plt.legend()
         # plt.show()
         return fig
-
-
-    

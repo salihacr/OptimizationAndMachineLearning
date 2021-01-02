@@ -25,13 +25,13 @@
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
                                 <label>Arı Sayısı - Besin Sayısı</label>
-                                <input type="number" value="45" step="any" class="form-control"
+                                <input type="number" value="30" step="any" class="form-control"
                                     name="abc_populationSize" id="abc_populationSize"
                                     placeholder="Arı Sayısı - Besin Sayısı" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label>Limit</label>
-                                <input type="number" inputmode="decimal" value="10" step="any" class="form-control"
+                                <input type="number" inputmode="decimal" value="5" step="any" class="form-control"
                                     name="abc_limit" id="abc_limit" placeholder="Arı Sayısı - Besin Sayısı" required>
                             </div>
                         </div>
@@ -47,7 +47,7 @@
                         <div class="form-row">
                             <div class="col-md-4 mb-3">
                                 <label>Sıcaklık</label>
-                                <input type="number" value="100" class="form-control" name="sa_temperature"
+                                <input type="number" value="10000" class="form-control" name="sa_temperature"
                                     id="sa_temperature" placeholder="Maksimum Sıcaklık" disabled required>
                             </div>
                             <div class="col-md-4 mb-3">
@@ -77,15 +77,12 @@
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
                                 <label>Sürüdeki Birey Sayısı</label>
-                                <input type="number" value="5" class="form-control" name="pso_particle_size"
+                                <input type="number" value="30" class="form-control" name="pso_particle_size"
                                     id="pso_particle_size" placeholder="Süredeki Birey Sayısı" required>
                             </div>
-
-
-
                             <div class="col-md-6 mb-3">
                                 <label>Ağırlık</label>
-                                <input type="number" value="5" class="form-control" name="pso_weight" id="pso_weight"
+                                <input type="number" value="0.8" class="form-control" name="pso_weight" id="pso_weight"
                                     placeholder="Ağırlık(w)" required>
                             </div>
                         </div>
@@ -101,7 +98,7 @@
                         <div class="form-row">
                             <div class="col-md-4 mb-3">
                                 <label>Popülasyon Sayısı</label>
-                                <input type="number" value="100" class="form-control" name="dea_population_size"
+                                <input type="number" value="30" class="form-control" name="dea_population_size"
                                     id="dea_population_size" placeholder="Popülasyon Sayısı" required>
                             </div>
                             <div class="col-md-4 mb-3">
@@ -111,7 +108,7 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Çaprazlama Olasılığı</label>
-                                <input type="number" value="0.9" class="form-control" name="dea_crossRate"
+                                <input type="number" value="0.5" class="form-control" name="dea_crossRate"
                                     id="dea_crossRate" placeholder="Çaprazlama Olasılığı" required>
                             </div>
                         </div>
@@ -134,11 +131,10 @@
                             <output id="iteration1" name="iteration1">60</output>
                         </div>
                         <label>Test Fonksiyonları</label>
-
                         <div class="form-row">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="obj_function" id="obj_function"
-                                    value="option1" checked>
+                                    value="sphere" checked>
                                 <label class="form-check-label" for="exampleRadios1">
                                     Sphere Fonksiyonu
                                 </label>
@@ -146,12 +142,12 @@
                         </div>
                         <div class="form-group">
                             <label>Problem Boyutu</label>
-                            <input type="number" value="2" class="form-control" name="problem_size" id="problem_size"
+                            <input type="number" value="4" class="form-control" name="problem_size" id="problem_size"
                                 placeholder="Çaprazlama Olasılığı" required>
                         </div>
                         <div class="form-group">
                             <label>Üst Sınır</label>
-                            <input type="number" value="5" inputmode="decimal" class="form-control" name="bound"
+                            <input type="number" value="5.12" inputmode="decimal" class="form-control" name="bound"
                                 id="bound" placeholder="Üst Sınır" required>
                         </div>
                     </div>
@@ -159,36 +155,58 @@
             </div>
         </div>
         <br> <br>
-        <button type="submit" id = "btn_run"  class="btn btn-primary btn-lg btn-block">Testi Başlat !</button>
+        <button type="submit" id="btn_run" class="btn btn-primary btn-lg btn-block">Testi Başlat !</button>
     </div>
 </form>
-
-<center>
-    <h4>Grafikler</h4>
+<center class="mt-2 mb-2">
+    <div class="spinner-border" id="wait" style="width: 3rem; height: 3rem; display: none;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
 </center>
-<div class="container">
+<center>
+    <h4>Grafikler - button click kitle/aç</h4>
+</center>
+<div class="container" id="plot_area" style="display: none;">
     <hr />
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-6">
+            <img id="compare_graph" src="" style="width: 100%;" />
+        </div>
+        <div class="col-md-6">
+            <img id="compare_graph2" src="" style="width: 100%;" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
             <img id="abc_cost_graph" src="" style="width: 100%; height: 400px;" />
         </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
             <img id="sa_cost_graph" src="" style="width: 100%; height: 400px;" />
         </div>
-        <div class="col-md-3">
+    </div>
+    <div class="row">
+        <div class="col-md-6">
             <img id="pso_cost_graph" src="" style="width: 100%; height: 400px;" />
         </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
             <img id="de_cost_graph" src="" style="width: 100%; height: 400px;" />
         </div>
     </div>
+
+
 </div>
 
 <script>
     console.log("Yüklendim")
     $(document).ready(function () {
+        $(document).ajaxStart(function () {
+            $("#wait").css("display", "block");
+        });
+        $(document).ajaxComplete(function () {
+            $("#wait").css("display", "none");
+        });
         console.log("Yüklendim")
-        $('#btn_run').click(function() {
+        $('#btn_run').click(function () {
             console.log("Formdan Veri Aldım")
             $("#plot_area").css("display", "none");
             var form_data = new FormData($('#opt_form')[0]);
@@ -217,6 +235,8 @@
                         $('#sa_cost_graph').attr("src", data.sa_cost_path);
                         $('#pso_cost_graph').attr("src", data.pso_cost_path);
                         $('#de_cost_graph').attr("src", data.de_cost_path);
+                        $('#compare_graph').attr("src", data.compare_costs_path);
+                        $('#compare_graph2').attr("src", data.compare_costs_path2);
 
                         $("#plot_area").css("display", "block");
 
