@@ -168,49 +168,61 @@ from algorithms.optimization.obj_functions import*
 def optimize():
     #Ortaklar: Bounds, iteration, objFunc, problem size
     bound = request.form.get("bound", False)
-    bounds = [-bound, bound]
+    boundConvert = float(bound) 
+    bounds = [-boundConvert, boundConvert]
+    print("Bounds Aralık : ", bounds)
 
     iter = request.form.get("iteration", False)
     iteration = int(iter)
+    print("İt Sayısı : ", iteration)
 
     #obj_function = request.form.get("obj_function", False)
     obj_function = sphere
 
     prob_size = request.form.get("problem_size", False)
     problem_size = int(prob_size)
+    print("Problem Boyutu", problem_size)
 
     #---------------Difer Alg---------------
     mr = request.form.get("dea_mutation_rate", False)
     mutation_rate = float(mr)
+    print("DE - Mutasyon Oranı:", mutation_rate)
 
     cr = request.form.get("dea_crossRate", False)
     cross_rate = float(cr)
+    print("DE - Çaprazlama Oranı:", mutation_rate)
 
     ps = request.form.get("dea_population_size", False)
     population_size = int(ps)
+    print("DE - Dif Alg Pop Boyutu", population_size )
 
-    de = DifferentialEvolution(obj_function, bounds = bounds, iteration = iteration, population_size = population_size, problem_size = problem_size, mutation_rate = mutation_rate, cr = cr)
-    de_cost_values, de_best_cost, de_best_solution = de.run_optimize()
+
+    #de = DifferentialEvolution(obj_function, bounds = bounds, iteration = iteration, population_size = population_size, problem_size = problem_size, mutation_rate = mutation_rate, cr = cr)
+    #de_cost_values, de_best_cost, de_best_solution = de.run_optimize()
 
 
     #---------------Pso Alg---------------
-    part_size = ("pso_particle_size", False)
+    part_size = request.form.get("pso_particle_size", False)
     partical_size = int(part_size)
-    
-    w = ("pso_weight", False)
-    weights = float(w)
+    print("PSO - Sürü Boyutu:", partical_size)
+
+    w = request.form.get("pso_weight", False)
+    weights = int(w)
+    print("PSO - Pso Ağırlık:", weights)
 
     pso = PSO(obj_function, bounds = bounds, iteration = iteration, problem_size= prob_size, particle_size = partical_size, w = weights)
 
-    pso_cost_values, pso_best_value = pso.run_optimize()
+    #pso_cost_values, pso_best_value = pso.run_optimize()
 
 
     #---------------Abc Alg---------------
-    bee_num = ("abc_populationSize", False)
+    bee_num = request.form.get("abc_populationSize", False)
     bee_size = int(bee_num)
+    print("ABC - Arı Sayısı:", bee_size )
     
-    lmt = ("abc_limit", False)
+    lmt = request.form.get("abc_limit", False)
     limit = float(lmt)
+    print("ABC - Arı Limit:", limit )
 
     abc_best, abc_cost_values = ABC(obj_function, bounds = bounds, iteration = iteration, problem_size = problem_size, bee_size = bee_size, limit = limit)
     print("Best Value: ", abc_best.f)
@@ -218,15 +230,18 @@ def optimize():
     #plot_results(abc_cost_values)
     
     #---------------SA Alg---------------+
-    co_coe = ("sa_cooling_coefficient", False)
+    co_coe = request.form.get("sa_cooling_coefficient", False)
     cooling_coefficient = float(co_coe)
+    print("SA - Soğuma Ks:", cooling_coefficient)
 
-    dlt = ("sa_delta", False)
+    dlt = request.form.get("sa_delta", False)
     delta = float(dlt)
+    print("SA - Delta: ", delta)
 
     sa = SimulatedAnnealing(obj_function, problem_size = problem_size, bounds = bounds, iteration = iteration, temperature = 10000, cooling_coefficient = cooling_coefficient, delta = delta)
     sa_cost_values, sa_best_cost, sa_best_solve = sa.run_optimize()
 
+    #return render_template("optimize.html")
 
 @app.route('/salih')
 def salih():
