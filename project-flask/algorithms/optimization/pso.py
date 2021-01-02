@@ -80,11 +80,14 @@ class PSO(object):
             print("Iteration :{}, Best Cost :{}".format(k + 1, g_best_value))
         
         return cost_values, g_best_value
-    def plot_results(self,cost_values):
-        
-        plt.plot(cost_values, 'r--', c="green", label='PSO')
-        plt.xlabel("Iteration")
-        plt.ylabel("Cost")
-        plt.legend()
-        plt.show()
 
+    def plot_results(self,cost_values):
+        fig, ax = plt.subplots(1, dpi=200)
+        plt.xlabel('Iteration')
+        plt.ylabel('Cost')
+        ax.plot(cost_values, "r--", c="green", label = 'PSO')
+        # plt.show()
+        return fig
+
+
+    

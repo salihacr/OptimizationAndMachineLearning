@@ -162,7 +162,7 @@ def optimization2():
 from algorithms.optimization.dea import DifferentialEvolution
 from algorithms.optimization.pso import PSO
 from algorithms.optimization.sa import SimulatedAnnealing
-from algorithms.optimization.abc import Bee, ABC
+from algorithms.optimization.abc import Bee, ABC, plot_results
 from algorithms.optimization.obj_functions import*
 @app.route('/optimize', methods=['POST'])
 def optimize():
@@ -175,9 +175,6 @@ def optimize():
     iter = request.form.get("iteration", False)
     iteration = int(iter)
     print("İt Sayısı : ", iteration)
-
-    iteration = 100
-    print("İt Sayısı : ", iteration)
     #obj_function = request.form.get("obj_function", False)
     obj_function = sphere
 
@@ -185,65 +182,95 @@ def optimize():
     problem_size = int(prob_size)
     print("Problem Boyutu", problem_size)
 
-    #---------------Difer Alg---------------
-    mr = request.form.get("dea_mutation_rate", False)
-    mutation_rate = float(mr)
-    print("DE - Mutasyon Oranı:", mutation_rate)
+    if bound and iter and prob_size and obj_function:
 
-    cr = request.form.get("dea_crossRate", False)
-    cross_rate = float(cr)
-    print("DE - Çaprazlama Oranı:", mutation_rate)
+        #---------------Difer Alg---------------
+        mr = request.form.get("dea_mutation_rate", False)
+        mutation_rate = float(mr)
+        print("DE - Mutasyon Oranı:", mutation_rate)
 
-    ps = request.form.get("dea_population_size", False)
-    population_size = int(ps)
-    print("DE - Dif Alg Pop Boyutu", population_size )
+        cr = request.form.get("dea_crossRate", False)
+        cross_rate = float(cr)
+        print("DE - Çaprazlama Oranı:", mutation_rate)
 
-
-    de = DifferentialEvolution(obj_function, bounds = bounds, iteration = iteration, population_size = population_size, problem_size = problem_size, mutation_rate = mutation_rate, cr = cross_rate)
-    de_cost_values, de_best_cost, de_best_solution = de.run_optimize()
+        ps = request.form.get("dea_population_size", False)
+        population_size = int(ps)
+        print("DE - Dif Alg Pop Boyutu", population_size )
 
 
-    #---------------Pso Alg---------------
-    part_size = request.form.get("pso_particle_size", False)
-    partical_size = int(part_size)
-    print("PSO - Sürü Boyutu:", partical_size)
-
-    w = request.form.get("pso_weight", False)
-    weights = float(w)
-    print("PSO - Pso Ağırlık:", weights)
-
-    pso = PSO(obj_function, bounds = bounds, iteration = iteration, problem_size= problem_size, particle_size = partical_size, w = weights)
-
-    pso_cost_values, pso_best_value = pso.run_optimize()
+        de = DifferentialEvolution(obj_function, bounds = bounds, iteration = iteration, population_size = population_size, problem_size = problem_size, mutation_rate = mutation_rate, cr = cross_rate)
+        de_cost_values, de_best_cost, de_best_solution = de.run_optimize()
 
 
-    #---------------Abc Alg---------------
-    bee_num = request.form.get("abc_populationSize", False)
-    bee_size = int(bee_num)
-    print("ABC - Arı Sayısı:", bee_size )
-    
-    lmt = request.form.get("abc_limit", False)
-    limit = float(lmt)
-    print("ABC - Arı Limit:", limit )
+        #---------------Pso Alg---------------
+        part_size = request.form.get("pso_particle_size", False)
+        partical_size = int(part_size)
+        print("PSO - Sürü Boyutu:", partical_size)
 
-    abc_best, abc_cost_values = ABC(obj_function, bounds = bounds, iteration = iteration, problem_size = problem_size, bee_size = bee_size, limit = limit)
-    print("Best Value: ", abc_best.f)
-    print("cost_values:", abc_cost_values)
-    #plot_results(abc_cost_values)
-    
-    #---------------SA Alg---------------+
-    co_coe = request.form.get("sa_cooling_coefficient", False)
-    cooling_coefficient = float(co_coe)
-    print("SA - Soğuma Ks:", cooling_coefficient)
+        w = request.form.get("pso_weight", False)
+        weights = float(w)
+        print("PSO - Pso Ağırlık:", weights)
 
-    dlt = request.form.get("sa_delta", False)
-    delta = float(dlt)
-    print("SA - Delta: ", delta)
+        pso = PSO(obj_function, bounds = bounds, iteration = iteration, problem_size= problem_size, particle_size = partical_size, w = weights)
 
-    sa = SimulatedAnnealing(obj_function, problem_size = problem_size, bounds = bounds, iteration = iteration, temperature = 10000, cooling_coefficient = cooling_coefficient, delta = delta)
-    sa_cost_values, sa_best_cost, sa_best_solve = sa.run_optimize()
+        pso_cost_values, pso_best_value = pso.run_optimize()
 
-    #return render_template("optimize.html")
+
+        #---------------Abc Alg---------------
+        bee_num = request.form.get("abc_populationSize", False)
+        bee_size = int(bee_num)
+        print("ABC - Arı Sayısı:", bee_size )
+        
+        lmt = request.form.get("abc_limit", False)
+        limit = float(lmt)
+        print("ABC - Arı Limit:", limit )
+
+        abc_best, abc_cost_values = ABC(obj_function, bounds = bounds, iteration = iteration, problem_size = problem_size, bee_size = bee_size, limit = limit)
+        print("Best Value: ", abc_best.f)
+        print("cost_values:", abc_cost_values)
+        #plot_results(abc_cost_values)
+        
+        #---------------SA Alg---------------+
+        #co_coe = request.form.get("sa_cooling_coefficient", False)
+        #cooling_coefficient = float(co_coe)
+        
+
+        dlt = request.form.get("sa_delta", False)
+        delta = float(dlt)
+        print("SA - Delta: ", delta)
+
+        sa = SimulatedAnnealing(obj_function, problem_size = problem_size, bounds = bounds, iteration = iteration, temperature = 10000, cooling_coefficient = 0.99, delta = delta)
+        sa_cost_values, sa_best_cost, sa_best_solve = sa.run_optimize()
+
+        #--------------------------BİTTİ--------------------------
+        # Save De
+        plt_de_costs_fig = de.plot_results(de_cost_values)
+        de_cost_fig_path = helper.save_figures_to_upload(
+            plot_fig=plt_de_costs_fig, img_name="plt_de_cost.png")
+
+        # Save Abc
+        plt_abc_costs_fig = plot_results(abc_cost_values)
+        abc_cost_fig_path = helper.save_figures_to_upload(
+            plot_fig=plt_abc_costs_fig, img_name="plt_abc_cost.png")
+
+        # Save Pso
+        plt_pso_costs_fig = pso.plot_results(pso_cost_values)
+        pso_cost_fig_path = helper.save_figures_to_upload(
+            plot_fig=plt_pso_costs_fig, img_name="plt_pso_cost.png")
+
+        # Save Sa
+        plt_sa_costs_fig = sa.plot_results(sa_cost_values)
+        sa_cost_fig_path = helper.save_figures_to_upload(
+            plot_fig=plt_sa_costs_fig, img_name="plt_sa_cost.png")
+
+        return jsonify({
+                        'compare_costs': '',
+                        'de_cost_path': de_cost_fig_path,
+                        'abc_cost_path': abc_cost_fig_path,
+                        'pso_cost_path': pso_cost_fig_path,
+                        'sa_cost_path': sa_cost_fig_path})
+
+    return jsonify({'error': 'Lütfen tüm verileri eksiksiz doldurun !'})
 
 @app.route('/salih')
 def salih():

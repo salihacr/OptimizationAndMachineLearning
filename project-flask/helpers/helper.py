@@ -145,11 +145,11 @@ def delete_files_in_folder_by_file_length():
 
 def run_schedule2():
     sched = BackgroundScheduler(daemon=True)
-    sched.add_job(delete_files_in_folder, 'interval', minutes=1)
+    sched.add_job(delete_files_in_folder, 'interval', minutes=30)
     sched.start()
 
 
 def run_schedule():
     sched = BackgroundScheduler(daemon=True)
-    sched.add_job(delete_files_in_folder_by_file_length, 'interval', minutes=1)
+    sched.add_job(delete_files_in_folder_by_file_length, 'interval', minutes=30)
     sched.start()

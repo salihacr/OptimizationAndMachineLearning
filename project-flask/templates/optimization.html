@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<form action="/optimize" method="post" class="d-inline">
+<form id="opt_form" class="d-inline" method="POST">
     <div class=container>
         <div class="py-1 text-center">
             <img class="d-block mx-auto mb-1"
@@ -81,12 +81,12 @@
                                     id="pso_particle_size" placeholder="Süredeki Birey Sayısı" required>
                             </div>
 
-        
+
 
                             <div class="col-md-6 mb-3">
                                 <label>Ağırlık</label>
-                                <input type="number" value="5" class="form-control"
-                                    name="pso_weight" id="pso_weight" placeholder="Ağırlık(w)" required>
+                                <input type="number" value="5" class="form-control" name="pso_weight" id="pso_weight"
+                                    placeholder="Ağırlık(w)" required>
                             </div>
                         </div>
                     </div>
@@ -129,16 +129,16 @@
                     <div class="card-body">
                         <div class="form-row">
                             <label for="formControlRange">İterasyon Sayısını Belirleyiniz</label>
-                            <input type="range" class="form-control-range" min="10" max="100" step=10
-                                oninput="iteration.value = this.value">
-                            <output id="iteration" name = "iteration">60</output>
+                            <input type="range" class="form-control-range" min="10" max="100" step=10 id="iteration"
+                                name="iteration" oninput="iteration1.value = this.value">
+                            <output id="iteration1" name="iteration1">60</output>
                         </div>
                         <label>Test Fonksiyonları</label>
 
                         <div class="form-row">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="obj_function"
-                                    id="obj_function" value="option1" checked>
+                                <input class="form-check-input" type="radio" name="obj_function" id="obj_function"
+                                    value="option1" checked>
                                 <label class="form-check-label" for="exampleRadios1">
                                     Sphere Fonksiyonu
                                 </label>
@@ -158,14 +158,74 @@
                 </div>
             </div>
         </div>
-
-
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Testi Başlat !</button>
-
-
         <br> <br>
-
+        <button type="submit" id = "btn_run"  class="btn btn-primary btn-lg btn-block">Testi Başlat !</button>
     </div>
+</form>
 
+<center>
+    <h4>Grafikler</h4>
+</center>
+<div class="container">
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            <img id="abc_cost_graph" src="" style="width: 100%; height: 400px;" />
+        </div>
+        <div class="col-md-3">
+            <img id="sa_cost_graph" src="" style="width: 100%; height: 400px;" />
+        </div>
+        <div class="col-md-3">
+            <img id="pso_cost_graph" src="" style="width: 100%; height: 400px;" />
+        </div>
+        <div class="col-md-3">
+            <img id="de_cost_graph" src="" style="width: 100%; height: 400px;" />
+        </div>
+    </div>
+</div>
 
-    {% endblock %}
+<script>
+    console.log("Yüklendim")
+    $(document).ready(function () {
+        console.log("Yüklendim")
+        $('#btn_run').click(function() {
+            console.log("Formdan Veri Aldım")
+            $("#plot_area").css("display", "none");
+            var form_data = new FormData($('#opt_form')[0]);
+            $.ajax({
+                type: 'POST',
+                url: '/optimize',
+                data: form_data,
+                contentType: false,
+                cache: false,
+                processData: false,
+                async: true,
+                enctype: 'multipart/form-data'
+            })
+                .done(function (data) {
+                    console.log("Hatalı Çalıştım")
+                    if (data.error) {
+                        $('#errorAlertText').text(data.error);
+                        $('#errorAlert').show();
+                        $('#successAlert').hide();
+                    }
+                    else {
+                        console.log("Çalıştım")
+                        console.log(data);
+
+                        $('#abc_cost_graph').attr("src", data.abc_cost_path);
+                        $('#sa_cost_graph').attr("src", data.sa_cost_path);
+                        $('#pso_cost_graph').attr("src", data.pso_cost_path);
+                        $('#de_cost_graph').attr("src", data.de_cost_path);
+
+                        $("#plot_area").css("display", "block");
+
+                        $('#errorAlert').hide();
+                    }
+                });
+            event.preventDefault();
+        });
+    });
+</script>
+
+{% endblock %}

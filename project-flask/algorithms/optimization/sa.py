@@ -77,9 +77,9 @@ class SimulatedAnnealing(object):
         return cost_values, best_cost, best_solve
 
     def plot_results(self,cost_values):
-        
-        plt.plot(cost_values, 'r--', c="blue", label='Simulated Annealing')
-        plt.xlabel("Iteration")
-        plt.ylabel("Cost")
-        plt.legend()
-        plt.show()
+        fig, ax = plt.subplots(1, dpi=200)
+        plt.xlabel('Iteration')
+        plt.ylabel('Cost')
+        ax.plot(cost_values, "r--", c="blue", label = 'Simulated Annealing')
+        # plt.show()
+        return fig
