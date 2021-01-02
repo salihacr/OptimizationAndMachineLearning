@@ -176,6 +176,8 @@ def optimize():
     iteration = int(iter)
     print("İt Sayısı : ", iteration)
 
+    iteration = 100
+    print("İt Sayısı : ", iteration)
     #obj_function = request.form.get("obj_function", False)
     obj_function = sphere
 
@@ -197,8 +199,8 @@ def optimize():
     print("DE - Dif Alg Pop Boyutu", population_size )
 
 
-    #de = DifferentialEvolution(obj_function, bounds = bounds, iteration = iteration, population_size = population_size, problem_size = problem_size, mutation_rate = mutation_rate, cr = cr)
-    #de_cost_values, de_best_cost, de_best_solution = de.run_optimize()
+    de = DifferentialEvolution(obj_function, bounds = bounds, iteration = iteration, population_size = population_size, problem_size = problem_size, mutation_rate = mutation_rate, cr = cross_rate)
+    de_cost_values, de_best_cost, de_best_solution = de.run_optimize()
 
 
     #---------------Pso Alg---------------
@@ -207,12 +209,12 @@ def optimize():
     print("PSO - Sürü Boyutu:", partical_size)
 
     w = request.form.get("pso_weight", False)
-    weights = int(w)
+    weights = float(w)
     print("PSO - Pso Ağırlık:", weights)
 
-    pso = PSO(obj_function, bounds = bounds, iteration = iteration, problem_size= prob_size, particle_size = partical_size, w = weights)
+    pso = PSO(obj_function, bounds = bounds, iteration = iteration, problem_size= problem_size, particle_size = partical_size, w = weights)
 
-    #pso_cost_values, pso_best_value = pso.run_optimize()
+    pso_cost_values, pso_best_value = pso.run_optimize()
 
 
     #---------------Abc Alg---------------
