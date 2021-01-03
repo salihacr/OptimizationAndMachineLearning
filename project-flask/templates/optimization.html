@@ -5,6 +5,8 @@
 
 {% block content %}
 
+
+
 <form id="opt_form" class="d-inline" method="POST">
     <div class=container>
         <div class="py-1 text-center">
@@ -14,7 +16,9 @@
             <h2>Optimizasyon Algoritmalarını Test Et !</h2>
             <p class="lead">Applied Optimization Algorithms and Machine Learning on Flask - Applied Optimization
                 Algorithms and Machine Learning on Flask</p>
+            <hr>
         </div>
+
         <div class="row">
             <div class="col-md-6 mb-3">
                 <div class="card">
@@ -25,14 +29,14 @@
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
                                 <label>Arı Sayısı - Besin Sayısı</label>
-                                <input type="number" value="30" step="any" class="form-control"
-                                    name="abc_populationSize" id="abc_populationSize"
+                                <input type="number" value="30" min="5" max="100" step="1" step="any"
+                                    class="form-control" name="abc_populationSize" id="abc_populationSize"
                                     placeholder="Arı Sayısı - Besin Sayısı" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label>Limit</label>
-                                <input type="number" inputmode="decimal" value="5" step="any" class="form-control"
-                                    name="abc_limit" id="abc_limit" placeholder="Arı Sayısı - Besin Sayısı" required>
+                                <input type="number" inputmode="decimal" min="1" max="20" step="1" value="5" step="any"
+                                    class="form-control" name="abc_limit" id="abc_limit" placeholder="Limit" required>
                             </div>
                         </div>
                     </div>
@@ -46,20 +50,21 @@
                     <div class="card-body">
                         <div class="form-row">
                             <div class="col-md-4 mb-3">
-                                <label>Sıcaklık</label>
-                                <input type="number" value="10000" class="form-control" name="sa_temperature"
-                                    id="sa_temperature" placeholder="Maksimum Sıcaklık" disabled required>
+                                <label>Maksimum Sıcaklık</label>
+                                <input type="number" value="10000" min="1" max="10000" step="100" class="form-control"
+                                    name="sa_temperature" id="sa_temperature" placeholder="Maksimum Sıcaklık" disabled
+                                    required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Soğuma Katsayısı</label>
-                                <input type="number" value="0.99" inputmode="decimal" class="form-control"
-                                    name="sa_cooling_coefficient" id="sa_cooling_coefficient"
-                                    placeholder="Mutasyon Olasılığı" disabled required>
+                                <input type="number" value="0.99" inputmode="decimal" min="0.1" max="1" step="0.1"
+                                    class="form-control" name="sa_cooling_coefficient" id="sa_cooling_coefficient"
+                                    placeholder="Soğuma Katsayısı" disabled required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Delta</label>
-                                <input type="number" value="0.10" inputmode="decimal" class="form-control"
-                                    name="sa_delta" id="sa_delta" placeholder="Çaprazlama Olasılığı" required>
+                                <input type="number" value="0.10" inputmode="decimal" min="0.1" max="10" step="0.2"
+                                    class="form-control" name="sa_delta" id="sa_delta" placeholder="Delta" required>
                             </div>
                         </div>
                     </div>
@@ -77,13 +82,15 @@
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
                                 <label>Sürüdeki Birey Sayısı</label>
-                                <input type="number" value="30" class="form-control" name="pso_particle_size"
-                                    id="pso_particle_size" placeholder="Süredeki Birey Sayısı" required>
+                                <input type="number" value="30" min="5" max="100" step="1" class="form-control"
+                                    name="pso_particle_size" id="pso_particle_size" placeholder="Süredeki Birey Sayısı"
+                                    required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label>Ağırlık</label>
-                                <input type="number" value="0.8" class="form-control" name="pso_weight" id="pso_weight"
-                                    placeholder="Ağırlık(w)" required>
+                                <input type="number" value="0.8" inputmode="decimal" min="0.1" max="3.0" step="0.1"
+                                    class="form-control" name="pso_weight" id="pso_weight" placeholder="Ağırlık(w)"
+                                    required>
                             </div>
                         </div>
                     </div>
@@ -98,18 +105,21 @@
                         <div class="form-row">
                             <div class="col-md-4 mb-3">
                                 <label>Popülasyon Sayısı</label>
-                                <input type="number" value="30" class="form-control" name="dea_population_size"
-                                    id="dea_population_size" placeholder="Popülasyon Sayısı" required>
+                                <input type="number" value="30" class="form-control" min="5" max="100" step="0.1"
+                                    name="dea_population_size" id="dea_population_size" placeholder="Popülasyon Sayısı"
+                                    required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Mutasyon Olasılığı</label>
-                                <input type="number" value="0.5" class="form-control" name="dea_mutation_rate"
-                                    id="dea_mutation_rate" placeholder="Mutasyon Olasılığı" required>
+                                <input type="number" value="0.5" inputmode="decimal" class="form-control" min="0.01"
+                                    max="0.99" step="0.01" name="dea_mutation_rate" id="dea_mutation_rate"
+                                    placeholder="Mutasyon Olasılığı" required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Çaprazlama Olasılığı</label>
-                                <input type="number" value="0.5" class="form-control" name="dea_crossRate"
-                                    id="dea_crossRate" placeholder="Çaprazlama Olasılığı" required>
+                                <input type="number" value="0.5" inputmode="decimal" class="form-control" min="0.01"
+                                    max="0.99" step="0.01" name="dea_crossRate" id="dea_crossRate"
+                                    placeholder="Çaprazlama Olasılığı" required>
                             </div>
                         </div>
                     </div>
@@ -132,41 +142,79 @@
                         </div>
                         <label>Test Fonksiyonları</label>
                         <div class="form-row">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="obj_function" id="obj_function"
-                                    value="sphere" checked>
-                                <label class="form-check-label" for="exampleRadios1">
-                                    Sphere Fonksiyonu
+                            <div class="col-md-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="obj_function" id="sphere"
+                                        value="sphere" checked>
+                                    <label class="form-check-label" for="sphere">
+                                        Sphere Fonksiyonu
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-check-input" type="radio" name="obj_function" id="rastrigin"
+                                    value="rastrigin">
+                                <label class="form-check-label" for="rastrigin">
+                                    Rastrigin Fonksiyonu
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-check-input" type="radio" name="obj_function" id="rosenbrock"
+                                    value="rosenbrock">
+                                <label class="form-check-label" for="rosenbrock">
+                                    Rosenbrock Fonksiyonu
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-check-input" type="radio" name="obj_function" id="griewank"
+                                    value="griewank">
+                                <label class="form-check-label" for="griewank">
+                                    Griewank Fonksiyonu
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>Problem Boyutu</label>
-                            <input type="number" value="4" class="form-control" name="problem_size" id="problem_size"
-                                placeholder="Çaprazlama Olasılığı" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Üst Sınır</label>
-                            <input type="number" value="5.12" inputmode="decimal" class="form-control" name="bound"
-                                id="bound" placeholder="Üst Sınır" required>
-                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label>Problem Boyutu</label>
+                    <input type="number" value="4" class="form-control" name="problem_size" id="problem_size" min="1"
+                        max="12.0" step="1" placeholder="Çaprazlama Olasılığı" required>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <label>Maksimum Sınır</label>
+                        <input type="number" value="5.12" inputmode="decimal" class="form-control" name="bound"
+                            min="1.0" max="12.0" step="0.01" inputmode="decimal" id="bound" placeholder="Üst Sınır"
+                            required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Sınırlar</label>
+                        <input type="text" disabled class="form-control" id="bounds"
+                            value="(-5.12, 5.12) olarak sınırlar belirlendi.">
                     </div>
                 </div>
             </div>
         </div>
-        <br> <br>
-        <button type="submit" id="btn_run" class="btn btn-primary btn-lg btn-block">Testi Başlat !</button>
+    </div>
+    </div>
+    </div>
+    <br>
+    <center>
+        <div class="col-md-4">
+            <button type="submit" id="btn_run" class="btn btn-primary btn-lg btn-block">Testi Başlat !</button>
+        </div>
+    </center>
     </div>
 </form>
-<center class="mt-2 mb-2">
-    <div class="spinner-border" id="wait" style="width: 3rem; height: 3rem; display: none;" role="status">
-        <span class="sr-only">Loading...</span>
-    </div>
-</center>
-<center>
-    <h4>Grafikler - button click kitle/aç</h4>
-</center>
+
+
+
 <div class="container" id="plot_area" style="display: none;">
+    <center>
+        <h4>Grafikler</h4>
+    </center>
+
     <hr />
     <div class="row">
         <div class="col-md-6">
@@ -192,12 +240,9 @@
             <img id="de_cost_graph" src="" style="width: 100%; height: 400px;" />
         </div>
     </div>
-
-
 </div>
 
 <script>
-    console.log("Yüklendim")
     $(document).ready(function () {
         $(document).ajaxStart(function () {
             $("#wait").css("display", "block");
@@ -205,9 +250,19 @@
         $(document).ajaxComplete(function () {
             $("#wait").css("display", "none");
         });
-        console.log("Yüklendim")
-        $('#btn_run').click(function () {
-            console.log("Formdan Veri Aldım")
+        console.log("Yüklendim");
+        $('#bound').keyup(function () {
+            var text = $('#bound').val();
+            var bounds = `(-${text}, ${text}) olarak sınırlar belirlendi`;
+            $('#bounds').val(bounds);
+        });
+        $('#opt_form').on('submit', function (event) {
+
+            console.log("Buttonu Disable Yaptım")
+            $("#btn_run").attr("disabled", true);
+            $("#btn_run").css("cursor", 'wait');
+
+            console.log("Formdan Veri Aldım, işliyorum.")
             $("#plot_area").css("display", "none");
             var form_data = new FormData($('#opt_form')[0]);
             $.ajax({
@@ -221,14 +276,15 @@
                 enctype: 'multipart/form-data'
             })
                 .done(function (data) {
-                    console.log("Hatalı Çalıştım")
+                    console.log("Adım Başarılı")
                     if (data.error) {
+                        console.log("HATA MEYDANA GELDİ")
                         $('#errorAlertText').text(data.error);
                         $('#errorAlert').show();
                         $('#successAlert').hide();
                     }
                     else {
-                        console.log("Çalıştım")
+                        console.log("Hatasız Çalıştım")
                         console.log(data);
 
                         $('#abc_cost_graph').attr("src", data.abc_cost_path);
@@ -241,11 +297,23 @@
                         $("#plot_area").css("display", "block");
 
                         $('#errorAlert').hide();
+
+                        console.log("Buttonu Enable Yaptım")
+                        $("#btn_run").attr("disabled", false);
+                        $("#btn_run").css("cursor", 'pointer');
                     }
                 });
             event.preventDefault();
         });
     });
 </script>
+
+<style>
+    body {
+        background-color: #ffffff;
+
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    } 
+</style>
 
 {% endblock %}

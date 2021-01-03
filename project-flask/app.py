@@ -183,14 +183,21 @@ def optimize():
     
     #obj_function = sphere
     
-    obj_func = request.form.get("obj_function")
-
-    obj_function = rastrigin if obj_func == 'rastrigin' else sphere
-    obj_function = sphere if obj_func == 'sphere' else sphere
-
+    obj_func = request.form.get("obj_function", False)
+    print("salih adam mıdır: ", obj_func)  
     
+    if obj_func == 'sphere':
+        obj_function = sphere
+    elif obj_func == 'rastrigin':
+        obj_function = rastrigin
+    elif obj_func == 'rosenbrock':
+        obj_function = rosenbrock
+    elif obj_func == 'griewank':
+        obj_function = griewank
+    else:
+        obj_function = sphere
 
-
+    print("Seçilen Fonksiyon: ", obj_function)
     prob_size = request.form.get("problem_size", False)
     problem_size = int(prob_size)
     print("Problem Boyutu", problem_size)
