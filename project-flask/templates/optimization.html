@@ -208,6 +208,16 @@
     </div>
 </form>
 
+<br>
+<center>
+    <div id="wait" style="display: none;">
+        <span class="loader">
+            <span class="loader-inner"></span>
+        </span>
+        <br>
+        <p class="mt-2">Yükleniyor...</p>
+    </div>
+</center>
 
 
 <div class="container" id="plot_area" style="display: none;">
@@ -240,6 +250,45 @@
             <img id="de_cost_graph" src="" style="width: 100%; height: 400px;" />
         </div>
     </div>
+
+    <div class="row">
+        <div class="card text-white bg-danger mb-6 shadow-sm">
+            <div class="card-header"> <h4>SASAASA</h4> </div>
+            <img id="all_compare_graph" src="" class="card-img-top"
+                style="height: 600px; width: 96%; margin-left: 2%; margin-right: 2%;">
+            <div class="card-body">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                    additional content. This content is a little bit longer.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card text-white bg-danger mb-6 shadow-sm">
+                <div class="card-header"> <h4>SASAASA</h4> </div>
+                <img id="all_compare_graph2" src="" class="card-img-top"
+                    style="height: 400px; width: 96%; margin-left: 2%; margin-right: 2%;">
+                <div class="card-body">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                        additional content. This content is a little bit longer.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-white bg-danger mb-6 shadow-sm">
+                <div class="card-header"> <h4>SASAASA</h4> </div>
+                <img id="all_compare_graph3" src="" class="card-img-top"
+                    style="height: 400px; width: 96%; margin-left: 2%; margin-right: 2%;">
+                <div class="card-body">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                        additional content. This content is a little bit longer.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
 <script>
@@ -293,6 +342,10 @@
                         $('#de_cost_graph').attr("src", data.de_cost_path);
                         $('#compare_graph').attr("src", data.compare_costs_path);
                         $('#compare_graph2').attr("src", data.compare_costs_path2);
+                        $('#all_compare_graph').attr("src", data.all_compare_costs_path);
+
+                        $('#all_compare_graph2').attr("src", data.all_compare_costs_path);
+                        $('#all_compare_graph3').attr("src", data.all_compare_costs_path);
 
                         $("#plot_area").css("display", "block");
 
@@ -313,7 +366,7 @@
         background-color: #ffffff;
 
         font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    } 
+    }
 </style>
 
 {% endblock %}

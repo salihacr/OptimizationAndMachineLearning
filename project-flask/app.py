@@ -240,6 +240,7 @@ def optimize():
         opt_color_list.append('red')
         opt_label_list.append('DE-Differential Evolution')
 
+        #SA - DE 2'li karşılaştırma
         plt_compare_fig = helper.plt_compare_costs(cost_values = opt_cost_list, colors = opt_color_list ,labels = opt_label_list)
         plt_compare_fig_path = helper.save_figures_to_upload(plot_fig = plt_compare_fig, img_name="plt_compare_cost.png")
 
@@ -299,7 +300,11 @@ def optimize():
         sa_cost_fig_path = helper.save_figures_to_upload(
             plot_fig=plt_sa_costs_fig, img_name="plt_sa_cost.png")
 
+        #ALL - 4'lü karşılaştırma.
+        plt_all_compare_fig = helper.plt_compare_costs(cost_values = opt_cost_list, colors = opt_color_list ,labels = opt_label_list)
+        plt_all_compare_fig_path = helper.save_figures_to_upload(plot_fig = plt_compare_fig, img_name="plt_all_compare_cost.png")
 
+        #PSO - ABC 2'li karşılaştırma için
         opt_cost_list.remove(sa_cost_values)
         opt_label_list.remove("SA-SimulatedAnnealing")
         opt_color_list.remove("blue")
@@ -314,6 +319,7 @@ def optimize():
         return jsonify({
                         'compare_costs_path': plt_compare_fig_path,
                         'compare_costs_path2': plt_compare_fig_path2,
+                        'all_compare_costs_path': plt_all_compare_fig_path,
                         'de_cost_path': de_cost_fig_path,
                         'abc_cost_path': abc_cost_fig_path,
                         'pso_cost_path': pso_cost_fig_path,
