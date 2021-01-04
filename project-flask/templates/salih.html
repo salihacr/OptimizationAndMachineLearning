@@ -43,8 +43,8 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label>Beta</label>
-                                <input type="number" step="any" value="1" class="form-control" name="beta" id="beta"
-                                    placeholder="Beta Değeri" required>
+                                <input type="number" step="0.1" value="1" min="0.1" max="5.0" class="form-control"
+                                    name="beta" id="beta" placeholder="Beta Değeri" required>
                             </div>
                         </div>
                     </div>
@@ -89,24 +89,23 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button id="btn_run" type="submit" class="btn btn-primary" style="width: 100%;">ÇALIŞTIR</button>
+            </div>
+        </div>
     </form>
 
-    <div class="row">
-        <div class="col-md-12">
-            <button id="btn_run" type="submit" class="btn btn-primary" style="width: 100%;">ÇALIŞTIR</button>
-        </div>
-    </div>
-
-    <center class="">
-        <div id="wait" class="skype-loader" style="display: none;">
-            <div class="dot">
-                <div class="first"></div>
-            </div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+    <center>
+        <div id="wait" style="display: none;">
+            <span class="loader">
+                <span class="loader-inner"></span>
+            </span>
+            <br>
+            <p class="mt-2">Yükleniyor...</p>
         </div>
     </center>
+
 
     <div class="alert alert-warning alert-dismissible mt-2 mb-2" id="errorAlert" role="alert" style="display: none;">
         <strong id="errorAlertText"></strong>
@@ -269,7 +268,7 @@
                 var form_data = new FormData($('#tspform')[0]);
                 $.ajax({
                     type: 'POST',
-                    url: '/tsptest2',
+                    url: '/solvetsp',
                     data: form_data,
                     contentType: false,
                     cache: false,

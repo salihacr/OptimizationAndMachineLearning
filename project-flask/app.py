@@ -1,3 +1,8 @@
+from algorithms.optimization.obj_functions import*
+from algorithms.optimization.abc import Bee, ABC, plot_results
+from algorithms.optimization.sa import SimulatedAnnealing
+from algorithms.optimization.pso import PSO
+from algorithms.optimization.dea import DifferentialEvolution
 import time
 import numpy as np
 import pandas as pd
@@ -15,6 +20,7 @@ import timeit
 from helpers import helper
 from algorithms.tsp.aco_tsp_solve import ACO_TSP_SOLVE
 from algorithms.tsp.ga_tsp_solve import GA_TSP_SOLVE
+from algorithms.tsp.abc_tsp_solve import ABC_TSP_SOLVE
 
 from flask import Flask, render_template, request, make_response, redirect, abort, flash, url_for, jsonify
 from werkzeug.utils import secure_filename
@@ -23,7 +29,7 @@ from werkzeug.utils import secure_filename
 # warnings.filterwarnings("ignore")
 
 YUKLEME_KLASORU = 'static/dataUpload'
-# Test amaçlı duruyorlar, son hali => .csv ve .txt olcak
+# Test amaçlı duruyorlar, son hali  = > .csv ve .txt olcak
 UZANTILAR = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'])
 
 app = Flask(__name__)
@@ -62,117 +68,15 @@ def machine_learning():
 def tsp():
     return render_template("tsp.html")
 
-
-@app.route('/process2', methods=['POST'])
-def process():
-
-    email = request.form['email']
-    name = request.form['name']
-    print(name + " " + email)
-    if name and email:
-        datas = email + name
-        time.sleep(5)
-        return jsonify({'name': datas})
-
-    return jsonify({'error': 'Missing data!'})
-
-
-@app.route('/tsptest', methods=['POST'])
-def tsptest():
-    file_type = "csv"
-    if file_type == "text":
-        df = pd.read_text("../input/marmara_mesafe/{}".format("mesafeler.txt"))
-    if file_type == "csv":
-        df = pd.read_csv("data/marmara_mesafeler.csv")
-
-    cities = df.loc[:, 'city'].values
-
-    cities_x_axis = df.loc[:, 'longitude'].values  # longitude is x axis
-
-    cities_y_axis = df.loc[:, 'latitude'].values  # latitude is y axis
-
-    antsize = request.form['antsize']
-    print(antsize)
-    pheromonerho = request.form['pheromonerho']
-    print("rho", pheromonerho)
-    alpha = request.form['alfa']
-    print("alfa", alpha)
-    beta = request.form['beta']
-    iteration = request.form['iteration']
-
-    print(alpha + " " + beta)
-
-    if antsize and pheromonerho and alpha and beta:
-        start = timeit.default_timer()
-
-        cities_xy = helper.format_for_genetic(cities_x_axis, cities_y_axis)
-
-        aco_tsp = ACO_TSP_SOLVE(_x_axis=cities_x_axis,
-                                _y_axis=cities_y_axis,
-                                _iteration=int(iteration),
-                                _ant_size=int(antsize),
-                                _rho=float(pheromonerho),
-                                _alpha=float(alpha),
-                                _beta=float(beta),
-                                _cities=cities)
-
-        aco_best_route, aco_cost_values, aco_best_cost = aco_tsp.run_optimize()
-
-        ga_tsp = GA_TSP_SOLVE(_cities_xy=cities_xy,
-                              _cities=cities,
-                              _life_count=100,
-                              _cross_rate=0.4,
-                              _mutation_rate=0.2)
-
-        ga_best_route, ga_cost_values, ga_best_cost = ga_tsp.run(
-            int(iteration))
-
-        # bitti
-        stop = timeit.default_timer()
-
-        show_label = True
-
-        # save routes figure
-        plt_compare_routes_fig = helper.compare_route_graphic(
-            cities_x_axis, cities_y_axis, cities, aco_best_route, ga_best_route)
-        compare_route_fig_path = helper.save_figures_to_upload(
-            plot_fig=plt_compare_routes_fig, img_name="plt_compare_routes.png")
-
-        # save cost figure
-        plt_compare_costs_fig = helper.compare_cost_values(
-            aco_cost_values, ga_cost_values)
-        compare_cost_fig_path = helper.save_figures_to_upload(
-            plot_fig=plt_compare_costs_fig, img_name="plt_compare_costs.png")
-
-        # compare_route_fig_path = "static/uploads/karınca.png"
-        print("onay {} resim yolu : {}".format(
-            show_label, compare_route_fig_path))
-
-        time.sleep(5)
-
-        return jsonify({'img1': compare_route_fig_path, 'img2': compare_cost_fig_path})
-
-    return jsonify({'error': 'Missing data!'})
-
-@app.route('/optimization')
-def optimization2():
-    return render_template("optimization.html")
-
-
-from algorithms.optimization.dea import DifferentialEvolution
-from algorithms.optimization.pso import PSO
-from algorithms.optimization.sa import SimulatedAnnealing
-from algorithms.optimization.abc import Bee, ABC, plot_results
-from algorithms.optimization.obj_functions import*
-@app.route('/optimize', methods=['POST'])
+@app.route('/optimize', methods = ['POST'])
 def optimize():
-    opt_cost_list  = []
+    opt_cost_list = []
     opt_color_list = []
     opt_label_list = []
 
-    #Ortaklar: Bounds, iteration, objFunc, problem size
+    # Ortaklar: Bounds, iteration, objFunc, problem size
     bound = request.form.get("bound", False)
-    boundConvert = float(bound) 
+    boundConvert = float(bound)
     bounds = [-boundConvert, boundConvert]
     print("Bounds Aralık : ", bounds)
 
@@ -180,19 +84,19 @@ def optimize():
     iteration = int(iter)
     print("İt Sayısı : ", iteration)
     #obj_function = request.form.get("obj_function", False)
-    
+
     #obj_function = sphere
-    
+
     obj_func = request.form.get("obj_function", False)
-    print("salih adam mıdır: ", obj_func)  
-    
-    if obj_func == 'sphere':
+    print("salih adam mıdır: ", obj_func)
+
+    if obj_func ==  'sphere':
         obj_function = sphere
-    elif obj_func == 'rastrigin':
+    elif obj_func ==  'rastrigin':
         obj_function = rastrigin
-    elif obj_func == 'rosenbrock':
+    elif obj_func ==  'rosenbrock':
         obj_function = rosenbrock
-    elif obj_func == 'griewank':
+    elif obj_func ==  'griewank':
         obj_function = griewank
     else:
         obj_function = sphere
@@ -203,22 +107,23 @@ def optimize():
     print("Problem Boyutu", problem_size)
 
     if bound and iter and prob_size and obj_function:
-        #---------------SA Alg---------------+
+        # ---------------SA Alg---------------+
         #co_coe = request.form.get("sa_cooling_coefficient", False)
         #cooling_coefficient = float(co_coe)
-        
+
         dlt = request.form.get("sa_delta", False)
         delta = float(dlt)
         print("SA - Delta: ", delta)
 
-        sa = SimulatedAnnealing(obj_function, problem_size = problem_size, bounds = bounds, iteration = iteration, temperature = 10000, cooling_coefficient = 0.99, delta = delta)
+        sa = SimulatedAnnealing(obj_function, problem_size = problem_size, bounds = bounds,
+                                iteration = iteration, temperature = 10000, cooling_coefficient = 0.99, delta = delta)
         sa_cost_values, sa_best_cost, sa_best_solve = sa.run_optimize()
 
         opt_cost_list.append(sa_cost_values)
         opt_color_list.append('blue')
         opt_label_list.append('SA-SimulatedAnnealing')
 
-        #---------------Difer Alg---------------
+        # ---------------Difer Alg---------------
         mr = request.form.get("dea_mutation_rate", False)
         mutation_rate = float(mr)
         print("DE - Mutasyon Oranı:", mutation_rate)
@@ -229,23 +134,24 @@ def optimize():
 
         ps = request.form.get("dea_population_size", False)
         population_size = int(ps)
-        print("DE - Dif Alg Pop Boyutu", population_size )
+        print("DE - Dif Alg Pop Boyutu", population_size)
 
-
-        de = DifferentialEvolution(obj_function, bounds = bounds, iteration = iteration, population_size = population_size, problem_size = problem_size, mutation_rate = mutation_rate, cr = cross_rate)
+        de = DifferentialEvolution(obj_function, bounds = bounds, iteration = iteration, population_size = population_size,
+                                   problem_size = problem_size, mutation_rate = mutation_rate, cr = cross_rate)
         de_cost_values, de_best_cost, de_best_solution = de.run_optimize()
-       
-        #'red','green','blue','orange','black','purple'
+
+        # 'red','green','blue','orange','black','purple'
         opt_cost_list.append(de_cost_values)
         opt_color_list.append('red')
         opt_label_list.append('DE-Differential Evolution')
 
-        #SA - DE 2'li karşılaştırma
-        plt_compare_fig = helper.plt_compare_costs(cost_values = opt_cost_list, colors = opt_color_list ,labels = opt_label_list)
-        plt_compare_fig_path = helper.save_figures_to_upload(plot_fig = plt_compare_fig, img_name="plt_compare_cost.png")
+        # SA - DE 2'li karşılaştırma
+        plt_compare_fig = helper.plt_compare_costs(
+            cost_values = opt_cost_list, colors = opt_color_list, labels = opt_label_list)
+        plt_compare_fig_path = helper.save_figures_to_upload(
+            plot_fig = plt_compare_fig, img_name = "plt_compare_cost.png")
 
-
-        #---------------Pso Alg---------------
+        # ---------------Pso Alg---------------
         part_size = request.form.get("pso_particle_size", False)
         partical_size = int(part_size)
         print("PSO - Sürü Boyutu:", partical_size)
@@ -254,57 +160,61 @@ def optimize():
         weights = float(w)
         print("PSO - Pso Ağırlık:", weights)
 
-        pso = PSO(obj_function, bounds = bounds, iteration = iteration, problem_size= problem_size, particle_size = partical_size, w = weights)
+        pso = PSO(obj_function, bounds = bounds, iteration = iteration,
+                  problem_size = problem_size, particle_size = partical_size, w = weights)
         pso_cost_values, pso_best_value = pso.run_optimize()
-        
+
         opt_cost_list.append(pso_cost_values)
         opt_color_list.append('green')
         opt_label_list.append('PSO-Particle Swarm')
 
-        #---------------Abc Alg---------------
+        # ---------------Abc Alg---------------
         bee_num = request.form.get("abc_populationSize", False)
         bee_size = int(bee_num)
-        print("ABC - Arı Sayısı:", bee_size )
-        
+        print("ABC - Arı Sayısı:", bee_size)
+
         lmt = request.form.get("abc_limit", False)
         limit = float(lmt)
-        print("ABC - Arı Limit:", limit )
+        print("ABC - Arı Limit:", limit)
 
-        abc_best, abc_cost_values = ABC(obj_function, bounds = bounds, iteration = iteration, problem_size = problem_size, bee_size = bee_size, limit = limit)
+        abc_best, abc_cost_values = ABC(
+            obj_function, bounds = bounds, iteration = iteration, problem_size = problem_size, bee_size = bee_size, limit = limit)
         print("Best Value: ", abc_best.f)
         print("cost_values:", abc_cost_values)
-        
+
         opt_cost_list.append(abc_cost_values)
         opt_color_list.append('orange')
         opt_label_list.append('ABC-Artifical Bee Colony')
 
-        #--------------------------BİTTİ--------------------------
-        
+        # --------------------------BİTTİ--------------------------
+
         # Save Dife Alg
         plt_de_costs_fig = de.plot_results(de_cost_values)
         de_cost_fig_path = helper.save_figures_to_upload(
-            plot_fig=plt_de_costs_fig, img_name="plt_de_cost.png")
+            plot_fig = plt_de_costs_fig, img_name = "plt_de_cost.png")
 
         # Save Abc
         plt_abc_costs_fig = plot_results(abc_cost_values)
         abc_cost_fig_path = helper.save_figures_to_upload(
-            plot_fig=plt_abc_costs_fig, img_name="plt_abc_cost.png")
+            plot_fig = plt_abc_costs_fig, img_name = "plt_abc_cost.png")
 
         # Save Pso
         plt_pso_costs_fig = pso.plot_results(pso_cost_values)
         pso_cost_fig_path = helper.save_figures_to_upload(
-            plot_fig=plt_pso_costs_fig, img_name="plt_pso_cost.png")
+            plot_fig = plt_pso_costs_fig, img_name = "plt_pso_cost.png")
 
         # Save Sa
         plt_sa_costs_fig = sa.plot_results(sa_cost_values)
         sa_cost_fig_path = helper.save_figures_to_upload(
-            plot_fig=plt_sa_costs_fig, img_name="plt_sa_cost.png")
+            plot_fig = plt_sa_costs_fig, img_name = "plt_sa_cost.png")
 
-        #ALL - 4'lü karşılaştırma.
-        plt_all_compare_fig = helper.plt_compare_costs(cost_values = opt_cost_list, colors = opt_color_list ,labels = opt_label_list)
-        plt_all_compare_fig_path = helper.save_figures_to_upload(plot_fig = plt_compare_fig, img_name="plt_all_compare_cost.png")
+        # ALL - 4'lü karşılaştırma.
+        plt_all_compare_fig = helper.plt_compare_costs(
+            cost_values = opt_cost_list, colors = opt_color_list, labels = opt_label_list)
+        plt_all_compare_fig_path = helper.save_figures_to_upload(
+            plot_fig = plt_compare_fig, img_name = "plt_all_compare_cost.png")
 
-        #PSO - ABC 2'li karşılaştırma için
+        # PSO - ABC 2'li karşılaştırma için
         opt_cost_list.remove(sa_cost_values)
         opt_label_list.remove("SA-SimulatedAnnealing")
         opt_color_list.remove("blue")
@@ -313,41 +223,48 @@ def optimize():
         opt_label_list.remove("DE-Differential Evolution")
         opt_color_list.remove("red")
 
-        plt_compare_fig2 = helper.plt_compare_costs(cost_values = opt_cost_list, colors = opt_color_list ,labels = opt_label_list)
-        plt_compare_fig_path2 = helper.save_figures_to_upload(plot_fig = plt_compare_fig, img_name="plt_compare_cost.png")
+        plt_compare_fig2 = helper.plt_compare_costs(
+            cost_values = opt_cost_list, colors = opt_color_list, labels = opt_label_list)
+        plt_compare_fig_path2 = helper.save_figures_to_upload(
+            plot_fig = plt_compare_fig, img_name = "plt_compare_cost.png")
 
         return jsonify({
-                        'compare_costs_path': plt_compare_fig_path,
-                        'compare_costs_path2': plt_compare_fig_path2,
-                        'all_compare_costs_path': plt_all_compare_fig_path,
-                        'de_cost_path': de_cost_fig_path,
-                        'abc_cost_path': abc_cost_fig_path,
-                        'pso_cost_path': pso_cost_fig_path,
-                        'sa_cost_path': sa_cost_fig_path})
+            'compare_costs_path': plt_compare_fig_path,
+            'compare_costs_path2': plt_compare_fig_path2,
+            'all_compare_costs_path': plt_all_compare_fig_path,
+            'de_cost_path': de_cost_fig_path,
+            'abc_cost_path': abc_cost_fig_path,
+            'pso_cost_path': pso_cost_fig_path,
+            'sa_cost_path': sa_cost_fig_path})
 
     return jsonify({'error': 'Lütfen tüm verileri eksiksiz doldurun !'})
+
 
 @app.route('/salih')
 def salih():
     return render_template("salih.html")
 
+
 @app.route('/berkayTest')
 def berkay_test():
     return render_template("berkaytest.html")
+
 
 @app.route('/berkay')
 def berkay():
     return render_template("berkay.html")
 # Formdan gelen resmi kullanıcıya geri göster. Veya belgesyi
 
+
 @app.route('/berkay/<string:dosya>')
 def dosyayuklemesonuc(dosya):
-    return render_template("berkay.html", dosya=dosya)
+    return render_template("berkay.html", dosya = dosya)
 # Form ile dosya yüklemek
 
-@app.route('/dataUpload', methods=['POST'])
+
+@app.route('/dataUpload', methods = ['POST'])
 def dosyayukle():
-    if request.method == 'POST':
+    if request.method ==  'POST':
         # Formdan bize bir dosya geldi mi ?
         if 'dosya' not in request.files:
             flash('Dosya seçilmedi')
@@ -355,16 +272,16 @@ def dosyayukle():
 
             # Kullanıcı dosya seçmemiş olabilir veya tarayıcı boş göndermiş mi kontrol et.
         dosya = request.files['dosya']
-        if dosya.filename == '':
+        if dosya.filename ==  '':
             flash('Dosya seçilmedi')
             return redirect('berkay')
 
             # Gelen dosya tipi bizim istediğim tipte bir dosya mı ?
-        # secure_filename => adı "../../../../home/images/logo.png" ise "home_images_logo.png" şeklinde çevirir.
+        # secure_filename  = > adı "../../../../home/images/logo.png" ise "home_images_logo.png" şeklinde çevirir.
         if dosya and uzanti_kontrol(dosya.filename):
             dosyaadi = secure_filename(dosya.filename)
             dosya.save(os.path.join(app.config['UPLOAD_FOLDER'], dosyaadi))
-            # return redirect(url_for('berkay',dosya=dosyaadi))
+            # return redirect(url_for('berkay',dosya = dosyaadi))
             return redirect('berkay/' + dosyaadi)
         else:
             flash(
@@ -385,225 +302,175 @@ def add_header(r):
     r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     r.headers["Pragma"] = "no-cache"
     r.headers["Expires"] = "0"
-    r.headers['Cache-Control'] = 'public, max-age=0'
+    r.headers['Cache-Control'] = 'public, max-age = 0'
     return r
 
 
-@app.route('/tsptest2', methods=['POST'])
-def tsptest2():
-    """
-    file operation done
-    """
-    """
-    file = request.files['cityfile']
-    filename = helper.combine_names()
-    filename += secure_filename(file.filename)
-
-    file.save(os.path.join(app.config['UPLOADED_DATAS'], filename))
-
-    # file name
-    print(file.filename, type(file), file.filename.split('.')[0])
-
-    # file extension -1 yapıyor
-    print(file.filename, type(file), file.filename.split('.')[-1])
-
-    file_extension = str(file.filename.split('.')[-1])
-
-    if file_extension == "txt":
-        df = pd.read_text("uploads/{}".format(filename))
-    if file_extension == "csv":
-        df = pd.read_csv("uploads/{}".format(filename))
-
-    """
-
-    """
-    end file operation
-    """
-
-    df = pd.read_csv("data/marmara_mesafeler.csv")
-
-    cities = df.loc[:, 'city'].values
-
-    cities_x_axis = df.loc[:, 'longitude'].values  # longitude is x axis
-
-    cities_y_axis = df.loc[:, 'latitude'].values  # latitude is y axis
-
-    show_label = False
-
-    start = timeit.default_timer()
-
-    ant_size = request.form.get('ant_size', False)
-
-    pheromone_rho = request.form.get('pheromone_rho', False)
-
-    alpha = request.form.get('alpha', False)
-
-    beta = request.form.get('beta', False)
-
-    # genetik parametreleri
-    life_count = request.form.get('life_count', False)
-    mutation_rate = request.form.get('mutation_rate', False)
-    cross_rate = request.form.get('cross_rate', False)
-
-    # iterasyon
-    iteration = request.form.get('iteration', False)
-
-    # file da eklenecek
-    if ant_size and iteration and pheromone_rho and alpha and beta and life_count and mutation_rate and cross_rate and iteration:
-
-        cities_xy = helper.format_for_genetic(cities_x_axis, cities_y_axis)
-
-        aco_tsp = ACO_TSP_SOLVE(_x_axis=cities_x_axis,
-                                _y_axis=cities_y_axis,
-                                _iteration=int(iteration),
-                                _ant_size=int(ant_size),
-                                _rho=float(pheromone_rho),
-                                _alpha=float(alpha),
-                                _beta=float(beta),
-                                _cities=cities)
-
-        aco_best_route, aco_cost_values, aco_best_cost = aco_tsp.run_optimize()
-
-        ga_tsp = GA_TSP_SOLVE(_cities_xy=cities_xy,
-                              _cities=cities,
-                              _life_count=int(life_count),
-                              _cross_rate=float(cross_rate),
-                              _mutation_rate=float(mutation_rate))
-
-        ga_best_route, ga_cost_values, ga_best_cost = ga_tsp.run(
-            int(iteration))
-
-        # bitti
-        stop = timeit.default_timer()
-        print(start, "", stop, "", ga_best_cost, " ", aco_best_cost)
-
-        show_label = True
-
-        # save compare routes figure
-        plt_compare_routes_fig = helper.compare_route_graphic(
-            cities_x_axis, cities_y_axis, cities, aco_best_route, ga_best_route)
-        compare_route_fig_path = helper.save_figures_to_upload(
-            plot_fig=plt_compare_routes_fig, img_name="plt_compare_routes.png")
-
-        # save compare cost figure
-        plt_compare_costs_fig = helper.compare_cost_values(
-            aco_cost_values, ga_cost_values)
-        compare_cost_fig_path = helper.save_figures_to_upload(
-            plot_fig=plt_compare_costs_fig, img_name="plt_compare_costs.png")
-
-        # save ant colony route figure
-        plt_antcolony_route_fig = aco_tsp.plot_cities(
-            aco_best_route, aco_cost_values)
-
-        antcolony_route_fig_path = helper.save_figures_to_upload(
-            plot_fig=plt_antcolony_route_fig, img_name="plt_antcolony_route.png")
-
-        # save ant colony cost figure
-        plt_antcolony_costs_fig = aco_tsp.plot_cost_iteration(aco_cost_values)
-
-        antcolony_cost_fig_path = helper.save_figures_to_upload(
-            plot_fig=plt_antcolony_costs_fig, img_name="plt_antcolony_costs.png")
-
-        # save genetic algorithm route figure
-        plt_ga_route_fig = ga_tsp.plot_cities(
-            cities_x_axis, cities_y_axis, ga_best_route, ga_cost_values)
-
-        ga_route_fig_path = helper.save_figures_to_upload(
-            plot_fig=plt_ga_route_fig, img_name="plt_ga_route.png")
-
-        # save ant colony cost figure
-        plt_ga_costs_fig = ga_tsp.plot_cost_iteration(ga_cost_values)
-
-        ga_cost_fig_path = helper.save_figures_to_upload(
-            plot_fig=plt_ga_costs_fig, img_name="plt_ga_costs.png")
-
-        return jsonify({'compare_routes': compare_route_fig_path,
-                        'compare_costs': compare_cost_fig_path,
-                        'antcolony_route': antcolony_route_fig_path,
-                        'antcolony_cost': antcolony_cost_fig_path,
-                        'ga_route': ga_route_fig_path,
-                        'ga_cost': ga_cost_fig_path})
-
-    return jsonify({'error': 'Lütfen tüm verileri eksiksiz doldurun !'})
-
-
-"""
-@app.route('/travellingsalesmanproblem', methods = ["GET","POST"])
-def run2():
-
-    file_type = "csv"
-    if file_type == "text":
-        df = pd.read_text("../input/marmara_mesafe/{}".format("mesafeler.txt")) 
-    if file_type == "csv":
-        df = pd.read_csv("data/marmara_mesafeler.csv")
-
-    cities = df.loc[:, 'city'].values
-
-    cities_x_axis = df.loc[:,'longitude'].values  # longitude is x axis
-
-    cities_y_axis = df.loc[:,'latitude'].values # latitude is y axis
-
-    show_label = False
-
-    if request.method == "POST":      
-        start = timeit.default_timer()
-        # karınca parametreleri
-        ant_size = request.form.get("ant_size")
-        pheromonerho = request.form.get("pheromonerho")
-        alpha = request.form.get("alpha")
-        beta = request.form.get("beta")
-
-        # genetik parametreleri
-        life_count = request.form.get("life_count")
-        mutation_rate = request.form.get("mutation_rate")
-        cross_rate = request.form.get("cross_rate")
-
-        # iterasyon
-        iteration = request.form.get("iteration")
-
-        cities_xy = helper.format_for_genetic(cities_x_axis,cities_y_axis)
+@app.route('/solvetsp', methods = ['POST'])
+def solve_tsp():
+    try:
+        """
+        file operation done
+        """
         
-        aco_tsp = ACO_TSP_SOLVE(_x_axis = cities_x_axis,
-                                _y_axis = cities_y_axis,
-                                _iteration = int(iteration),
-                                _ant_size = int(ant_size),
-                                _rho = float(pheromonerho),
-                                _alpha = float(alpha),
-                                _beta = float(beta),
-                                _cities = cities)
+        file = request.files['cityfile']
+        print("dosya adı", file.filename)
+        if file.filename:
 
-        aco_best_route, aco_cost_values, aco_best_cost = aco_tsp.run_optimize()
+            filename = helper.combine_names()
+            filename +=  secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOADED_DATAS'], filename))
 
-        ga_tsp = GA_TSP_SOLVE(_cities_xy = cities_xy,
+            # file name
+            print(file.filename, type(file), file.filename.split('.')[0])
+
+            # file extension -1 yapıyor
+            print(file.filename, type(file), file.filename.split('.')[-1])
+
+            file_extension = str(file.filename.split('.')[-1])
+            
+            if file_extension ==  "txt":
+                df = pd.read_text("uploads/{}".format(filename))
+            if file_extension ==  "csv":
+                df = pd.read_csv("uploads/{}".format(filename))
+
+        else:
+            ready_map = request.form.get("map", False)
+            if  ready_map == 'marmara':
+                filename = 'marmara_mesafeler.csv'
+
+            if ready_map == 'icanadolu':
+                filename = 'icanadolu_mesafeler.csv'
+
+            if ready_map == 'karadeniz':
+                filename = 'karadeniz_mesafeler.csv'  
+
+            if ready_map == 'doguanadolu':
+                filename = 'doguanadolu_mesafeler.csv'
+
+            df = pd.read_csv("data/{}".format(filename))
+
+        """
+        end file operation
+        """
+        #df = pd.read_csv("data/marmara_mesafeler.csv")
+        
+        # dataset parameters (city)
+        cities = df.loc[:, 'city'].values
+        cities_x_axis = df.loc[:, 'longitude'].values  # longitude is x axis
+        cities_y_axis = df.loc[:, 'latitude'].values  # latitude is y axis
+
+        # ant colony optimization paramaters
+        ant_size = request.form.get('ant_size', False)
+        pheromone_rho = request.form.get('pheromone_rho', False)
+        alpha = request.form.get('alpha', False)
+        beta = request.form.get('beta', False)
+
+        # genetic algorithm parameters
+        life_count = request.form.get('life_count', False)
+        mutation_rate = request.form.get('mutation_rate', False)
+        cross_rate = request.form.get('cross_rate', False)
+
+        # artificial bee colony optimization paramaters
+        number_of_bees = request.form.get('number_of_bees', False)
+        number_of_worker_bees = request.form.get('number_of_worker_bees', False)
+        limit = request.form.get('limit', False)
+
+        # iteration
+        iteration = request.form.get('iteration', False)
+
+        # file da eklenecek
+        if int(ant_size) < len(cities):
+            return jsonify({'error': 'Karınca sayısı {} den küçük olamaz !'.format(len(cities))})
+        elif int(life_count) < len(cities):
+            return jsonify({'error': 'Genetik Algoritmadaki Birey sayısı {} den küçük olamaz !'.format(len(cities))})
+        elif int(number_of_bees) < len(cities):
+            return jsonify({'error': 'Arı sayısı {} den küçük olamaz !'.format(len(cities))})
+
+        elif ant_size and pheromone_rho and alpha and beta and life_count and mutation_rate and cross_rate and number_of_bees and number_of_worker_bees and limit and iteration:
+
+            cities_xy = helper.format_for_genetic(cities_x_axis, cities_y_axis)
+
+            aco_tsp = ACO_TSP_SOLVE(_x_axis = cities_x_axis,
+                                    _y_axis = cities_y_axis,
+                                    _iteration = int(iteration),
+                                    _ant_size = int(ant_size),
+                                    _rho = float(pheromone_rho),
+                                    _alpha = float(alpha),
+                                    _beta = float(beta),
+                                    _cities = cities)
+
+            aco_best_route, aco_cost_values, aco_best_cost = aco_tsp.run_optimize()
+
+            ga_tsp = GA_TSP_SOLVE(_cities_xy = cities_xy,
                                 _cities = cities,
                                 _life_count = int(life_count),
                                 _cross_rate = float(cross_rate),
                                 _mutation_rate = float(mutation_rate))
 
-        ga_best_route, ga_cost_values, ga_best_cost  = ga_tsp.run(int(iteration))
+            ga_best_route, ga_cost_values, ga_best_cost = ga_tsp.run(
+                int(iteration))
 
-        # bitti
-        stop = timeit.default_timer()
+            abc_tsp = ABC_TSP_SOLVE(x_axis = cities_x_axis, y_axis = cities_y_axis,
+                                    number_of_bees = int(number_of_bees), number_of_worker_bees = int(number_of_worker_bees),
+                                    limits_of_try = int(limit), iteration = int(iteration), cities = cities)
 
-        show_label = True
+            abc_best_route, abc_cost_values, abc_best_cost = abc_tsp.start_optimize()
 
-        # save routes figure
-        plt_compare_routes_fig = helper.compare_route_graphic(cities_x_axis, cities_y_axis, cities, aco_best_route, ga_best_route)
-        compare_route_fig_path = helper.save_figures_to_upload(plot_fig = plt_compare_routes_fig, img_name = "plt_compare_routes.png")
+            print(abc_best_cost, aco_best_cost, ga_best_cost)
 
-        # save cost figure
-        plt_compare_costs_fig = helper.compare_cost_values(aco_cost_values, ga_cost_values)
-        compare_cost_fig_path = helper.save_figures_to_upload(plot_fig = plt_compare_costs_fig, img_name = "plt_compare_costs.png")
-        
-        # compare_route_fig_path = "static/uploads/karınca.png"
-        print("onay {} resim yolu : {}".format(show_label, compare_route_fig_path))
+            # save ant colony route figure
+            plt_antcolony_route_fig = aco_tsp.plot_cities(aco_best_route, aco_cost_values)
+            antcolony_route_fig_path = helper.save_figures_to_upload(plot_fig = plt_antcolony_route_fig, img_name = "plt_antcolony_route.png")
 
-        return render_template("tsp.html", route_compare_img = compare_route_fig_path, 
-                                           cost_compare_img = compare_cost_fig_path, 
-                                           onayli = show_label)
-        
-    else:
-        return render_template("tsp.html", onayli = False)
-"""
-if __name__ == "__main__":
-    app.run(debug=True)
+            # save ant colony cost figure
+            plt_antcolony_costs_fig = aco_tsp.plot_cost_iteration(aco_cost_values)
+            antcolony_cost_fig_path = helper.save_figures_to_upload(plot_fig = plt_antcolony_costs_fig, img_name = "plt_antcolony_costs.png")
+
+            # save genetic algorithm route figure
+            plt_ga_route_fig = ga_tsp.plot_cities(cities_x_axis, cities_y_axis, ga_best_route, ga_cost_values)
+            ga_route_fig_path = helper.save_figures_to_upload(plot_fig = plt_ga_route_fig, img_name = "plt_ga_route.png")
+
+            # save genetic algorithm cost figure
+            plt_ga_costs_fig = ga_tsp.plot_cost_iteration(ga_cost_values)
+            ga_cost_fig_path = helper.save_figures_to_upload(plot_fig = plt_ga_costs_fig, img_name = "plt_ga_costs.png")
+
+            # save artificial bee colony algorithm route figure
+            plt_abc_route_fig = abc_tsp.plot_cities(abc_best_route, abc_cost_values)
+            abc_route_fig_path = helper.save_figures_to_upload(plot_fig = plt_abc_route_fig, img_name = "plt_abc_route.png")
+
+            # save artificial bee colony cost figure
+            plt_abc_costs_fig = abc_tsp.plot_cost_iteration(abc_cost_values)
+            abc_cost_fig_path = helper.save_figures_to_upload(plot_fig = plt_abc_costs_fig, img_name = "plt_abc_costs.png")
+            
+            route_list = [aco_best_route, ga_best_route, abc_best_route]
+            cost_list = [aco_cost_values, ga_cost_values, abc_cost_values]
+            color_list = ['green', 'blue', 'orange']
+            label_list = ['Ant Colony', 'Genetic Algorithm', 'Bee Colony']
+            
+            # save compare routes figure
+            plt_compare_routes_fig =helper.plt_compare_routes(x_axis = cities_x_axis, y_axis = cities_y_axis,
+            cities= cities, best_routes = route_list, colors = color_list, labels = label_list)
+
+            compare_route_fig_path = helper.save_figures_to_upload(plot_fig = plt_compare_routes_fig, img_name = "plt_compare_routes.png")
+
+            # save compare cost figure
+            plt_compare_costs_fig = helper.plt_compare_costs(cost_list, color_list, label_list)
+            compare_cost_fig_path = helper.save_figures_to_upload(plot_fig = plt_compare_costs_fig, img_name = "plt_compare_costs.png")
+
+            return jsonify({'compare_routes_fig_path': compare_route_fig_path,
+                            'compare_costs_fig_path': compare_cost_fig_path,
+                            'antcolony_route_path': antcolony_route_fig_path,
+                            'antcolony_cost_path': antcolony_cost_fig_path,
+                            'beecolony_route_path': abc_route_fig_path,
+                            'beecolony_cost_path': abc_cost_fig_path,
+                            'ga_route_path': ga_route_fig_path,
+                            'ga_cost_path': ga_cost_fig_path})
+
+        return jsonify({'error': 'Lütfen tüm verileri eksiksiz doldurun !'})
+    except :
+        return jsonify({'error': 'Beklenmedik bir hata meydana geldi. Lütfen tekrar deneyin. !'})
+
+
+if __name__ ==  "__main__":
+    app.run(debug = True)

@@ -194,12 +194,11 @@ class GA_TSP_SOLVE(object):
         while n > 0:
             self.ga.next()
             cost = self.distance(self.ga.best_genes.gene)
-            print("{}. Generation, Cost : {}".format(
-                self.ga.generation - 1, cost))
+            #print("{}. Generation, Cost : {}".format(self.ga.generation - 1, cost))
             self.ga.best_genes.gene.append(self.ga.best_genes.gene[0])
             best_route = self.ga.best_genes.gene
             cost_values.append(cost)
-            print("Güzergah: ", best_route)
+            #print("Güzergah: ", best_route)
             self.ga.best_genes.gene.pop()
             n -= 1
 
@@ -211,8 +210,8 @@ class GA_TSP_SOLVE(object):
         fig.suptitle('Genetic Algorithm Costs per Iterations')
         plt.xlabel('Iteration')
         plt.ylabel('Cost')
-        plt.grid(b=True, which='major', ls='-.', lw=0.45)
-        ax.plot(cost_values,  "r--", c="red")
+        ax.plot(cost_values,  "r--", c="blue", label = "Genetic Algorithm")
+        plt.legend()
         # plt.show()
 
         return fig
@@ -226,17 +225,17 @@ class GA_TSP_SOLVE(object):
     def plot_cities(self, x_axis, y_axis, best_route, best_cost):
 
         cities_best_route = []
-        print(self.cities)
+        #print(self.cities)
         for i in best_route:
             cities_best_route.append(self.cities[i])
 
-        fig, ax = plt.subplots(1, figsize=(10, 6))
+        fig, ax = plt.subplots(1, figsize=(10, 6), dpi = 200)
 
         fig.suptitle('Genetic Algorithm Optimization for TSP Problem')
         plt.xlabel('X AXIS')
         plt.ylabel('Y AXIS')
 
-        ax.scatter(x_axis, y_axis, c="orange", s=150)
+        ax.scatter(x_axis, y_axis, c="red", s=150)
 
         path = np.append(best_route, best_route)
 
@@ -244,10 +243,9 @@ class GA_TSP_SOLVE(object):
             ax.annotate(self.cities[i], xy=get_XY_location(
                 self, x_axis, y_axis, i), c="black")
 
-        plt.plot(x_axis[path], y_axis[path], c="green")
+        plt.plot(x_axis[path], y_axis[path], c="blue")
         # plt.show()
 
-        print("Best Route : {}, Best Cost : {} ".format(
-            cities_best_route, best_cost))
+        #print("Best Route : {}, Best Cost : {} ".format(cities_best_route, best_cost))
 
         return fig

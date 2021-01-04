@@ -29,7 +29,6 @@ class ACO_TSP_SOLVE(object):
         self.distance_matrice = self.create_distance_matrice()
 
     global calculate_distance
-
     def calculate_distance(city1_x, city1_y, city2_x, city2_y):
         city1_x, city1_y, city2_x, city2_y = map(
             radians, [city1_x, city1_y, city2_x, city2_y])
@@ -55,7 +54,6 @@ class ACO_TSP_SOLVE(object):
 
         return distance_matrice
     global calculate_tour_cost
-
     def calculate_tour_cost(self, route):
         L = 0
         for i in range(len(route) - 1):
@@ -64,7 +62,6 @@ class ACO_TSP_SOLVE(object):
         return L
 
     global roulette_selection
-
     def roulette_selection(self, probability):
         cprobs = probability.copy()
         for i in range(1, len(probability)):
@@ -135,12 +132,11 @@ class ACO_TSP_SOLVE(object):
             pheromone_amount = (1 - self.rho) * pheromone_amount
             cost_values.append(best_cost)
 
-            print("Iteration : {} , Best Cost : {} ".format(t+1, best_cost))
+            #print("Iteration : {} , Best Cost : {} ".format(t+1, best_cost))
 
         return best_route, cost_values, best_cost
 
     global get_XY_location
-
     def get_XY_location(self, index):
         loc_xy = np.array([self.x_axis[index], self.y_axis[index]])
         return loc_xy
@@ -150,8 +146,8 @@ class ACO_TSP_SOLVE(object):
         fig.suptitle('Ant Colony Optimization Costs per Iterations')
         plt.xlabel('Iteration')
         plt.ylabel('Cost')
-        plt.grid(b=True, which='major', ls='-.', lw=0.45)
-        ax.plot(cost_values, "r--", c="green")
+        ax.plot(cost_values, "r--", c="green", label = "Ant Colony")
+        plt.legend()
         # plt.show()
 
         return fig
@@ -163,23 +159,22 @@ class ACO_TSP_SOLVE(object):
         for i in best_route:
             cities_best_route.append(self.cities[i])
 
-        fig, ax = plt.subplots(1, figsize=(10, 6))
+        fig, ax = plt.subplots(1, figsize=(10, 6), dpi = 200)
 
         fig.suptitle('Ant Colony Optimization for TSP Problem')
         #plt.xlabel('X AXIS')
         #plt.ylabel('Y AXIS')
 
-        ax.scatter(self.x_axis, self.y_axis, c="orange", s=150)
+        ax.scatter(self.x_axis, self.y_axis, c="red", s=150)
 
         path = np.append(best_route, best_route)
 
         for i in range(len(self.cities)):
             ax.annotate(self.cities[i], xy=get_XY_location(self, i), c="black")
 
-        plt.plot(self.x_axis[path], self.y_axis[path], c="purple")
+        plt.plot(self.x_axis[path], self.y_axis[path], c="green")
         # plt.show()
 
-        print("Best Route : {}, Best Cost : {} ".format(
-            cities_best_route, best_cost))
+        #print("Best Route : {}, Best Cost : {} ".format(cities_best_route, best_cost))
 
         return fig

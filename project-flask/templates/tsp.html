@@ -3,155 +3,305 @@
 <meta http-equiv="Expires" content="0" />
 {% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
-
+{% block title %}Test Ajax{% endblock %}
 
 {% block content %}
-<form action="/tsptest2" method="post" class="d-inline">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Karınca Kolonisi Parametreleri</h4>
+<div class="container">
+    <form id="tspform" method="post" class="d-inline" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="cityfile">Gezgin satıcı problemi için dosya seçiniz. Dosya tipleri (csv, txt)</label>
+            <input type="file" class="form-control-file btn btn-primary" name="cityfile" id="cityfile"
+                accept=".csv, .txt">
+        </div>
+        <label>Hazır Haritalar</label>
+        <center>
+            <div class="form-row">
+                <div class="col-md-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="map" id="marmara" value="marmara">
+                        <label class="form-check-label" for="marmara">
+                            Marmara Bölgesi
+                        </label>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="form-row">
-                        <div class="col-md-6 mb-3">
-                            <label>Karınca Sayısı</label>
-                            <input type="number" value="11" class="form-control" name="ant_size" id="ant_size"
-                                placeholder="Karınca Sayısı" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Feromon Buharlaşma Orarnı</label>
-                            <input type="number" value="0.3" step="any" class="form-control" name="pheromone_rho"
-                                id="pheromone_rho" placeholder="Feromon Miktarı" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-md-6 mb-3">
-                            <label>Alfa</label>
-                            <input type="number" step="any" value="1" class="form-control" name="alpha" id="alpha"
-                                placeholder="Alfa Değeri" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Beta</label>
-                            <input type="number" step="any" value="1" class="form-control" name="beta" id="beta"
-                                placeholder="Beta Değeri" required>
-                        </div>
-                    </div>
+                <div class="col-md-3">
+                    <input class="form-check-input" type="radio" name="map" id="icanadolu" value="icanadolu">
+                    <label class="form-check-label" for="icanadolu">
+                        İç Anadolu Bölgesi
+                    </label>
+                </div>
+                <div class="col-md-3">
+                    <input class="form-check-input" type="radio" name="map" id="karadeniz" value="karadeniz">
+                    <label class="form-check-label" for="karadeniz">
+                        Karadeniz Bölgesi
+                    </label>
+                </div>
+                <div class="col-md-3">
+                    <input class="form-check-input" type="radio" name="map" id="doguanadolu" value="doguanadolu">
+                    <label class="form-check-label" for="doguanadolu">
+                        Doğu Anadolu Bölgesi
+                    </label>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Genetik Algoritma Parametreleri</h4>
-                </div>
-                <div class="card-body">
-                    <div class="form-row">
-                        <div class="col-md-6 mb-3">
-                            <label>Birey Sayısı</label>
-                            <input type="number" value="100" class="form-control" name="life_count" id="life_count"
-                                placeholder="Birey Sayısı" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Mutasyon Olasılığı </label>
-                            <input type="number" value="0.2" class="form-control" name="mutation_rate"
-                                id="mutation_rate" placeholder="Mutasyon Olasılığı" required>
-                        </div>
+        </center>
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-white"
+                        style="background-image: linear-gradient(to left,#826d57,#863b22 ) !important">
+                        <h4>Karınca Kolonisi Parametreleri</h4>
                     </div>
-                    <div class="form-row">
-                        <div class="col-md-12 mb-3">
-                            <label>Çaprazlama Olasılığı</label>
-                            <input type="number" value="0.4" class="form-control" name="cross_rate" id="cross_rate"
-                                placeholder="Çaprazlama Olasılığı" required>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                    <div class="card-body">
 
-    <div class="col-md-12">
-        <div class="form-group">
-            <label>İterasyon Sayısı</label>
-            <input type="number" value="10" class="form-control" id="iteration" name="iteration"
-                placeholder="İterasyon Sayısı" min="1" max="100" required>
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label>Karınca Sayısı</label>
+                                <input type="number" value="11" class="form-control" name="ant_size" id="ant_size"
+                                    placeholder="Karınca Sayısı" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Feromon Buharlaşma Orarnı</label>
+                                <input type="number" value="0.3" step="any" class="form-control" name="pheromone_rho"
+                                    id="pheromone_rho" placeholder="Feromon Miktarı" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label>Alfa</label>
+                                <input type="number" step="any" value="1" class="form-control" name="alpha" id="alpha"
+                                    placeholder="Alfa Değeri" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Beta</label>
+                                <input type="number" step="0.1" value="1" min="0.1" max="5.0" class="form-control"
+                                    name="beta" id="beta" placeholder="Beta Değeri" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-white" style="background-color: #5b9ad5;
+                    background-image: linear-gradient(to left,#5b9ad5,#007bff ) !important"">
+                        <h4>Genetik Algoritma Parametreleri</h4>
+                    </div>
+                    <div class=" card-body">
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label>Birey Sayısı</label>
+                                <input type="number" value="50" min="10" max="100" class="form-control"
+                                    name="life_count" id="life_count" placeholder="Birey Sayısı" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Mutasyon Olasılığı </label>
+                                <input type="number" value="0.2" min="0.01" max="1.0" step="0.01" class="form-control"
+                                    name="mutation_rate" id="mutation_rate" placeholder="Mutasyon Olasılığı" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                                <label>Çaprazlama Olasılığı</label>
+                                <input type="number" value="0.4" min="0.01" max="1.0" step="0.01" class="form-control"
+                                    name="cross_rate" id="cross_rate" placeholder="Çaprazlama Olasılığı" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <button id="btn_run" type="submit" class="btn btn-primary" style="width: 100%;">ÇALIŞTIR</button>
+
+
+        <div class="row">
+            <div class="col-md-12 mt-3">
+                <div class="card">
+                    <div class="card-header text-white" style="background-color: #5b9ad5;
+                    background-image: linear-gradient(to right,#e65c00,#F7971E ,#F9D423 ) !important"">
+                        <h4>Yapay Arı Kolonisi Parametreleri</h4>
+                    </div>
+                    <div class=" card-body">
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label>Arı Sayısı</label>
+                                <input type="number" value="15" min="10" max="100" class="form-control"
+                                    name="number_of_bees" id="number_of_bees" placeholder="Arı Sayısı" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>İşçi Arı Sayısı</label>
+                                <input type="number" value="10" min="10" max="100" class="form-control"
+                                    name="number_of_worker_bees" id="number_of_worker_bees"
+                                    placeholder="İşçi Arı Sayısı" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>Algoritma Limiti</label>
+                                <input type="number" value="5" min="3" max="20" class="form-control" name="limit"
+                                    id="limit" placeholder="Algoritma Limiti" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <center class="mt-2 mb-2">
-        <div class="spinner-border" id="wait" style="width: 3rem; height: 3rem; display: none;" role="status">
-            <span class="sr-only">Loading...</span>
+
+
+        <div class="row mt-3 mb-1">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>İterasyon Sayısı</label>
+                    <input type="number" value="10" class="form-control" id="iteration" name="iteration"
+                        placeholder="İterasyon Sayısı" min="3" max="100" required>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button id="btn_run" type="submit" class="btn btn-primary" style="width: 100%;">ÇALIŞTIR</button>
+            </div>
+        </div>
+    </form>
+    <br />
+
+    <!-- Loader icon -->
+    <center>
+        <div id="wait" style="display: none;">
+            <span class="loader">
+                <span class="loader-inner"></span>
+            </span>
+            <br>
+            <p class="mt-2">Yükleniyor...</p>
         </div>
     </center>
-</form>
 
-<div class="col-md-12">
-    <div id="plot_area" style="display: block;">
+    <!-- Form Validation Error via Backend -->
+    <div class="alert alert-warning alert-dismissible mt-2 mb-2" id="errorAlert" role="alert" style="display: none;">
+        <strong id="errorAlertText"></strong>
+    </div>
+</div>
 
-        <div class="card">
-            <img id="resim1" src="">
-
-            <img id="resim2" src="">
-
-            <div class="card-body">
+<!-- Plotting Area for algorithms outputs -->
+<div id="plot_area" style="display: none;">
+    <center>
+        <h4>Karşılaştırma Grafikleri</h4>
+    </center>
+    <div class="container">
+        <hr />
+        <div class="row">
+            <div class="col-md-7">
+                <img id="ga_vs_aco_routes" src="" style="width: 100%; height: 400px;" />
+            </div>
+            <div class="col-md-5 mt-5">
+                <img id="ga_vs_aco_cost" src="" style="width: 100%; height: 300px;" />
             </div>
         </div>
     </div>
-</div>
-</div>
+    <center>
+        <h4>Karınca Kolonisi Grafikleri</h4>
+    </center>
+    <div class="container">
+        <hr />
+        <div class="row">
+            <div class="col-md-7">
+                <img id="aco_route" src="" style="width: 100%; height: 400px;" />
+            </div>
+            <div class="col-md-5 mt-5">
+                <img id="aco_cost" src="" style="width: 100%; height: 300px;" />
+            </div>
+        </div>
+    </div>
+    <center>
+        <h4>Yapay Arı Kolonisi Grafikleri</h4>
+    </center>
+    <div class="container">
+        <hr />
+        <div class="row">
+            <div class="col-md-7">
+                <img id="abc_route" src="" style="width: 100%; height: 400px;" />
+            </div>
+            <div class=" col-md-5 mt-5">
+                <img id="abc_cost" src="" style="width: 100%; height: 300px;" />
+            </div>
+        </div>
+    </div>
 
-<script>
-    $(document).ready(function () {
+    <center>
+        <h4>Genetik Algoritma Grafikleri</h4>
+    </center>
+    <div class="container">
+        <hr />
+        <div class="row">
+            <div class="col-md-7">
+                <img id="ga_route" src="" style="width: 100%; height: 400px;" />
+            </div>
+            <div class=" col-md-5 mt-5">
+                <img id="ga_cost" src="" style="width: 100%; height: 300px;" />
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $(document).ajaxStart(function () {
+                $("#wait").css("display", "block");
+            });
 
-        $(document).ajaxStart(function () {
-            $("#wait").css("display", "block");
-            $("#plot_area").css("display", "none");
-        });
+
+            $(document).ajaxComplete(function () {
+                $("#wait").css("display", "none");
+            });
 
 
-        $(document).ajaxComplete(function () {
-            $("#wait").css("display", "none");
-            $("#plot_area").css("display", "block");
-        });
+            $('#tspform').on('submit', function (event) {
+                scrollWin(0, 100);
 
+                // If the plotting area is open when the button is first clicked, close it.
+                $("#plot_area").css("display", "none");
 
-        $('form').on('submit', function (event) {
-            $.ajax({
-                data: {
-                    antsize: $('#ant_size').val(),
-                    rho: $('#pheromone_rho').val(),
-                    alpha: $('#alpha').val(),
-                    beta: $('#beta').val(),
-                    lifecount: $('#life_count').val(),
-                    mutationrate: $('#mutation_rate').val(),
-                    crossrate: $('#cross_rate').val(),
-                    iteration: $('#iteration').val()
-                },
-                type: 'POST',
-                url: '/tsptest2'
-            })
-                .done(function (data) {
+                $("#btn_run").attr("disabled", true);
+                $("#btn_run").css("cursor", 'wait');
 
-                    if (data.error) {
-                        $('#errorAlert').text(data.error).show();
-                        $('#successAlert').hide();
-                    }
-                    else {
-                        console.log(data);
-                        $('#resim1').attr("src", data.img1);
-                        $('#resim2').attr("src", data.img2);
-                        $('#successAlert').text(data.name).show();
+                var form_data = new FormData($('#tspform')[0]);
+                $.ajax({
+                    type: 'POST',
+                    url: '/solvetsp',
+                    data: form_data,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    async: true,
+                    enctype: 'multipart/form-data'
+                })
+                    .done(function (data) {
                         $('#errorAlert').hide();
-                    }
-                });
-            event.preventDefault();
+                        if (data.error) {
+                            $('#errorAlertText').text(data.error);
+                            $('#errorAlert').show();
+                            $('#successAlert').hide();
+                            $("#btn_run").attr("disabled", false);
+                            $("#btn_run").css("cursor", 'pointer');
+                        }
+                        else {
+                            console.log(data);
+                            $('#ga_vs_aco_routes').attr("src", data.compare_routes_fig_path);
+                            $('#ga_vs_aco_cost').attr("src", data.compare_costs_fig_path);
+                            $('#aco_route').attr("src", data.antcolony_route_path);
+                            $('#aco_cost').attr("src", data.antcolony_cost_path);
+                            $('#abc_route').attr("src", data.beecolony_route_path);
+                            $('#abc_cost').attr("src", data.beecolony_cost_path);
+                            $('#ga_route').attr("src", data.ga_route_path);
+                            $('#ga_cost').attr("src", data.ga_cost_path);
+
+                            $("#plot_area").css("display", "block");
+                            $('#errorAlert').hide();
+                            $("#btn_run").attr("disabled", false);
+                            $("#btn_run").css("cursor", 'pointer');
+                        }
+                    });
+                event.preventDefault();
+            });
+
         });
-
-    });
-
-</script>
-{% endblock %}
+        function scrollWin(x, y) {
+            window.scrollBy(x, y);
+        }
+    </script>
+    {% endblock %}
