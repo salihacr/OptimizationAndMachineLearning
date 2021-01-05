@@ -13,7 +13,7 @@ a:hover {
 }
 
 .footer {
-    position: relative;
+    position: fixed;;
     left: 0;
     bottom: 0;
     width: 100%;
@@ -23,4 +23,87 @@ a:hover {
     text-align: center;
     align-items: center;
     justify-content: space-between;
+}
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+.wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.custom-card {
+    max-width: 300px;
+    min-height: 250px;
+    background: #02b875;
+    padding: 30px;
+    box-sizing: border-box;
+    color: #FFF;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 18px -4px rgba(0, 0, 0, 0.75);
+}
+
+.custom-card:nth-child(2) {
+    background: #4181ee;
+}
+
+.custom-card:last-child {
+    background: #673ab7;
+}
+
+.custom-card-title {
+    margin-top: 0;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+}
+
+.custom-card-content {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    line-height: 1.5;
+}
+
+.custom-card-btn {
+    all: unset;
+    display: block;
+    margin-left: auto;
+    border: 2px solid #FFF;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 25px;
+    font-size: 10px;
+    font-weight: 600;
+    transition: all 0.5s;
+    cursor: pointer;
+    letter-spacing: 1.2px;
+    text-decoration: none;
+}
+
+.custom-card-btn:hover {
+    color: #02b875;
+    background: #FFF;
+}
+
+.custom-card:nth-child(2) .custom-card-btn:hover {
+    color: #4181ee;
+    background: #FFF;
+}
+
+.custom-card:last-child .custom-card-btn:hover {
+    color: #673ab7;
+    background: #FFF;
+}
+
+.custom-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    transition: all 0.5s ease;
+}
+
+.custom-card:hover .card__image {
+    top: -20%;
 }

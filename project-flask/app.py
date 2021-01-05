@@ -52,22 +52,27 @@ helper.run_schedule()
 @app.route('/')
 def index():
     return render_template("index.html")
-
-
 @app.route('/optimization')
 def optimization():
     return render_template("optimization.html")
-
-
 @app.route('/machine_learning')
 def machine_learning():
     return render_template("machine-learning.html")
-
-
 @app.route('/travellingsalesmanproblem')
 def tsp():
     return render_template("tsp.html")
 
+@app.route('/salih')
+def salih():
+    return render_template("salih.html")
+
+@app.route('/berkayTest')
+def berkay_test():
+    return render_template("berkaytest.html")
+
+@app.route('/berkay')
+def berkay():
+    return render_template("berkay.html")
 @app.route('/optimize', methods = ['POST'])
 def optimize():
     
@@ -259,17 +264,7 @@ def optimize():
         return "done"
     except :
         return jsonify({'error': 'Beklenmedik bir hata meydana geldi. Lütfen tekrar deneyin. !'})
-@app.route('/salih')
-def salih():
-    return render_template("salih.html")
 
-@app.route('/berkayTest')
-def berkay_test():
-    return render_template("berkaytest.html")
-
-@app.route('/berkay')
-def berkay():
-    return render_template("berkay.html")
 # Formdan gelen resmi kullanıcıya geri göster. Veya belgesyi
 
 @app.route('/berkay/<string:dosya>')

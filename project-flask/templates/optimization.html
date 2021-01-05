@@ -4,79 +4,14 @@
 
 
 {% block content %}
-<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<style>
-    label {
-        width: 100%;
-        font-size: 1rem;
-    }
-
-    .card-input-element+.card {
-        height: calc(36px + 2*1rem);
-        color: #000000;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-        border: 2px solid transparent;
-        border-radius: 2px;
-    }
-
-    .card-input-element+.card:hover {
-        cursor: pointer;
-    }
-
-    .card-input-element:checked+.card {
-        border: 2px solid #5cb85c;
-        -webkit-transition: border .3s;
-        -o-transition: border .3s;
-        transition: border .3s;
-    }
-
-    .card-input-element:checked+.card::after {
-        content: '\e5ca';
-        color: #5cb85c;
-        font-family: 'Material Icons';
-        font-size: 28px;
-        -webkit-animation-name: fadeInCheckbox;
-        animation-name: fadeInCheckbox;
-        -webkit-animation-duration: .5s;
-        animation-duration: .5s;
-        -webkit-animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    @-webkit-keyframes fadeInCheckbox {
-        from {
-            opacity: 0;
-            -webkit-transform: rotateZ(-20deg);
-        }
-
-        to {
-            opacity: 1;
-            -webkit-transform: rotateZ(0deg);
-        }
-    }
-
-    @keyframes fadeInCheckbox {
-        from {
-            opacity: 0;
-            transform: rotateZ(-20deg);
-        }
-
-        to {
-            opacity: 1;
-            transform: rotateZ(0deg);
-        }
-    }
-</style>
+<link href="{{ url_for('static', filename='css/opt.css') }}" rel="stylesheet">
 
 
 <form id="opt_form" class="d-inline" method="POST">
     <div class=container>
         <div class="py-1 text-center">
-            <h2>Optimizasyon Algoritmalarını Test Et !</h2>
-            <p class="lead">Applied Optimization Algorithms and Machine Learning on Flask - Applied Optimization
-                Algorithms and Machine Learning on Flask</p>
+            <h3>Optimizasyon Algoritmalarını Test Et !</h3>
+            <p class="lead">Applied Optimization Algorithms and Machine Learning on Flask</p>
             <hr>
         </div>
         <center>
@@ -231,8 +166,8 @@
                     <div class="card-body">
                         <div class="form-row">
                             <label for="formControlRange">İterasyon Sayısını Belirleyiniz</label>
-                            <input type="range" class="form-control-range" min="10" max="100" step=10 id="iteration"
-                                name="iteration" oninput="iteration1.value = this.value">
+                            <input type="range" class="form-control-range text-success" min="10" max="100" step=10
+                                id="iteration" name="iteration" oninput="iteration1.value = this.value">
                             <output id="iteration1" name="iteration1">60</output>
                         </div>
                         <hr>
@@ -280,25 +215,27 @@
                                 </label>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <br>
-                <div class="form-group">
-                    <label>Problem Boyutu</label>
-                    <input type="number" value="4" class="form-control" name="problem_size" id="problem_size" min="1"
-                        max="12.0" step="1" placeholder="Çaprazlama Olasılığı" required>
-                </div>
-                <div class="form-row">
-                    <div class="col-md-6">
-                        <label>Maksimum Sınır</label>
-                        <input type="number" value="5.12" inputmode="decimal" class="form-control" name="bound"
-                            min="1.0" max="12.0" step="0.01" inputmode="decimal" id="bound" placeholder="Üst Sınır"
-                            required>
-                    </div>
-                    <div class="col-md-6">
-                        <label>Sınırlar</label>
-                        <input type="text" disabled class="form-control" id="bounds"
-                            value="(-5.12, 5.12) olarak sınırlar belirlendi.">
+                        <div>
+                            <div class="form-group">
+                                <label>Problem Boyutu</label>
+                                <input type="number" value="4" class="form-control" name="problem_size"
+                                    id="problem_size" min="1" max="12.0" step="1" placeholder="Çaprazlama Olasılığı"
+                                    required>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <label>Maksimum Sınır</label>
+                                    <input type="number" value="5.12" inputmode="decimal" class="form-control"
+                                        name="bound" min="1.0" max="12.0" step="0.01" inputmode="decimal" id="bound"
+                                        placeholder="Üst Sınır" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Sınırlar</label>
+                                    <input type="text" disabled class="form-control" id="bounds"
+                                        value="(-5.12, 5.12) olarak sınırlar belirlendi.">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -323,6 +260,7 @@
 </form>
 
 <br>
+<!-- Loader icon -->
 <center>
     <div id="wait" style="display: none;">
         <span class="loader">
@@ -332,6 +270,27 @@
         <p class="mt-2">Yükleniyor...</p>
     </div>
 </center>
+
+<!-- Form Validation Error via Backend -->
+<center>
+    <div class="col-md-6">
+        <div class="alert alert-danger alert-dismissible mt-2 mb-2" id="errorAlert" role="alert" style="display: none;">
+            <strong id="errorAlertText"></strong>
+        </div>
+    </div>
+</center>
+<br>
+</div>
+
+<!-- Image Zoom Modal -->
+<div id="modal01" class="modaltest" onclick="this.style.display='none'">
+    <span class="close">&times;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <div class="modal-content">
+        <center>
+            <img id="img01" class="" width="80%" height="80%">
+        </center>
+    </div>
+</div>
 
 
 <div class="container" id="plot_area" style="display: none;">
@@ -345,28 +304,35 @@
             <div class="card-header">
                 <h4>SASAASA</h4>
             </div>
-            <img id="compare_graph2" src="" class="card-img-top"
-                style="height: 600px; width: 96%; margin-left: 2%; margin-right: 2%;">
             <div class="card-body">
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                    additional content. This content is a little bit longer.</p>
+                <center>
+                    <img id="compare_graph2" src="" class="card-img-top"
+                        style="height: 400px; width: 80%; margin-left: 2%; margin-right: 2%;" onclick="onClick(this)"
+                        class="img-for-modal">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                        additional content. This content is a little bit longer.</p>
+                </center>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            <img id="abc_cost_graph" src="" style="width: 100%; height: 400px;" />
+            <img id="abc_cost_graph" src="" style="width: 100%; height: 400px;" onclick="onClick(this)"
+                class="img-for-modal" />
         </div>
         <div class="col-md-6">
-            <img id="sa_cost_graph" src="" style="width: 100%; height: 400px;" />
+            <img id="sa_cost_graph" src="" style="width: 100%; height: 400px;" onclick="onClick(this)"
+                class="img-for-modal" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            <img id="pso_cost_graph" src="" style="width: 100%; height: 400px;" />
+            <img id="pso_cost_graph" src="" style="width: 100%; height: 400px;" onclick="onClick(this)"
+                class="img-for-modal" />
         </div>
         <div class="col-md-6">
-            <img id="de_cost_graph" src="" style="width: 100%; height: 400px;" />
+            <img id="de_cost_graph" src="" style="width: 100%; height: 400px;" onclick="onClick(this)"
+                class="img-for-modal" />
         </div>
     </div>
 
@@ -376,7 +342,8 @@
                 <h4>SASAASA</h4>
             </div>
             <img id="all_compare_graph" src="" class="card-img-top"
-                style="height: 600px; width: 96%; margin-left: 2%; margin-right: 2%;">
+                style="height: 600px; width: 96%; margin-left: 2%; margin-right: 2%;" onclick="onClick(this)"
+                class="img-for-modal">
             <div class="card-body">
                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
                     additional content. This content is a little bit longer.</p>
@@ -384,14 +351,15 @@
         </div>
     </div>
 
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-md-6">
             <div class="card text-white bg-danger mb-6 shadow-sm">
                 <div class="card-header">
                     <h4>SASAASA</h4>
                 </div>
                 <img id="all_compare_graph2" src="" class="card-img-top"
-                    style="height: 400px; width: 96%; margin-left: 2%; margin-right: 2%;">
+                    style="height: 400px; width: 96%; margin-left: 2%; margin-right: 2%;" onclick="onClick(this)"
+                    class="img-for-modal">
                 <div class="card-body">
                     <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
                         additional content. This content is a little bit longer.</p>
@@ -404,95 +372,15 @@
                     <h4>SASAASA</h4>
                 </div>
                 <img id="all_compare_graph3" src="" class="card-img-top"
-                    style="height: 400px; width: 96%; margin-left: 2%; margin-right: 2%;">
+                    style="height: 400px; width: 96%; margin-left: 2%; margin-right: 2%;" onclick="onClick(this)"
+                    class="img-for-modal">
                 <div class="card-body">
                     <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
                         additional content. This content is a little bit longer.</p>
                 </div>
             </div>
         </div>
-    </div>
-
-
+    </div> -->
 </div>
-
-<script>
-    $(document).ready(function () {
-        $(document).ajaxStart(function () {
-            $("#wait").css("display", "block");
-        });
-        $(document).ajaxComplete(function () {
-            $("#wait").css("display", "none");
-        });
-        console.log("Yüklendim");
-        $('#bound').keyup(function () {
-            var text = $('#bound').val();
-            var bounds = `(-${text}, ${text}) olarak sınırlar belirlendi`;
-            $('#bounds').val(bounds);
-        });
-        $('#opt_form').on('submit', function (event) {
-
-            console.log("Buttonu Disable Yaptım")
-            $("#btn_run").attr("disabled", true);
-            $("#btn_run").css("cursor", 'wait');
-
-            console.log("Formdan Veri Aldım, işliyorum.")
-            $("#plot_area").css("display", "none");
-            var form_data = new FormData($('#opt_form')[0]);
-            $.ajax({
-                type: 'POST',
-                url: '/optimize',
-                data: form_data,
-                contentType: false,
-                cache: false,
-                processData: false,
-                async: true,
-                enctype: 'multipart/form-data'
-            })
-                .done(function (data) {
-                    console.log("Adım Başarılı")
-                    if (data.error) {
-                        console.log("HATA MEYDANA GELDİ")
-                        $('#errorAlertText').text(data.error);
-                        $('#errorAlert').show();
-                        $("#btn_run").attr("disabled", false);
-                        $("#btn_run").css("cursor", 'pointer');
-                        $('#successAlert').hide();
-                    }
-                    else {
-                        console.log("Hatasız Çalıştım")
-                        console.log(data);
-
-                        $('#abc_cost_graph').attr("src", data.abc_cost_path);
-                        $('#sa_cost_graph').attr("src", data.sa_cost_path);
-                        $('#pso_cost_graph').attr("src", data.pso_cost_path);
-                        $('#de_cost_graph').attr("src", data.de_cost_path);
-                        $('#compare_graph2').attr("src", data.compare_costs_path2);
-                        $('#all_compare_graph').attr("src", data.all_compare_costs_path);
-
-                        $('#all_compare_graph2').attr("src", data.all_compare_costs_path);
-                        $('#all_compare_graph3').attr("src", data.all_compare_costs_path);
-
-                        $("#plot_area").css("display", "block");
-
-                        $('#errorAlert').hide();
-
-                        console.log("Buttonu Enable Yaptım")
-                        $("#btn_run").attr("disabled", false);
-                        $("#btn_run").css("cursor", 'pointer');
-                    }
-                });
-            event.preventDefault();
-        });
-    });
-</script>
-
-<style>
-    body {
-        background-color: #ffffff;
-
-        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    }
-</style>
-
+<script src="{{ url_for('static', filename='js/opt.js') }}"></script>
 {% endblock %}

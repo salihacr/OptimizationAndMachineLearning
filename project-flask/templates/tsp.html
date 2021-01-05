@@ -7,6 +7,11 @@
 
 {% block content %}
 <div class="container">
+    <div class="py-1 text-center">
+        <h3>Gezgin Satıcı Probleminin Optimizasyonu !</h3>
+        <p class="lead">Applied Optimization Algorithms and Machine Learning on Flask</p>
+        <hr>
+    </div>
     <form id="tspform" method="post" class="d-inline" enctype="multipart/form-data">
         <div class="form-group">
             <label for="cityfile">Gezgin satıcı problemi için dosya seçiniz. Dosya tipleri (csv, txt)</label>
@@ -154,11 +159,11 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <button id="btn_run" type="submit" class="btn btn-primary" style="width: 100%;">ÇALIŞTIR</button>
+        <center>
+            <div class="col-md-4">
+                <button type="submit" id="btn_run" class="btn btn-primary btn-lg btn-block">Testi Başlat !</button>
             </div>
-        </div>
+        </center>
     </form>
     <br />
 
@@ -174,9 +179,15 @@
     </center>
 
     <!-- Form Validation Error via Backend -->
-    <div class="alert alert-warning alert-dismissible mt-2 mb-2" id="errorAlert" role="alert" style="display: none;">
-        <strong id="errorAlertText"></strong>
-    </div>
+    <center>
+        <div class="col-md-6">
+            <div class="alert alert-danger alert-dismissible mt-2 mb-2" id="errorAlert" role="alert"
+                style="display: none;">
+                <strong id="errorAlertText"></strong>
+            </div>
+        </div>
+    </center>
+    <br>
 </div>
 
 <!-- Image Zoom Modal -->
@@ -251,5 +262,5 @@
         </div>
     </div>
 </div>
-<script src="{{ url_for('static', filename='js/tsp.js') }}" ></script>
+<script src="{{ url_for('static', filename='js/tsp.js') }}"></script>
 {% endblock %}
