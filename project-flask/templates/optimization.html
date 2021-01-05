@@ -4,27 +4,102 @@
 
 
 {% block content %}
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+    label {
+        width: 100%;
+        font-size: 1rem;
+    }
 
+    .card-input-element+.card {
+        height: calc(36px + 2*1rem);
+        color: #000000;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        border: 2px solid transparent;
+        border-radius: 2px;
+    }
+
+    .card-input-element+.card:hover {
+        cursor: pointer;
+    }
+
+    .card-input-element:checked+.card {
+        border: 2px solid #5cb85c;
+        -webkit-transition: border .3s;
+        -o-transition: border .3s;
+        transition: border .3s;
+    }
+
+    .card-input-element:checked+.card::after {
+        content: '\e5ca';
+        color: #5cb85c;
+        font-family: 'Material Icons';
+        font-size: 28px;
+        -webkit-animation-name: fadeInCheckbox;
+        animation-name: fadeInCheckbox;
+        -webkit-animation-duration: .5s;
+        animation-duration: .5s;
+        -webkit-animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @-webkit-keyframes fadeInCheckbox {
+        from {
+            opacity: 0;
+            -webkit-transform: rotateZ(-20deg);
+        }
+
+        to {
+            opacity: 1;
+            -webkit-transform: rotateZ(0deg);
+        }
+    }
+
+    @keyframes fadeInCheckbox {
+        from {
+            opacity: 0;
+            transform: rotateZ(-20deg);
+        }
+
+        to {
+            opacity: 1;
+            transform: rotateZ(0deg);
+        }
+    }
+</style>
 
 
 <form id="opt_form" class="d-inline" method="POST">
     <div class=container>
         <div class="py-1 text-center">
-            <img class="d-block mx-auto mb-1"
-                src="https://muhendislik.gop.edu.tr/Depo/Icons/birim_logo/fakulteler//muhendislik_tr.png?dt=20201213223623"
-                alt="" width="440" height="120">
             <h2>Optimizasyon Algoritmalarını Test Et !</h2>
             <p class="lead">Applied Optimization Algorithms and Machine Learning on Flask - Applied Optimization
                 Algorithms and Machine Learning on Flask</p>
             <hr>
         </div>
-
+        <center>
+            <div class="col-md-6">
+                <div class="alert alert-primary in text-center"> </a>
+                    Karşılaştırmak için <strong> en az 2 tane </strong> algoritma seçiniz.
+                </div>
+                <br>
+            </div>
+        </center>
         <div class="row">
             <div class="col-md-6 mb-3">
                 <div class="card">
-                    <div class="card-header">
-                        <h4>Yapay Arı Algoritması (ABC)</h4>
-                    </div>
+                    <label>
+                        <input type="checkbox" name="alg_checkbox" value="abc" class="card-input-element d-none"
+                            id="alg_checkbox" checked>
+                        <div
+                            class="card card-header bg-light d-flex flex-row justify-content-between align-items-center">
+                            <h4>
+                                Yapay Arı Algoritması (ABC)
+                            </h4>
+                        </div>
+                    </label>
                     <div class="card-body">
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
@@ -44,9 +119,17 @@
             </div>
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">
-                        <h4>Tavlama Benzetimi</h4>
-                    </div>
+                    <label>
+                        <input type="checkbox" name="alg_checkbox" value="sa" class="card-input-element d-none"
+                            id="alg_checkbox">
+                        <div
+                            class="card card-header bg-light d-flex flex-row justify-content-between align-items-center">
+                            <h4>
+                                Tavlama Benzetimi (SA)
+                            </h4>
+                        </div>
+                    </label>
+
                     <div class="card-body">
                         <div class="form-row">
                             <div class="col-md-4 mb-3">
@@ -75,9 +158,16 @@
         <div class="row">
             <div class="col-md-6 mb-3">
                 <div class="card">
-                    <div class="card-header">
-                        <h4>Parçacık Sürü Optimizasyonu (PSO)</h4>
-                    </div>
+                    <label>
+                        <input type="checkbox" name="alg_checkbox" value="pso" class="card-input-element d-none"
+                            id="alg_checkbox">
+                        <div
+                            class="card card-header bg-light d-flex flex-row justify-content-between align-items-center">
+                            <h4>
+                                Parçacık Sürü Optimizasyonu (PSO)
+                            </h4>
+                        </div>
+                    </label>
                     <div class="card-body">
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
@@ -98,9 +188,16 @@
             </div>
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">
-                        <h4>Diferansiyel Evrim Algoritması (DEA)</h4>
-                    </div>
+                    <label>
+                        <input type="checkbox" name="alg_checkbox" value="dea" class="card-input-element d-none"
+                            id="alg_checkbox">
+                        <div
+                            class="card card-header bg-light d-flex flex-row justify-content-between align-items-center">
+                            <h4>
+                                Diferansiyel Evrim Algoritması (DEA)
+                            </h4>
+                        </div>
+                    </label>
                     <div class="card-body">
                         <div class="form-row">
                             <div class="col-md-4 mb-3">
@@ -125,8 +222,6 @@
                     </div>
                 </div>
             </div>
-
-
             <div class="col-md-12 mb-3">
                 <div class="card">
                     <div class="card-header">
@@ -140,36 +235,48 @@
                                 name="iteration" oninput="iteration1.value = this.value">
                             <output id="iteration1" name="iteration1">60</output>
                         </div>
+                        <hr>
                         <label>Test Fonksiyonları</label>
                         <div class="form-row">
                             <div class="col-md-3">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="obj_function" id="sphere"
-                                        value="sphere" checked>
-                                    <label class="form-check-label" for="sphere">
+                                <label>
+                                    <input type="radio" name="obj_function" id="sphere"
+                                        class="card-input-element d-none" value="sphere" checked>
+                                    <div
+                                        class="card card-body bg-light d-flex flex-row justify-content-between align-items-center">
                                         Sphere Fonksiyonu
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <input class="form-check-input" type="radio" name="obj_function" id="rastrigin"
-                                    value="rastrigin">
-                                <label class="form-check-label" for="rastrigin">
-                                    Rastrigin Fonksiyonu
+                                    </div>
                                 </label>
                             </div>
                             <div class="col-md-3">
-                                <input class="form-check-input" type="radio" name="obj_function" id="rosenbrock"
-                                    value="rosenbrock">
-                                <label class="form-check-label" for="rosenbrock">
-                                    Rosenbrock Fonksiyonu
+                                <label>
+                                    <input type="radio" name="obj_function" id="rastrigin"
+                                        class="card-input-element d-none" value="rastrigin">
+                                    <div
+                                        class="card card-body bg-light d-flex flex-row justify-content-between align-items-center">
+                                        Rastrigin Fonksiyonu
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label>
+                                    <input type="radio" name="obj_function" id="rosenbrock"
+                                        class="card-input-element d-none" value="rosenbrock">
+                                    <div
+                                        class="card card-body bg-light d-flex flex-row justify-content-between align-items-center">
+                                        Rosenbrock Fonksiyonu
+                                    </div>
                                 </label>
                             </div>
                             <div class="col-md-3">
-                                <input class="form-check-input" type="radio" name="obj_function" id="griewank"
-                                    value="griewank">
-                                <label class="form-check-label" for="griewank">
-                                    Griewank Fonksiyonu
+                                <label>
+                                    <input type="radio" name="obj_function" id="griewank"
+                                        class="card-input-element d-none" value="rosenbrock">
+                                    <div
+                                        class="card card-body bg-light d-flex flex-row justify-content-between align-items-center">
+                                        Griewank Fonksiyonu
+                                    </div>
                                 </label>
                             </div>
                         </div>
@@ -197,7 +304,9 @@
             </div>
         </div>
     </div>
-    </div>
+    <!-- Form Validation Error via Backend -->
+    <div class="alert alert-warning alert-dismissible mt-2 mb-2" id="errorAlert" role="alert" style="display: none;">
+        <strong id="errorAlertText"></strong>
     </div>
     <br>
     <center>
@@ -227,11 +336,16 @@
 
     <hr />
     <div class="row">
-        <div class="col-md-6">
-            <img id="compare_graph" src="" style="width: 100%;" />
-        </div>
-        <div class="col-md-6">
-            <img id="compare_graph2" src="" style="width: 100%;" />
+        <div class="card text-white bg-danger mb-6 shadow-sm">
+            <div class="card-header">
+                <h4>SASAASA</h4>
+            </div>
+            <img id="compare_graph2" src="" class="card-img-top"
+                style="height: 600px; width: 96%; margin-left: 2%; margin-right: 2%;">
+            <div class="card-body">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                    additional content. This content is a little bit longer.</p>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -253,7 +367,9 @@
 
     <div class="row">
         <div class="card text-white bg-danger mb-6 shadow-sm">
-            <div class="card-header"> <h4>SASAASA</h4> </div>
+            <div class="card-header">
+                <h4>SASAASA</h4>
+            </div>
             <img id="all_compare_graph" src="" class="card-img-top"
                 style="height: 600px; width: 96%; margin-left: 2%; margin-right: 2%;">
             <div class="card-body">
@@ -266,7 +382,9 @@
     <div class="row">
         <div class="col-md-6">
             <div class="card text-white bg-danger mb-6 shadow-sm">
-                <div class="card-header"> <h4>SASAASA</h4> </div>
+                <div class="card-header">
+                    <h4>SASAASA</h4>
+                </div>
                 <img id="all_compare_graph2" src="" class="card-img-top"
                     style="height: 400px; width: 96%; margin-left: 2%; margin-right: 2%;">
                 <div class="card-body">
@@ -277,7 +395,9 @@
         </div>
         <div class="col-md-6">
             <div class="card text-white bg-danger mb-6 shadow-sm">
-                <div class="card-header"> <h4>SASAASA</h4> </div>
+                <div class="card-header">
+                    <h4>SASAASA</h4>
+                </div>
                 <img id="all_compare_graph3" src="" class="card-img-top"
                     style="height: 400px; width: 96%; margin-left: 2%; margin-right: 2%;">
                 <div class="card-body">
@@ -330,6 +450,8 @@
                         console.log("HATA MEYDANA GELDİ")
                         $('#errorAlertText').text(data.error);
                         $('#errorAlert').show();
+                        $("#btn_run").attr("disabled", false);
+                        $("#btn_run").css("cursor", 'pointer');
                         $('#successAlert').hide();
                     }
                     else {
@@ -340,7 +462,6 @@
                         $('#sa_cost_graph').attr("src", data.sa_cost_path);
                         $('#pso_cost_graph').attr("src", data.pso_cost_path);
                         $('#de_cost_graph').attr("src", data.de_cost_path);
-                        $('#compare_graph').attr("src", data.compare_costs_path);
                         $('#compare_graph2').attr("src", data.compare_costs_path2);
                         $('#all_compare_graph').attr("src", data.all_compare_costs_path);
 

@@ -70,187 +70,195 @@ def tsp():
 
 @app.route('/optimize', methods = ['POST'])
 def optimize():
-    opt_cost_list = []
-    opt_color_list = []
-    opt_label_list = []
+    
+    try:
+        opt_cost_list = []
+        opt_color_list = []
+        opt_label_list = []
 
-    # Ortaklar: Bounds, iteration, objFunc, problem size
-    bound = request.form.get("bound", False)
-    boundConvert = float(bound)
-    bounds = [-boundConvert, boundConvert]
-    print("Bounds Aralık : ", bounds)
+        # Ortaklar: Bounds, iteration, objFunc, problem size
+        bound = request.form.get("bound", False)
+        boundConvert = float(bound)
+        bounds = [-boundConvert, boundConvert]
+        print("Bounds Aralık : ", bounds)
 
-    iter = request.form.get("iteration", False)
-    iteration = int(iter)
-    print("İt Sayısı : ", iteration)
-    #obj_function = request.form.get("obj_function", False)
+        iter = request.form.get("iteration", False)
+        iteration = int(iter)
+        print("İt Sayısı : ", iteration)
+        
+        selectedAlg = request.form.getlist('alg_checkbox')
+        print("Seçilen Algoritmalar:  ", selectedAlg)
 
-    #obj_function = sphere
+        if len(selectedAlg) < 2 :
+            print("Boş Geldi")
+            return jsonify({'error': 'Karşılaştırmak için en az 2 algoritma seçiniz !'})
+        else:
+            obj_func = request.form.get("obj_function", False)
+            print("Seçilen Test Fonksiyonu:  ", obj_func)
 
-    obj_func = request.form.get("obj_function", False)
-    print("salih adam mıdır: ", obj_func)
+            if obj_func ==  'sphere':
+                obj_function = sphere
+            elif obj_func ==  'rastrigin':
+                obj_function = rastrigin
+            elif obj_func ==  'rosenbrock':
+                obj_function = rosenbrock
+            elif obj_func ==  'griewank':
+                obj_function = griewank
+            else:
+                obj_function = sphere
 
-    if obj_func ==  'sphere':
-        obj_function = sphere
-    elif obj_func ==  'rastrigin':
-        obj_function = rastrigin
-    elif obj_func ==  'rosenbrock':
-        obj_function = rosenbrock
-    elif obj_func ==  'griewank':
-        obj_function = griewank
-    else:
-        obj_function = sphere
+            print("Seçilen Fonksiyon: ", obj_function)
+            prob_size = request.form.get("problem_size", False)
+            problem_size = int(prob_size)
+            print("Problem Boyutu", problem_size)
 
-    print("Seçilen Fonksiyon: ", obj_function)
-    prob_size = request.form.get("problem_size", False)
-    problem_size = int(prob_size)
-    print("Problem Boyutu", problem_size)
+            if bound and iter and prob_size and obj_function:
+                # ---------------SA Alg---------------
+                dlt = request.form.get("sa_delta", False)
+                delta = float(dlt)
+                print("SA - Delta: ", delta)
 
-    if bound and iter and prob_size and obj_function:
-        # ---------------SA Alg---------------+
-        #co_coe = request.form.get("sa_cooling_coefficient", False)
-        #cooling_coefficient = float(co_coe)
+                sa = SimulatedAnnealing(obj_function, problem_size = problem_size, bounds = bounds,
+                                        iteration = iteration, temperature = 10000, cooling_coefficient = 0.99, delta = delta)
+                sa_cost_values, sa_best_cost, sa_best_solve = sa.run_optimize()
 
-        dlt = request.form.get("sa_delta", False)
-        delta = float(dlt)
-        print("SA - Delta: ", delta)
+                opt_cost_list.append(sa_cost_values)
+                opt_color_list.append('blue')
+                opt_label_list.append('SA-SimulatedAnnealing')
 
-        sa = SimulatedAnnealing(obj_function, problem_size = problem_size, bounds = bounds,
-                                iteration = iteration, temperature = 10000, cooling_coefficient = 0.99, delta = delta)
-        sa_cost_values, sa_best_cost, sa_best_solve = sa.run_optimize()
+                # ---------------Difer Alg---------------
+                mr = request.form.get("dea_mutation_rate", False)
+                mutation_rate = float(mr)
+                print("DE - Mutasyon Oranı:", mutation_rate)
 
-        opt_cost_list.append(sa_cost_values)
-        opt_color_list.append('blue')
-        opt_label_list.append('SA-SimulatedAnnealing')
+                cr = request.form.get("dea_crossRate", False)
+                cross_rate = float(cr)
+                print("DE - Çaprazlama Oranı:", mutation_rate)
 
-        # ---------------Difer Alg---------------
-        mr = request.form.get("dea_mutation_rate", False)
-        mutation_rate = float(mr)
-        print("DE - Mutasyon Oranı:", mutation_rate)
+                ps = request.form.get("dea_population_size", False)
+                population_size = int(ps)
+                print("DE - Dif Alg Pop Boyutu", population_size)
 
-        cr = request.form.get("dea_crossRate", False)
-        cross_rate = float(cr)
-        print("DE - Çaprazlama Oranı:", mutation_rate)
+                de = DifferentialEvolution(obj_function, bounds = bounds, iteration = iteration, population_size = population_size,
+                                        problem_size = problem_size, mutation_rate = mutation_rate, cr = cross_rate)
+                de_cost_values, de_best_cost, de_best_solution = de.run_optimize()
 
-        ps = request.form.get("dea_population_size", False)
-        population_size = int(ps)
-        print("DE - Dif Alg Pop Boyutu", population_size)
+                # 'red','green','blue','orange','black','purple'
+                opt_cost_list.append(de_cost_values)
+                opt_color_list.append('red')
+                opt_label_list.append('DE-Differential Evolution')
 
-        de = DifferentialEvolution(obj_function, bounds = bounds, iteration = iteration, population_size = population_size,
-                                   problem_size = problem_size, mutation_rate = mutation_rate, cr = cross_rate)
-        de_cost_values, de_best_cost, de_best_solution = de.run_optimize()
+                # SA - DE 2'li karşılaştırma
+                plt_compare_fig = helper.plt_compare_costs(
+                    cost_values = opt_cost_list, colors = opt_color_list, labels = opt_label_list)
+                plt_compare_fig_path = helper.save_figures_to_upload(
+                    plot_fig = plt_compare_fig, img_name = "plt_compare_cost.png")
 
-        # 'red','green','blue','orange','black','purple'
-        opt_cost_list.append(de_cost_values)
-        opt_color_list.append('red')
-        opt_label_list.append('DE-Differential Evolution')
+                # ---------------Pso Alg---------------
+                part_size = request.form.get("pso_particle_size", False)
+                partical_size = int(part_size)
+                print("PSO - Sürü Boyutu:", partical_size)
 
-        # SA - DE 2'li karşılaştırma
-        plt_compare_fig = helper.plt_compare_costs(
-            cost_values = opt_cost_list, colors = opt_color_list, labels = opt_label_list)
-        plt_compare_fig_path = helper.save_figures_to_upload(
-            plot_fig = plt_compare_fig, img_name = "plt_compare_cost.png")
+                w = request.form.get("pso_weight", False)
+                weights = float(w)
+                print("PSO - Pso Ağırlık:", weights)
 
-        # ---------------Pso Alg---------------
-        part_size = request.form.get("pso_particle_size", False)
-        partical_size = int(part_size)
-        print("PSO - Sürü Boyutu:", partical_size)
+                pso = PSO(obj_function, bounds = bounds, iteration = iteration,
+                        problem_size = problem_size, particle_size = partical_size, w = weights)
+                pso_cost_values, pso_best_value = pso.run_optimize()
 
-        w = request.form.get("pso_weight", False)
-        weights = float(w)
-        print("PSO - Pso Ağırlık:", weights)
+                opt_cost_list.append(pso_cost_values)
+                opt_color_list.append('green')
+                opt_label_list.append('PSO-Particle Swarm')
 
-        pso = PSO(obj_function, bounds = bounds, iteration = iteration,
-                  problem_size = problem_size, particle_size = partical_size, w = weights)
-        pso_cost_values, pso_best_value = pso.run_optimize()
+                # ---------------Abc Alg---------------
+                bee_num = request.form.get("abc_populationSize", False)
+                bee_size = int(bee_num)
+                print("ABC - Arı Sayısı:", bee_size)
 
-        opt_cost_list.append(pso_cost_values)
-        opt_color_list.append('green')
-        opt_label_list.append('PSO-Particle Swarm')
+                lmt = request.form.get("abc_limit", False)
+                limit = float(lmt)
+                print("ABC - Arı Limit:", limit)
 
-        # ---------------Abc Alg---------------
-        bee_num = request.form.get("abc_populationSize", False)
-        bee_size = int(bee_num)
-        print("ABC - Arı Sayısı:", bee_size)
+                abc_best, abc_cost_values = ABC(
+                    obj_function, bounds = bounds, iteration = iteration, problem_size = problem_size, bee_size = bee_size, limit = limit)
+                print("Best Value: ", abc_best.f)
+                print("cost_values:", abc_cost_values)
 
-        lmt = request.form.get("abc_limit", False)
-        limit = float(lmt)
-        print("ABC - Arı Limit:", limit)
+                opt_cost_list.append(abc_cost_values)
+                opt_color_list.append('orange')
+                opt_label_list.append('ABC-Artifical Bee Colony')
 
-        abc_best, abc_cost_values = ABC(
-            obj_function, bounds = bounds, iteration = iteration, problem_size = problem_size, bee_size = bee_size, limit = limit)
-        print("Best Value: ", abc_best.f)
-        print("cost_values:", abc_cost_values)
+                # --------------------------BİTTİ--------------------------
 
-        opt_cost_list.append(abc_cost_values)
-        opt_color_list.append('orange')
-        opt_label_list.append('ABC-Artifical Bee Colony')
+                # Save Dife Alg
+                plt_de_costs_fig = de.plot_results(de_cost_values)
+                de_cost_fig_path = helper.save_figures_to_upload(
+                    plot_fig = plt_de_costs_fig, img_name = "plt_de_cost.png")
 
-        # --------------------------BİTTİ--------------------------
+                # Save Abc
+                plt_abc_costs_fig = plot_results(abc_cost_values)
+                abc_cost_fig_path = helper.save_figures_to_upload(
+                    plot_fig = plt_abc_costs_fig, img_name = "plt_abc_cost.png")
 
-        # Save Dife Alg
-        plt_de_costs_fig = de.plot_results(de_cost_values)
-        de_cost_fig_path = helper.save_figures_to_upload(
-            plot_fig = plt_de_costs_fig, img_name = "plt_de_cost.png")
+                # Save Pso
+                plt_pso_costs_fig = pso.plot_results(pso_cost_values)
+                pso_cost_fig_path = helper.save_figures_to_upload(
+                    plot_fig = plt_pso_costs_fig, img_name = "plt_pso_cost.png")
 
-        # Save Abc
-        plt_abc_costs_fig = plot_results(abc_cost_values)
-        abc_cost_fig_path = helper.save_figures_to_upload(
-            plot_fig = plt_abc_costs_fig, img_name = "plt_abc_cost.png")
+                # Save Sa
+                plt_sa_costs_fig = sa.plot_results(sa_cost_values)
+                sa_cost_fig_path = helper.save_figures_to_upload(
+                    plot_fig = plt_sa_costs_fig, img_name = "plt_sa_cost.png")
 
-        # Save Pso
-        plt_pso_costs_fig = pso.plot_results(pso_cost_values)
-        pso_cost_fig_path = helper.save_figures_to_upload(
-            plot_fig = plt_pso_costs_fig, img_name = "plt_pso_cost.png")
+                # ALL - 4'lü karşılaştırma.
+                plt_all_compare_fig = helper.plt_compare_costs(
+                    cost_values = opt_cost_list, colors = opt_color_list, labels = opt_label_list)
+                plt_all_compare_fig_path = helper.save_figures_to_upload(
+                    plot_fig = plt_compare_fig, img_name = "plt_all_compare_cost.png")
 
-        # Save Sa
-        plt_sa_costs_fig = sa.plot_results(sa_cost_values)
-        sa_cost_fig_path = helper.save_figures_to_upload(
-            plot_fig = plt_sa_costs_fig, img_name = "plt_sa_cost.png")
+                user_compare_algo = []
+                user_compare_color = []
+                user_compare_label = []
 
-        # ALL - 4'lü karşılaştırma.
-        plt_all_compare_fig = helper.plt_compare_costs(
-            cost_values = opt_cost_list, colors = opt_color_list, labels = opt_label_list)
-        plt_all_compare_fig_path = helper.save_figures_to_upload(
-            plot_fig = plt_compare_fig, img_name = "plt_all_compare_cost.png")
+                for i in range(len(selectedAlg)):
+                    if selectedAlg[i] == 'abc':
+                        user_compare_algo.append(abc_cost_values)
+                        user_compare_color.append('orange')
+                        user_compare_label.append('ABC-Artifical Bee Colony')
+                    
+                    if selectedAlg[i] == 'sa':
+                        user_compare_algo.append(sa_cost_values)
+                        user_compare_color.append('blue')
+                        user_compare_label.append('SA-SimulatedAnnealing')
 
-        # PSO - ABC 2'li karşılaştırma için
-        opt_cost_list.remove(sa_cost_values)
-        opt_label_list.remove("SA-SimulatedAnnealing")
-        opt_color_list.remove("blue")
+                    if selectedAlg[i] == 'pso':
+                        user_compare_algo.append(pso_cost_values)
+                        user_compare_color.append("green")
+                        user_compare_label.append('PSO-Particle Swarm')    
 
-        opt_cost_list.remove(de_cost_values)
-        opt_label_list.remove("DE-Differential Evolution")
-        opt_color_list.remove("red")
+                    if selectedAlg[i] == 'dea':
+                        user_compare_algo.append(de_cost_values)
+                        user_compare_color.append('red')
+                        user_compare_label.append('DE-Differential Evolution')       
+    
+                plt_compare_fig2 = helper.plt_compare_costs(
+                    cost_values = user_compare_algo, colors = user_compare_color, labels = user_compare_label)
+                plt_compare_fig_path2 = helper.save_figures_to_upload(
+                    plot_fig = plt_compare_fig2, img_name = "plt_compare_cost.png")
 
-        """
-        if select 1 == true
-            list.add = arı özellikleri
-        if select 2 == true
-            list.add = pso özellikleri
+                return jsonify({
+                    'compare_costs_path2': plt_compare_fig_path2,
+                    'all_compare_costs_path': plt_all_compare_fig_path,
+                    'de_cost_path': de_cost_fig_path,
+                    'abc_cost_path': abc_cost_fig_path,
+                    'pso_cost_path': pso_cost_fig_path,
+                    'sa_cost_path': sa_cost_fig_path})
 
-        1. karşılaştırma grafiği hepsi 2. karşılaştırma grafiği kullanıcının dilediği algoritmalar
-        seçilenleri listeye ekler plot ettiririz yalnizca
-
-        """
-
-        plt_compare_fig2 = helper.plt_compare_costs(
-            cost_values = opt_cost_list, colors = opt_color_list, labels = opt_label_list)
-        plt_compare_fig_path2 = helper.save_figures_to_upload(
-            plot_fig = plt_compare_fig, img_name = "plt_compare_cost.png")
-
-        return jsonify({
-            'compare_costs_path': plt_compare_fig_path,
-            'compare_costs_path2': plt_compare_fig_path2,
-            'all_compare_costs_path': plt_all_compare_fig_path,
-            'de_cost_path': de_cost_fig_path,
-            'abc_cost_path': abc_cost_fig_path,
-            'pso_cost_path': pso_cost_fig_path,
-            'sa_cost_path': sa_cost_fig_path})
-
-    return jsonify({'error': 'Lütfen tüm verileri eksiksiz doldurun !'})
-
-
+            return jsonify({'error': 'Lütfen tüm verileri eksiksiz doldurun !'})
+        return "done"
+    except :
+        return jsonify({'error': 'Beklenmedik bir hata meydana geldi. Lütfen tekrar deneyin. !'})
 @app.route('/salih')
 def salih():
     return render_template("salih.html")
