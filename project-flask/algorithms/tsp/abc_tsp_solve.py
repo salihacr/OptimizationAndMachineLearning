@@ -186,7 +186,7 @@ class ABC_TSP_SOLVE(object):
         for i in range(len(self.cities)):
             ax.annotate(self.cities[i] , xy = get_XY_location(self, i), c = "black")
         
-        plt.plot(self.x_axis[path], self.y_axis[path], c = "green", label = "Artificial Bee Colony")
+        plt.plot(self.x_axis[path], self.y_axis[path], c = "orange", label = "Artificial Bee Colony")
         plt.legend()
 
         #print("Best Route : {}".format(cities_best_route))

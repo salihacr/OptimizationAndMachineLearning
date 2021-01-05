@@ -18,7 +18,7 @@
             <div class="form-row">
                 <div class="col-md-3">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="map" id="marmara" value="marmara">
+                        <input class="form-check-input" type="radio" name="map" id="marmara" value="marmara" checked>
                         <label class="form-check-label" for="marmara">
                             Marmara Bölgesi
                         </label>
@@ -179,6 +179,16 @@
     </div>
 </div>
 
+<!-- Image Zoom Modal -->
+<div id="modal01" class="modaltest" onclick="this.style.display='none'">
+    <span class="close">&times;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <div class="modal-content">
+        <center>
+            <img id="img01" class="" width="80%" height="80%">
+        </center>
+    </div>
+</div>
+
 <!-- Plotting Area for algorithms outputs -->
 <div id="plot_area" style="display: none;">
     <center>
@@ -188,10 +198,12 @@
         <hr />
         <div class="row">
             <div class="col-md-7">
-                <img id="ga_vs_aco_routes" src="" style="width: 100%; height: 400px;" />
+                <img id="ga_vs_aco_routes" src="" style="width: 100%; height: 400px;" onclick="onClick(this)"
+                    class="img-for-modal" />
             </div>
             <div class="col-md-5 mt-5">
-                <img id="ga_vs_aco_cost" src="" style="width: 100%; height: 300px;" />
+                <img id="ga_vs_aco_cost" src="" style="width: 100%; height: 300px;" onclick="onClick(this)"
+                    class="img-for-modal" />
             </div>
         </div>
     </div>
@@ -238,70 +250,6 @@
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function () {
-            $(document).ajaxStart(function () {
-                $("#wait").css("display", "block");
-            });
-
-
-            $(document).ajaxComplete(function () {
-                $("#wait").css("display", "none");
-            });
-
-
-            $('#tspform').on('submit', function (event) {
-                scrollWin(0, 100);
-
-                // If the plotting area is open when the button is first clicked, close it.
-                $("#plot_area").css("display", "none");
-
-                $("#btn_run").attr("disabled", true);
-                $("#btn_run").css("cursor", 'wait');
-
-                var form_data = new FormData($('#tspform')[0]);
-                $.ajax({
-                    type: 'POST',
-                    url: '/solvetsp',
-                    data: form_data,
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    async: true,
-                    enctype: 'multipart/form-data'
-                })
-                    .done(function (data) {
-                        $('#errorAlert').hide();
-                        if (data.error) {
-                            $('#errorAlertText').text(data.error);
-                            $('#errorAlert').show();
-                            $('#successAlert').hide();
-                            $("#btn_run").attr("disabled", false);
-                            $("#btn_run").css("cursor", 'pointer');
-                        }
-                        else {
-                            console.log(data);
-                            $('#ga_vs_aco_routes').attr("src", data.compare_routes_fig_path);
-                            $('#ga_vs_aco_cost').attr("src", data.compare_costs_fig_path);
-                            $('#aco_route').attr("src", data.antcolony_route_path);
-                            $('#aco_cost').attr("src", data.antcolony_cost_path);
-                            $('#abc_route').attr("src", data.beecolony_route_path);
-                            $('#abc_cost').attr("src", data.beecolony_cost_path);
-                            $('#ga_route').attr("src", data.ga_route_path);
-                            $('#ga_cost').attr("src", data.ga_cost_path);
-
-                            $("#plot_area").css("display", "block");
-                            $('#errorAlert').hide();
-                            $("#btn_run").attr("disabled", false);
-                            $("#btn_run").css("cursor", 'pointer');
-                        }
-                    });
-                event.preventDefault();
-            });
-
-        });
-        function scrollWin(x, y) {
-            window.scrollBy(x, y);
-        }
-    </script>
-    {% endblock %}
+</div>
+<script src="{{ url_for('static', filename='js/tsp.js') }}" ></script>
+{% endblock %}

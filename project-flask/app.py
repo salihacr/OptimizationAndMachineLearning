@@ -223,6 +223,17 @@ def optimize():
         opt_label_list.remove("DE-Differential Evolution")
         opt_color_list.remove("red")
 
+        """
+        if select 1 == true
+            list.add = arı özellikleri
+        if select 2 == true
+            list.add = pso özellikleri
+
+        1. karşılaştırma grafiği hepsi 2. karşılaştırma grafiği kullanıcının dilediği algoritmalar
+        seçilenleri listeye ekler plot ettiririz yalnizca
+
+        """
+
         plt_compare_fig2 = helper.plt_compare_costs(
             cost_values = opt_cost_list, colors = opt_color_list, labels = opt_label_list)
         plt_compare_fig_path2 = helper.save_figures_to_upload(
@@ -244,23 +255,19 @@ def optimize():
 def salih():
     return render_template("salih.html")
 
-
 @app.route('/berkayTest')
 def berkay_test():
     return render_template("berkaytest.html")
-
 
 @app.route('/berkay')
 def berkay():
     return render_template("berkay.html")
 # Formdan gelen resmi kullanıcıya geri göster. Veya belgesyi
 
-
 @app.route('/berkay/<string:dosya>')
 def dosyayuklemesonuc(dosya):
     return render_template("berkay.html", dosya = dosya)
 # Form ile dosya yüklemek
-
 
 @app.route('/dataUpload', methods = ['POST'])
 def dosyayukle():
@@ -291,8 +298,6 @@ def dosyayukle():
         abort(401)
 
 # Cache Blocker
-
-
 @app.after_request
 def add_header(r):
     """
@@ -352,9 +357,7 @@ def solve_tsp():
 
         """
         end file operation
-        """
-        #df = pd.read_csv("data/marmara_mesafeler.csv")
-        
+        """        
         # dataset parameters (city)
         cities = df.loc[:, 'city'].values
         cities_x_axis = df.loc[:, 'longitude'].values  # longitude is x axis

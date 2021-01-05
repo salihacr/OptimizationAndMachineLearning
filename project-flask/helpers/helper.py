@@ -187,7 +187,7 @@ def plt_compare_costs(cost_values, colors, labels):
     fig, ax = plt.subplots(1, dpi=200)
     plt.xlabel('Iteration')
     plt.ylabel('Cost')
-
+    fig.suptitle('Compare Optimization Algorithms Costs')
     for i in range(0, len(cost_values)):
         ax.plot(cost_values[i], 'r--', c=colors[i], label=labels[i])
 
