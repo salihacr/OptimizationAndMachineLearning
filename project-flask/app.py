@@ -3,7 +3,6 @@ from algorithms.optimization.abc import Bee, ABC, plot_results
 from algorithms.optimization.sa import SimulatedAnnealing
 from algorithms.optimization.pso import PSO
 from algorithms.optimization.dea import DifferentialEvolution
-import time
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -11,11 +10,8 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
-import os
+import os, random, math, time, timeit
 from io import BytesIO
-import math
-import random
-import timeit
 
 from helpers import helper
 from algorithms.tsp.aco_tsp_solve import ACO_TSP_SOLVE
@@ -25,29 +21,33 @@ from algorithms.tsp.abc_tsp_solve import ABC_TSP_SOLVE
 from flask import Flask, render_template, request, make_response, redirect, abort, flash, url_for, jsonify
 from werkzeug.utils import secure_filename
 
-# import warnings
-# warnings.filterwarnings("ignore")
-
-YUKLEME_KLASORU = 'static/dataUpload'
-# Test amaçlı duruyorlar, son hali  = > .csv ve .txt olcak
-UZANTILAR = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'])
-
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = '^%huYtFd90;90jjj'
-app.config['UPLOADED_DATAS'] = 'uploads'
+app.config['UPLOADED_DATAS'] = 'static/uploads'
 
-app.config['UPLOAD_FOLDER'] = YUKLEME_KLASORU
-app.secret_key = "denemeKey"
+# Cache Blocker
+@app.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age = 0'
+    return r
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error.html', error = "Page Not Found", error_code = 404), 404
 
-def uzanti_kontrol(dosyaadi):
-    return '.' in dosyaadi and \
-        dosyaadi.rsplit('.', 1)[1].lower() in UZANTILAR
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('error.html', error = "Internal Server Error", error_code = 500), 500
 
-
-helper.run_schedule()
-
+helper.run_schedule() #Delete Img
 
 @app.route('/')
 def index():
@@ -66,16 +66,8 @@ def tsp():
 def salih():
     return render_template("salih.html")
 
-@app.route('/berkayTest')
-def berkay_test():
-    return render_template("berkaytest.html")
-
-@app.route('/berkay')
-def berkay():
-    return render_template("berkay.html")
 @app.route('/optimize', methods = ['POST'])
 def optimize():
-    
     try:
         opt_cost_list = []
         opt_color_list = []
@@ -195,7 +187,6 @@ def optimize():
                 opt_label_list.append('ABC-Artifical Bee Colony')
 
                 # --------------------------BİTTİ--------------------------
-
                 # Save Dife Alg
                 plt_de_costs_fig = de.plot_results(de_cost_values)
                 de_cost_fig_path = helper.save_figures_to_upload(
@@ -265,62 +256,13 @@ def optimize():
     except :
         return jsonify({'error': 'Beklenmedik bir hata meydana geldi. Lütfen tekrar deneyin. !'})
 
-# Formdan gelen resmi kullanıcıya geri göster. Veya belgesyi
-
-@app.route('/berkay/<string:dosya>')
-def dosyayuklemesonuc(dosya):
-    return render_template("berkay.html", dosya = dosya)
-# Form ile dosya yüklemek
-
-@app.route('/dataUpload', methods = ['POST'])
-def dosyayukle():
-    if request.method ==  'POST':
-        # Formdan bize bir dosya geldi mi ?
-        if 'dosya' not in request.files:
-            flash('Dosya seçilmedi')
-            return redirect('berkay')
-
-            # Kullanıcı dosya seçmemiş olabilir veya tarayıcı boş göndermiş mi kontrol et.
-        dosya = request.files['dosya']
-        if dosya.filename ==  '':
-            flash('Dosya seçilmedi')
-            return redirect('berkay')
-
-            # Gelen dosya tipi bizim istediğim tipte bir dosya mı ?
-        # secure_filename  = > adı "../../../../home/images/logo.png" ise "home_images_logo.png" şeklinde çevirir.
-        if dosya and uzanti_kontrol(dosya.filename):
-            dosyaadi = secure_filename(dosya.filename)
-            dosya.save(os.path.join(app.config['UPLOAD_FOLDER'], dosyaadi))
-            # return redirect(url_for('berkay',dosya = dosyaadi))
-            return redirect('berkay/' + dosyaadi)
-        else:
-            flash(
-                'İzin verilmeyen dosya uzantısı. Lütfen .txt veya .csv uzantılı bir dosya yükleyiniz !')
-            return redirect('berkay')
-    else:
-        abort(401)
-
-# Cache Blocker
-@app.after_request
-def add_header(r):
-    """
-    Add headers to both force latest IE rendering engine or Chrome Frame,
-    and also to cache the rendered page for 10 minutes.
-    """
-    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    r.headers["Pragma"] = "no-cache"
-    r.headers["Expires"] = "0"
-    r.headers['Cache-Control'] = 'public, max-age = 0'
-    return r
-
-
+# ----------------------------TSP----------------------------
 @app.route('/solvetsp', methods = ['POST'])
 def solve_tsp():
     try:
         """
         file operation done
         """
-        
         file = request.files['cityfile']
         print("dosya adı", file.filename)
         if file.filename:
@@ -338,9 +280,9 @@ def solve_tsp():
             file_extension = str(file.filename.split('.')[-1])
             
             if file_extension ==  "txt":
-                df = pd.read_text("uploads/{}".format(filename))
+                df = pd.read_text("static/uploads/{}".format(filename))
             if file_extension ==  "csv":
-                df = pd.read_csv("uploads/{}".format(filename))
+                df = pd.read_csv("static/uploads/{}".format(filename))
 
         else:
             ready_map = request.form.get("map", False)

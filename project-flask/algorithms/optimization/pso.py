@@ -39,7 +39,6 @@ class PSO(object):
         cost_values.append(g_best_value)
 
         for k in range(self.iteration):
-
             for i in range(self.particle_size):
                 velocity[i, :] = self.w * velocity[i, :] + \
                     c1 * np.random.ranf() * (p_best_position[i, :] - population[i, :]) + \
@@ -77,12 +76,13 @@ class PSO(object):
             
             cost_values.append(g_best_value)
             
-            print("Iteration :{}, Best Cost :{}".format(k + 1, g_best_value))
+            #print("Iteration :{}, Best Cost :{}".format(k + 1, g_best_value))
         
         return cost_values, g_best_value
 
     def plot_results(self,cost_values):
-        fig, ax = plt.subplots(1, dpi=200)
+        fig, ax = plt.subplots(1, figsize=(10, 6), dpi=200)
+        fig.suptitle('Particle Swarm Optimization')
         plt.xlabel('Iteration')
         plt.ylabel('Cost')
         ax.plot(cost_values, "r--", c="green", label = 'Particle Swarm')

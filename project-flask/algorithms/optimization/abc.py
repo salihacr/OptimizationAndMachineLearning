@@ -82,10 +82,9 @@ problem_size = 4, bee_size = 10, limit = 10):
     
     return best_bees, cost_values
 
-
-
 def plot_results(cost_values):
-    fig, ax = plt.subplots(1, dpi=200)
+    fig, ax = plt.subplots(1, figsize=(10, 6), dpi=200)
+    fig.suptitle('Artificial Bee Colony Optimization')
     plt.xlabel('Iteration')
     plt.ylabel('Cost')
     ax.plot(cost_values, "r--", c="orange", label = 'Artificial Bee Colony')

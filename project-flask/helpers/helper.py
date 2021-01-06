@@ -11,70 +11,17 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from apscheduler.schedulers.background import BackgroundScheduler
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-
 from flask import make_response
 
 plt.style.use('ggplot')
 
 global get_XY_location
-
-
 def get_XY_location(x_axis, y_axis, index):
     loc_xy = np.array([x_axis[index], y_axis[index]])
     return loc_xy
 
-
-def compare_cost_values(aco_cost_values, ga_cost_values):
-    fig, ax = plt.subplots(1, dpi=200)
-    fig.suptitle('ACO vs GA Costs per Iterations')
-    plt.xlabel('Iteration')
-    plt.ylabel('Cost')
-    plt.grid(b=True, which='major', ls='-.', lw=0.45)
-    ax.plot(aco_cost_values, c='green', lw=1.5, label='Karınca')
-    ax.plot(ga_cost_values, 'r--', c='red', label='Genetik')
-    ax.legend(['Ant Colony', 'Genetic'])
-    # plt.show()
-
-    return fig
-
-
-def compare_route_graphic(x_axis, y_axis, cities, aco_best_route, ga_best_route):
-
-    fig, ax = plt.subplots(1, figsize=(12, 8), dpi=200)
-
-    fig.suptitle('ACO vs GA Optimization for TSP Problem')
-    plt.xlabel('X AXIS')
-    plt.ylabel('Y AXIS')
-
-    # city points
-    ax.scatter(x_axis, y_axis, c='orange', s=150)
-    # and city names
-    for i in range(len(cities)):
-        ax.annotate(cities[i], xy=get_XY_location(
-            x_axis, y_axis, i), c='black')
-
-    # aco path
-    aco_path = np.append(aco_best_route, aco_best_route)
-
-    # ga path
-    ga_path = np.append(ga_best_route, ga_best_route)
-
-    # adding paths to plot
-    # aco path plot
-    plt.plot(x_axis[aco_path], y_axis[aco_path], lw=2.5,
-             c='purple', label='Karınca')
-    # ga path plot
-    plt.plot(x_axis[ga_path], y_axis[ga_path],
-             c='green', label='Genetik')
-
-    plt.legend(['Ant Colony', 'Genetic'])
-
-    # plt.show()
-
-    return fig
-
+# Compare and Graph the Routes of Algorithms.
 def plt_compare_routes(x_axis, y_axis, cities, best_routes, colors, labels):
-    
     fig, ax = plt.subplots(1, figsize=(12, 8), dpi=200)
     fig.suptitle('Compare Optimization Algorithms for TSP Problem')
     plt.xlabel('X AXIS')
@@ -91,8 +38,7 @@ def plt_compare_routes(x_axis, y_axis, cities, best_routes, colors, labels):
         # algorithm path
         algorithm_path = np.append(best_routes[i], best_routes[i])
 
-        # adding paths to plot
-        # path plot
+        # adding paths to plot, path plot
         plt.plot(x_axis[algorithm_path], y_axis[algorithm_path], lw = 2.5,
                 c = colors[i], label = labels[i])
 
@@ -100,9 +46,18 @@ def plt_compare_routes(x_axis, y_axis, cities, best_routes, colors, labels):
     plt.legend()
     return fig
 
-# Random str generator for image names
+# Compare and Graph the Cost of Algorithms.
+def plt_compare_costs(cost_values, colors, labels):
+    fig, ax = plt.subplots(1, dpi=200)
+    plt.xlabel('Iteration')
+    plt.ylabel('Cost')
+    fig.suptitle('Compare Optimization Algorithms Costs')
+    for i in range(0, len(cost_values)):
+        ax.plot(cost_values[i], 'r--', c=colors[i], label=labels[i])
+    plt.legend()
+    return fig
 
-
+# This function returns the random string to change the name of the picture.
 def get_random_string(length):
     letters = string.ascii_letters
     value = random.randint(100, 999)
@@ -112,39 +67,32 @@ def get_random_string(length):
     #print('Random string of length', length, 'is:', result_str)
     return result_str
 
-
+# This function returns the current time to change the name of the picture.
 def get_current_time():
     return str(datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S_%f_')[:-3])
 
-
+#This function combine random string and current time
 def combine_names():
     return str(get_current_time() + get_random_string(10))
 
-
+#This function save image to given folder.
+# using >  plt_img1_path = save_figures_to_upload(figure,your_img_name)
 def save_figures_to_upload(plot_fig, img_name):
-    # random + img_name
     rand_str = get_random_string(10)
     current_time = get_current_time()
     temp_img_name = rand_str + current_time + img_name
 
-    # pure img_name
-    #temp_img_name = img_name
-
     base_path = 'static/uploads/'
     img_path = base_path + temp_img_name
-
+    
     plt.savefig(img_path)
     #print('Image Path => ', img_path)
 
     return img_path
 
-# using >  plt_img1_path = save_figures_to_upload(figure,your_img_name)
-
-
 def format_for_genetic(longitudes_x, latitudes_y):
     distance_list = zip(longitudes_x, latitudes_y)
     return list(distance_list)
-
 
 def delete_files_in_folder():
     dir = 'static/uploads'
@@ -153,7 +101,6 @@ def delete_files_in_folder():
         for f in filelist:
             os.remove(f)
 
-
 def delete_files_in_folder_by_dir(dir=''):
     temp_dir = dir
     filelist = glob.glob(os.path.join(temp_dir, '*'))
@@ -161,35 +108,9 @@ def delete_files_in_folder_by_dir(dir=''):
         for f in filelist:
             os.remove(f)
 
-
-def delete_files_in_folder_by_file_length():
-    dir = 'static/uploads'
-    filelist = glob.glob(os.path.join(dir, '*'))
-    if len(filelist) >= 10:
-        for f in filelist:
-            os.remove(f)
-
-
-def run_schedule2():
-    sched = BackgroundScheduler(daemon=True)
-    sched.add_job(delete_files_in_folder, 'interval', minutes=30)
-    sched.start()
-
-
+#This function runs the given job at scheduled times.
 def run_schedule():
     sched = BackgroundScheduler(daemon=True)
-    sched.add_job(delete_files_in_folder_by_file_length,
+    sched.add_job(delete_files_in_folder,
                   'interval', minutes=30)
     sched.start()
-
-
-def plt_compare_costs(cost_values, colors, labels):
-    fig, ax = plt.subplots(1, dpi=200)
-    plt.xlabel('Iteration')
-    plt.ylabel('Cost')
-    fig.suptitle('Compare Optimization Algorithms Costs')
-    for i in range(0, len(cost_values)):
-        ax.plot(cost_values[i], 'r--', c=colors[i], label=labels[i])
-
-    plt.legend()
-    return fig

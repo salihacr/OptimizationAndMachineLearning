@@ -76,6 +76,7 @@ function card_checked(element) {
         card.className = "card border-success";
         card.style.border = "2px solid transparent";
     } else {
-        card.className = "card";
+        card.className = "card border";
+        card.style.border = "2px solid transparent";
     }
 }

@@ -9,12 +9,10 @@ class DifferentialEvolution(object):
         self.bounds = bounds
         self.iteration = iteration
         self.problem_size = problem_size
-
         self.mutation_rate = mutation_rate
         self.cr = cr
         self.population_size = population_size
         
-
     def run_optimize(self):
         population = np.random.ranf([self.population_size,self.problem_size]) * (self.bounds[1]-self.bounds[0]) + self.bounds[0]
         child = population.copy()
@@ -27,7 +25,6 @@ class DifferentialEvolution(object):
         
         cost_values = list()
         cost_values.append(solution[best_index])
-
 
         for iteration in range(self.iteration):
             for k in range(self.population_size):
@@ -61,20 +58,20 @@ class DifferentialEvolution(object):
                 
             cost_values.append(best_cost)
                 
-            print("Iteration :{}, Best Cost :{}".format(iteration + 1, best_cost))
+            #print("Iteration :{}, Best Cost :{}".format(iteration + 1, best_cost))
         
         best_solve = population[idx, :]
-        print("Optimum Karar değişkenleri :", best_solve)
-        print("Optimum Çözüm :",best_cost)
+        #print("Optimum Karar değişkenleri :", best_solve)
+        #print("Optimum Çözüm :",best_cost)
 
         return cost_values, best_cost, best_solve
 
     def plot_results(self,cost_values):
-        fig, ax = plt.subplots(1, dpi=200)
+        fig, ax = plt.subplots(1, figsize=(10, 6), dpi=200)
+        fig.suptitle('Diferantial Evulation Algorithm')
         plt.xlabel('Iteration')
         plt.ylabel('Cost')
         ax.plot(cost_values, "r--", c="red", label = 'Differential Evolution')
         plt.legend()
         # plt.show()
         return fig
-

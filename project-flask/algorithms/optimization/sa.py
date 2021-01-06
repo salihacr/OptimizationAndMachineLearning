@@ -63,21 +63,22 @@ class SimulatedAnnealing(object):
                     best_solve = solve
 
                 counter = counter + 1
-                print("Iteration : {}, Best Cost : {}, Temperature : {}".format(counter, best_cost, self.temperature))
+                #print("Iteration : {}, Best Cost : {}, Temperature : {}".format(counter, best_cost, self.temperature))
             
             self.iteration = self.iteration - 1
 
         remaining = int(temp) - counter
-        print("remaining : ",remaining)
+        #print("remaining : ",remaining)
         for i in range(remaining):
             counter = counter + 1
             cost_values.append(best_cost)
-            print("Iteration : {}, Best Cost : {}, Temperature : {}".format(counter, best_cost, self.temperature))
+            #print("Iteration : {}, Best Cost : {}, Temperature : {}".format(counter, best_cost, self.temperature))
 
         return cost_values, best_cost, best_solve
 
     def plot_results(self,cost_values):
-        fig, ax = plt.subplots(1, dpi=200)
+        fig, ax = plt.subplots(1, figsize=(10, 6), dpi=200)
+        fig.suptitle('Simulated Annealing')
         plt.xlabel('Iteration')
         plt.ylabel('Cost')
         ax.plot(cost_values, "r--", c="blue", label = 'Simulated Annealing')

@@ -14,10 +14,25 @@
         <hr>
     </div>
     <form id="tspform" method="post" class="d-inline" enctype="multipart/form-data">
+
+
         <div class="form-group">
-            <label for="cityfile">Gezgin satıcı problemi için dosya seçiniz. Dosya tipleri (csv, txt)</label>
-            <input type="file" class="form-control-file btn btn-primary" name="cityfile" id="cityfile"
-                accept=".csv, .txt">
+            <div class="row">
+                <div class="col-md-6">
+
+                    <label for="cityfile">
+                        <h4> Dosya Yükleyiniz (.csv)</h4>
+                    </label>
+                    <input type="file" class="form-control-file btn-lg btn-primary mt-5" name="cityfile" id="cityfile"
+                        accept=".csv">
+                </div>
+                <div class="col-md-6">
+                    <h4>Örnek .csv Formatı</h4>
+                    <img class="card-img-top" src="{{ url_for('static', filename='img/csv_template.PNG') }}"
+                        alt="Card image cap">
+                </div>
+            </div>
+
         </div>
         <label>Hazır Haritalar</label>
         <center>
