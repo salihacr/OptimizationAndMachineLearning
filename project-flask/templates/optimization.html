@@ -1,8 +1,6 @@
 {% extends "base.html" %}
-
-{% block title %}Home{% endblock %}
-
-
+{% set active_page = "opt" %}
+{% block title %}Metaheuristic Methods{% endblock %}
 {% block content %}
 <link href="{{ url_for('static', filename='css/opt.css') }}" rel="stylesheet">
 
@@ -293,28 +291,25 @@
 </div>
 
 
-<div class="container" id="plot_area" style="display: none;">
+<div class="container" id="plot_area" style="display: block;">
     <center>
-        <h4>Grafikler</h4>
+        <h4>Karşılaştırma Sonuçlarınız</h4>
     </center>
 
     <hr />
     <div class="row">
-        <div class="card text-white bg-danger mb-6 shadow-sm">
-            <div class="card-header">
-                <h4>SASAASA</h4>
-            </div>
-            <div class="card-body">
-                <center>
-                    <img id="compare_graph2" src="" class="card-img-top"
-                        style="height: 400px; width: 80%; margin-left: 2%; margin-right: 2%;" onclick="onClick(this)"
-                        class="img-for-modal">
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                </center>
-            </div>
+        <div class="col-md-12">
+            <center>
+                <img id="compare_graph2" src="" style="width: 80%; height: 400px;" onclick="onClick(this)"
+                    class="img-for-modal">
+            </center>
         </div>
     </div>
+    <br/>
+    <center>
+        <h4>Diğer Sonuçlar</h4>
+    </center>
+    <hr/>
     <div class="row">
         <div class="col-md-6">
             <img id="abc_cost_graph" src="" style="width: 100%; height: 400px;" onclick="onClick(this)"
@@ -325,6 +320,7 @@
                 class="img-for-modal" />
         </div>
     </div>
+    <hr />
     <div class="row">
         <div class="col-md-6">
             <img id="pso_cost_graph" src="" style="width: 100%; height: 400px;" onclick="onClick(this)"
@@ -335,52 +331,19 @@
                 class="img-for-modal" />
         </div>
     </div>
-
-    <div class="row">
-        <div class="card text-white bg-danger mb-6 shadow-sm">
-            <div class="card-header">
-                <h4>SASAASA</h4>
-            </div>
-            <img id="all_compare_graph" src="" class="card-img-top"
-                style="height: 600px; width: 96%; margin-left: 2%; margin-right: 2%;" onclick="onClick(this)"
-                class="img-for-modal">
-            <div class="card-body">
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                    additional content. This content is a little bit longer.</p>
-            </div>
+    <br/>
+    <center>
+        <h4>Tüm Algoritmaların Karşılaştırma Sonuçları</h4>
+    </center>
+    <hr/>
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <center>
+                <img id="all_compare_graph" src="" style="width: 80%; height: 400px;" onclick="onClick(this)"
+                    class="img-for-modal">
+            </center>
         </div>
     </div>
-
-    <!-- <div class="row">
-        <div class="col-md-6">
-            <div class="card text-white bg-danger mb-6 shadow-sm">
-                <div class="card-header">
-                    <h4>SASAASA</h4>
-                </div>
-                <img id="all_compare_graph2" src="" class="card-img-top"
-                    style="height: 400px; width: 96%; margin-left: 2%; margin-right: 2%;" onclick="onClick(this)"
-                    class="img-for-modal">
-                <div class="card-body">
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card text-white bg-danger mb-6 shadow-sm">
-                <div class="card-header">
-                    <h4>SASAASA</h4>
-                </div>
-                <img id="all_compare_graph3" src="" class="card-img-top"
-                    style="height: 400px; width: 96%; margin-left: 2%; margin-right: 2%;" onclick="onClick(this)"
-                    class="img-for-modal">
-                <div class="card-body">
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                </div>
-            </div>
-        </div>
-    </div> -->
 </div>
 <script src="{{ url_for('static', filename='js/opt.js') }}"></script>
 {% endblock %}

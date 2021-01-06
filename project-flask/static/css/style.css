@@ -8,7 +8,11 @@ a {
     color: rgb(204, 204, 204);
 }
 a:hover {
-    color: #ff8000;
+    color: #ff8000 !important;
+    text-decoration: none;
+}
+a.active{
+    color: #ff8000 !important;
     text-decoration: none;
 }
 
@@ -87,7 +91,9 @@ a:hover {
     color: #02b875;
     background: #FFF;
 }
-
+.custom-card-btn{
+    outline: 0 !important;
+}
 .custom-card:nth-child(2) .custom-card-btn:hover {
     color: #4181ee;
     background: #FFF;
