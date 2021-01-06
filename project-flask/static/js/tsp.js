@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $(document).ajaxStart(function () {
         $("#wait").css("display", "block");
+        $('#errorAlert').hide();
     });
 
 
@@ -57,5 +58,23 @@ $(document).ready(function () {
             });
         event.preventDefault();
     });
-
 });
+
+const num_of_ants_el = document.getElementById('ant_size');
+const num_of_lives_el = document.getElementById('life_count');
+const num_of_bees_el = document.getElementById('number_of_bees');
+const map_list = ['marmara', 'icanadolu', 'karadeniz', 'doguanadolu'];
+const map_city_length = [11, 13, 15, 17];
+
+function cardChecked(element) {
+    if (element.checked === true) {
+        for (let i = 0; i < map_list.length; i++) {
+            if (element.id === map_list[i]) {
+                num_of_ants_el.value = map_city_length[i];
+                num_of_lives_el.value = map_city_length[i];
+                num_of_bees_el.value = map_city_length[i];
+                console.log("asdads")
+            }
+        }
+    }
+}

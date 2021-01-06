@@ -3,7 +3,7 @@ label {
     font-size: 1rem;
 }
 
-.card-input-element+.card {
+.card-input-element2+.card2 {
     height: calc(36px + 2*1rem);
     color: #000000;
     -webkit-box-shadow: none;
@@ -12,18 +12,18 @@ label {
     border-radius: 2px;
 }
 
-.card-input-element+.card:hover {
+.card-input-element2+.card2:hover {
     cursor: pointer;
 }
 
-.card-input-element:checked+.card {
-    /* border: 2px solid #28a745!important burayı açınca düzeliyor*/ 
+.card-input-element2:checked+.card2 {
+    border: 2px solid #28a745!important;
     -webkit-transition: border .3s;
     -o-transition: border .3s;
     transition: border .3s;
 }
 
-.card-input-element:checked+.card::after {
+.card-input-element2:checked+.card2::after {
     content: '\e5ca';
     color: #28a745!important;
     font-family: 'Material Icons';

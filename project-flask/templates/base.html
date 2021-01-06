@@ -16,6 +16,8 @@
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/loader.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/img-modal.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/input-range.css') }}" rel="stylesheet">
+
     <script src="{{ url_for('static', filename='js/img-modal.js') }}"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
@@ -26,7 +28,7 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #203040 !important;">
-        <a class="navbar-brand" href="{{url_for('index')}}">TOGU CS - OPTIMIZATION & ML</a>
+        <a class="navbar-brand {{'active' if active_page == 'index' else ''}}" href="{{url_for('index')}}">TOGU CS - OPTIMIZATION & ML</a>
         
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,17 +46,11 @@
                 <li class="nav-item">
                     <a class="nav-link {{'active' if active_page == 'ml' else ''}}" href="{{url_for('machine_learning')}}">Makine Öğrenmesi</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('berkay')}}">bugra</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('salih')}}">salih</a>
-                </li>
 
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="button" disabled>Search</button>
             </form>
         </div>
     </nav>

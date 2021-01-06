@@ -1,16 +1,17 @@
 $(document).ready(function () {
     $(document).ajaxStart(function () {
         $("#wait").css("display", "block");
+        $('#errorAlert').hide();
     });
     $(document).ajaxComplete(function () {
         $("#wait").css("display", "none");
     });
-    console.log("Yüklendim");
     $('#bound').keyup(function () {
         var text = $('#bound').val();
         var bounds = `(-${text}, ${text}) olarak sınırlar belirlendi`;
         $('#bounds').val(bounds);
     });
+
     $('#opt_form').on('submit', function (event) {
 
         console.log("Buttonu Disable Yaptım")
@@ -66,3 +67,15 @@ $(document).ready(function () {
         event.preventDefault();
     });
 });
+function card_checked(element) {
+    console.log(element.id);
+    var card = element.parentNode.parentNode;
+    console.log(card);
+
+    if (element.checked === true) {
+        card.className = "card border-success";
+        card.style.border = "2px solid transparent";
+    } else {
+        card.className = "card";
+    }
+}

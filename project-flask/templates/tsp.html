@@ -4,8 +4,9 @@
 {% extends "base.html" %}
 {% set active_page = "tsp" %}
 {% block title %}Travelling Salesman Problem{% endblock %}
-
 {% block content %}
+<link href="{{ url_for('static', filename='css/opt.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/opt2.css') }}" rel="stylesheet">
 <div class="container">
     <div class="py-1 text-center">
         <h3>Gezgin Satıcı Probleminin Optimizasyonu !</h3>
@@ -22,29 +23,43 @@
         <center>
             <div class="form-row">
                 <div class="col-md-3">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="map" id="marmara" value="marmara" checked>
-                        <label class="form-check-label" for="marmara">
+                    <label>
+                        <input type="radio" name="map" id="marmara" class="card-input-element2 d-none" value="marmara"
+                            onclick="cardChecked(this);" checked />
+                        <div
+                            class="card2 card-body bg-light d-flex flex-row justify-content-between align-items-center">
                             Marmara Bölgesi
-                        </label>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <input class="form-check-input" type="radio" name="map" id="icanadolu" value="icanadolu">
-                    <label class="form-check-label" for="icanadolu">
-                        İç Anadolu Bölgesi
+                        </div>
                     </label>
                 </div>
                 <div class="col-md-3">
-                    <input class="form-check-input" type="radio" name="map" id="karadeniz" value="karadeniz">
-                    <label class="form-check-label" for="karadeniz">
-                        Karadeniz Bölgesi
+                    <label>
+                        <input type="radio" name="map" id="icanadolu" class="card-input-element2 d-none"
+                            value="icanadolu" onclick="cardChecked(this);" />
+                        <div
+                            class="card2 card-body bg-light d-flex flex-row justify-content-between align-items-center">
+                            İç Anadolu Bölgesi
+                        </div>
                     </label>
                 </div>
                 <div class="col-md-3">
-                    <input class="form-check-input" type="radio" name="map" id="doguanadolu" value="doguanadolu">
-                    <label class="form-check-label" for="doguanadolu">
-                        Doğu Anadolu Bölgesi
+                    <label>
+                        <input type="radio" name="map" id="karadeniz" class="card-input-element2 d-none"
+                            value="karadeniz" onclick="cardChecked(this);" />
+                        <div
+                            class="card2 card-body bg-light d-flex flex-row justify-content-between align-items-center">
+                            Karadeniz Bölgesi
+                        </div>
+                    </label>
+                </div>
+                <div class="col-md-3">
+                    <label>
+                        <input type="radio" name="map" id="doguanadolu" class="card-input-element2 d-none"
+                            value="doguanadolu" onclick="cardChecked(this);" />
+                        <div
+                            class="card2 card-body bg-light d-flex flex-row justify-content-between align-items-center">
+                            Doğu Anadolu Bölgesi
+                        </div>
                     </label>
                 </div>
             </div>
@@ -152,11 +167,13 @@
 
         <div class="row mt-3 mb-1">
             <div class="col-md-12">
-                <div class="form-group">
-                    <label>İterasyon Sayısı</label>
-                    <input type="number" value="10" class="form-control" id="iteration" name="iteration"
-                        placeholder="İterasyon Sayısı" min="3" max="100" required>
+                <div class="form-row">
+                    <label for="formControlRange">İterasyon Sayısını Belirleyiniz</label>
+                    <input type="range" class="form-control-range text-success" min="10" max="110" step=10
+                        id="iteration" name="iteration" oninput="iteration1.value = this.value">
+                    <output id="iteration1" name="iteration1">60</output>
                 </div>
+                <hr>
             </div>
         </div>
         <center>
@@ -225,10 +242,12 @@
         <hr />
         <div class="row">
             <div class="col-md-7">
-                <img id="aco_route" src="" style="width: 100%; height: 400px;" />
+                <img id="aco_route" src="" style="width: 100%; height: 400px;" onclick="onClick(this)"
+                    class="img-for-modal" />
             </div>
             <div class="col-md-5 mt-5">
-                <img id="aco_cost" src="" style="width: 100%; height: 300px;" />
+                <img id="aco_cost" src="" style="width: 100%; height: 300px;" onclick="onClick(this)"
+                    class="img-for-modal" />
             </div>
         </div>
     </div>
@@ -239,10 +258,12 @@
         <hr />
         <div class="row">
             <div class="col-md-7">
-                <img id="abc_route" src="" style="width: 100%; height: 400px;" />
+                <img id="abc_route" src="" style="width: 100%; height: 400px;" onclick="onClick(this)"
+                    class="img-for-modal" />
             </div>
             <div class=" col-md-5 mt-5">
-                <img id="abc_cost" src="" style="width: 100%; height: 300px;" />
+                <img id="abc_cost" src="" style="width: 100%; height: 300px;" onclick="onClick(this)"
+                    class="img-for-modal" />
             </div>
         </div>
     </div>
@@ -254,10 +275,12 @@
         <hr />
         <div class="row">
             <div class="col-md-7">
-                <img id="ga_route" src="" style="width: 100%; height: 400px;" />
+                <img id="ga_route" src="" style="width: 100%; height: 400px;" onclick="onClick(this)"
+                    class="img-for-modal" />
             </div>
             <div class=" col-md-5 mt-5">
-                <img id="ga_cost" src="" style="width: 100%; height: 300px;" />
+                <img id="ga_cost" src="" style="width: 100%; height: 300px;" onclick="onClick(this)"
+                    class="img-for-modal" />
             </div>
         </div>
     </div>

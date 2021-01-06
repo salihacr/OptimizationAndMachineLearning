@@ -3,6 +3,7 @@
 {% block title %}Metaheuristic Methods{% endblock %}
 {% block content %}
 <link href="{{ url_for('static', filename='css/opt.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/opt2.css') }}" rel="stylesheet">
 
 
 <form id="opt_form" class="d-inline" method="POST">
@@ -22,10 +23,10 @@
         </center>
         <div class="row">
             <div class="col-md-6 mb-3">
-                <div class="card">
+                <div class="card border-success" style="border: 2px solid transparent;">
                     <label>
                         <input type="checkbox" name="alg_checkbox" value="abc" class="card-input-element d-none"
-                            id="alg_checkbox" checked>
+                            id="alg_checkbox" onclick="card_checked(this);" checked>
                         <div
                             class="card card-header bg-light d-flex flex-row justify-content-between align-items-center">
                             <h4>
@@ -54,7 +55,7 @@
                 <div class="card">
                     <label>
                         <input type="checkbox" name="alg_checkbox" value="sa" class="card-input-element d-none"
-                            id="alg_checkbox">
+                            id="alg_checkbox" onclick="card_checked(this);">
                         <div
                             class="card card-header bg-light d-flex flex-row justify-content-between align-items-center">
                             <h4>
@@ -93,7 +94,7 @@
                 <div class="card">
                     <label>
                         <input type="checkbox" name="alg_checkbox" value="pso" class="card-input-element d-none"
-                            id="alg_checkbox">
+                            id="alg_checkbox" onclick="card_checked(this);">
                         <div
                             class="card card-header bg-light d-flex flex-row justify-content-between align-items-center">
                             <h4>
@@ -123,7 +124,7 @@
                 <div class="card">
                     <label>
                         <input type="checkbox" name="alg_checkbox" value="dea" class="card-input-element d-none"
-                            id="alg_checkbox">
+                            id="alg_checkbox" onclick="card_checked(this);">
                         <div
                             class="card card-header bg-light d-flex flex-row justify-content-between align-items-center">
                             <h4>
@@ -164,19 +165,21 @@
                     <div class="card-body">
                         <div class="form-row">
                             <label for="formControlRange">İterasyon Sayısını Belirleyiniz</label>
-                            <input type="range" class="form-control-range text-success" min="10" max="100" step=10
+                            <input type="range" class="form-control-range text-success" min="10" max="110" step=10
                                 id="iteration" name="iteration" oninput="iteration1.value = this.value">
-                            <output id="iteration1" name="iteration1">60</output>
                         </div>
+                        <center>
+                            <h4><output id="iteration1" name="iteration1" >60</output></h4>
+                        </center>
                         <hr>
                         <label>Test Fonksiyonları</label>
                         <div class="form-row">
                             <div class="col-md-3">
                                 <label>
                                     <input type="radio" name="obj_function" id="sphere"
-                                        class="card-input-element d-none" value="sphere" checked>
+                                        class="card-input-element2 d-none" value="sphere" checked />
                                     <div
-                                        class="card card-body bg-light d-flex flex-row justify-content-between align-items-center">
+                                        class="card2 card-body bg-light d-flex flex-row justify-content-between align-items-center">
                                         Sphere Fonksiyonu
                                     </div>
                                 </label>
@@ -184,9 +187,9 @@
                             <div class="col-md-3">
                                 <label>
                                     <input type="radio" name="obj_function" id="rastrigin"
-                                        class="card-input-element d-none" value="rastrigin">
+                                        class="card-input-element2 d-none" value="rastrigin" />
                                     <div
-                                        class="card card-body bg-light d-flex flex-row justify-content-between align-items-center">
+                                        class="card2 card-body bg-light d-flex flex-row justify-content-between align-items-center">
                                         Rastrigin Fonksiyonu
                                     </div>
                                 </label>
@@ -195,9 +198,9 @@
                             <div class="col-md-3">
                                 <label>
                                     <input type="radio" name="obj_function" id="rosenbrock"
-                                        class="card-input-element d-none" value="rosenbrock">
+                                        class="card-input-element2 d-none" value="rosenbrock" />
                                     <div
-                                        class="card card-body bg-light d-flex flex-row justify-content-between align-items-center">
+                                        class="card2 card-body bg-light d-flex flex-row justify-content-between align-items-center">
                                         Rosenbrock Fonksiyonu
                                     </div>
                                 </label>
@@ -205,9 +208,9 @@
                             <div class="col-md-3">
                                 <label>
                                     <input type="radio" name="obj_function" id="griewank"
-                                        class="card-input-element d-none" value="rosenbrock">
+                                        class="card-input-element2 d-none" value="rosenbrock" />
                                     <div
-                                        class="card card-body bg-light d-flex flex-row justify-content-between align-items-center">
+                                        class="card2 card-body bg-light d-flex flex-row justify-content-between align-items-center">
                                         Griewank Fonksiyonu
                                     </div>
                                 </label>
@@ -291,7 +294,7 @@
 </div>
 
 
-<div class="container" id="plot_area" style="display: block;">
+<div class="container" id="plot_area" style="display: none;">
     <center>
         <h4>Karşılaştırma Sonuçlarınız</h4>
     </center>
@@ -300,46 +303,46 @@
     <div class="row">
         <div class="col-md-12">
             <center>
-                <img id="compare_graph2" src="" style="width: 80%; height: 400px;" onclick="onClick(this)"
+                <img id="compare_graph2" src="" style="width: 60%; height: 80%;" onclick="onClick(this)"
                     class="img-for-modal">
             </center>
         </div>
     </div>
-    <br/>
+    <br />
     <center>
         <h4>Diğer Sonuçlar</h4>
     </center>
-    <hr/>
+    <hr />
     <div class="row">
         <div class="col-md-6">
-            <img id="abc_cost_graph" src="" style="width: 100%; height: 400px;" onclick="onClick(this)"
+            <img id="abc_cost_graph" src="" style="width: 100%; height: 80%;" onclick="onClick(this)"
                 class="img-for-modal" />
         </div>
         <div class="col-md-6">
-            <img id="sa_cost_graph" src="" style="width: 100%; height: 400px;" onclick="onClick(this)"
+            <img id="sa_cost_graph" src="" style="width: 100%; height: 80%;" onclick="onClick(this)"
                 class="img-for-modal" />
         </div>
     </div>
     <hr />
     <div class="row">
         <div class="col-md-6">
-            <img id="pso_cost_graph" src="" style="width: 100%; height: 400px;" onclick="onClick(this)"
+            <img id="pso_cost_graph" src="" style="width: 100%; height: 80%;" onclick="onClick(this)"
                 class="img-for-modal" />
         </div>
         <div class="col-md-6">
-            <img id="de_cost_graph" src="" style="width: 100%; height: 400px;" onclick="onClick(this)"
+            <img id="de_cost_graph" src="" style="width: 100%; height: 80%;" onclick="onClick(this)"
                 class="img-for-modal" />
         </div>
     </div>
-    <br/>
+    <br />
     <center>
         <h4>Tüm Algoritmaların Karşılaştırma Sonuçları</h4>
     </center>
-    <hr/>
+    <hr />
     <div class="row mb-5">
         <div class="col-md-12">
             <center>
-                <img id="all_compare_graph" src="" style="width: 80%; height: 400px;" onclick="onClick(this)"
+                <img id="all_compare_graph" src="" style="width: 80%; height: 100%;" onclick="onClick(this)"
                     class="img-for-modal">
             </center>
         </div>
