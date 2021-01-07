@@ -4,4 +4,4 @@ node_modules
 __pycache__/
 
 # bitince açılacak bu dosyalar şuan test amaçlı kullanımda
-uploads
+# uploads

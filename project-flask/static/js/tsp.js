@@ -63,8 +63,8 @@ $(document).ready(function () {
 const num_of_ants_el = document.getElementById('ant_size');
 const num_of_lives_el = document.getElementById('life_count');
 const num_of_bees_el = document.getElementById('number_of_bees');
-const map_list = ['marmara', 'icanadolu', 'karadeniz', 'doguanadolu'];
-const map_city_length = [11, 13, 15, 17];
+const map_list = ['marmara', 'icanadolu', 'karadeniz', 'doguanadolu', 'guneydogu', 'akdeniz', 'ege', 'anothercity'];
+const map_city_length = [11, 13, 18, 14, 9, 8, 8, 20];
 
 function cardChecked(element) {
     if (element.checked === true) {
@@ -73,7 +73,6 @@ function cardChecked(element) {
                 num_of_ants_el.value = map_city_length[i];
                 num_of_lives_el.value = map_city_length[i];
                 num_of_bees_el.value = map_city_length[i];
-                console.log("asdads")
             }
         }
     }

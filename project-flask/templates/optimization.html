@@ -4,8 +4,6 @@
 {% block content %}
 <link href="{{ url_for('static', filename='css/opt.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/opt2.css') }}" rel="stylesheet">
-
-
 <form id="opt_form" class="d-inline" method="POST">
     <div class=container>
         <div class="py-1 text-center">
@@ -21,6 +19,7 @@
                 <br>
             </div>
         </center>
+        <!-- Optimization Algorithm selection for comparison. -->
         <div class="row">
             <div class="col-md-6 mb-3">
                 <div class="card border-success" style="border: 2px solid transparent;">
@@ -63,7 +62,6 @@
                             </h4>
                         </div>
                     </label>
-
                     <div class="card-body">
                         <div class="form-row">
                             <div class="col-md-4 mb-3">
@@ -168,7 +166,7 @@
                                 id="iteration" name="iteration" oninput="iteration1.value = this.value">
                         </div>
                         <center>
-                            <h4><output id="iteration1" name="iteration1" >60</output></h4>
+                            <h4><output id="iteration1" name="iteration1">60</output></h4>
                         </center>
                         <hr>
                         <label>Test Fonksiyonları</label>
@@ -241,16 +239,6 @@
             </div>
         </div>
     </div>
-    <!-- Form Validation Error via Backend -->
-    <center>
-        <div class="col-md-6">
-            <div class="alert alert-danger alert-dismissible mt-2 mb-2" id="errorAlert" role="alert"
-                style="display: none;">
-                <strong id="errorAlertText"></strong>
-            </div>
-        </div>
-    </center>
-    <br>
     <center>
         <div class="col-md-4">
             <button type="submit" id="btn_run" class="btn btn-primary btn-lg btn-block">Testi Başlat !</button>
@@ -258,7 +246,6 @@
     </center>
     </div>
 </form>
-
 <br>
 <!-- Loader icon -->
 <center>
@@ -270,18 +257,16 @@
         <p class="mt-2">Yükleniyor...</p>
     </div>
 </center>
-
 <!-- Form Validation Error via Backend -->
 <center>
     <div class="col-md-6">
         <div class="alert alert-danger alert-dismissible mt-2 mb-2" id="errorAlert" role="alert" style="display: none;">
             <strong id="errorAlertText"></strong>
         </div>
+        <br /><br/>
     </div>
 </center>
-<br>
 </div>
-
 <!-- Image Zoom Modal -->
 <div id="modal01" class="modaltest" onclick="this.style.display='none'">
     <span class="close">&times;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -291,13 +276,10 @@
         </center>
     </div>
 </div>
-
-
 <div class="container" id="plot_area" style="display: none;">
     <center>
         <h4>Karşılaştırma Sonuçlarınız</h4>
     </center>
-
     <hr />
     <div class="row">
         <div class="col-md-12">

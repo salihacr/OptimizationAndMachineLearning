@@ -1,15 +1,13 @@
 <link href="{{ url_for('static', filename='css/ml.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
-
 <div class="overlay"></div>
 <div class="stars" aria-hidden="true"></div>
 <div class="starts2" aria-hidden="true"></div>
 <div class="stars3" aria-hidden="true"></div>
 <main class="main">
-	<section class="contact">
-        <h1 style="text-align: center;" class="title">{{error_code}}</h1>   
-        <h2 class="sub-title">{{error}}</h2>
-        <a href="{{url_for('index')}}">Go Back</a>
-        
-	</section>
+        <section class="contact">
+                <h1 style="text-align: center;" class="title">{{error_code}}</h1>
+                <h2 class="sub-title">{{error}}</h2>
+                <a href="{{url_for('index')}}">Go Back</a>
+        </section>                                                     
 </main>

@@ -296,10 +296,21 @@ def solve_tsp():
                 filename = 'karadeniz_mesafeler.csv'  
 
             if ready_map == 'doguanadolu':
-                filename = 'doguanadolu_mesafeler.csv'
-
+                filename = 'dogu_anadolu_mesafeler.csv'
+            
+            if ready_map == 'guneydogu':
+                filename = 'guneydogu_mesafeler.csv'
+            
+            if ready_map == 'akdeniz':
+                filename = 'akdeniz_mesafeler.csv'
+            
+            if ready_map == 'ege':
+                filename = 'ege_mesafeler.csv'
+            
+            if ready_map == 'anothercity':
+                filename = 'anothercity_locations.csv'
             df = pd.read_csv("data/{}".format(filename))
-
+            df.head()
         """
         end file operation
         """        

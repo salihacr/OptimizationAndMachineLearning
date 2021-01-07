@@ -11,6 +11,11 @@ $(document).ready(function () {
         var bounds = `(-${text}, ${text}) olarak sınırlar belirlendi`;
         $('#bounds').val(bounds);
     });
+    $('#bound').change(function () {
+        var text = $('#bound').val();
+        var bounds = `(-${text}, ${text}) olarak sınırlar belirlendi`;
+        $('#bounds').val(bounds);
+    });
 
     $('#opt_form').on('submit', function (event) {
 
