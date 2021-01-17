@@ -307,8 +307,8 @@ def solve_tsp():
             if ready_map == 'ege':
                 filename = 'ege_mesafeler.csv'
             
-            if ready_map == 'anothercity':
-                filename = 'anothercity_locations.csv'
+            if ready_map == 'sehirler':
+                filename = 'turkiye_mesafeler.csv'
             df = pd.read_csv("data/{}".format(filename))
             df.head()
         """

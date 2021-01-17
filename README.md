@@ -49,9 +49,4 @@ and push to github
 
 Please make sure to read the [Contributing Guide](#) before making a pull request. If you have a Vue-related project/component/tool, add it with a pull request to [this curated list](#)!
 
-## Contributors
-
-<img src = "https://avatars3.githubusercontent.com/u/35336217?s=460&u=da16c4a1ee3850237dc738ff3709aebea16e6bb7&v=4" style="width:6%; border-radius: 50px;"/>
-<img src = "https://avatars2.githubusercontent.com/u/37087597?s=460&u=1af871ed70165792c70a755a195d98cb031c11d5&v=4" style="width:6%; border-radius: 50px;"/>
-<br>
 Copyright (c) 2021 - present
